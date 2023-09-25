@@ -25,7 +25,7 @@ RUN apt install -y npm \
 
 WORKDIR /var/www/html
 
-COPY ./src/ /var/www/html
+COPY ./src/ .
 COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 
 COPY ./docker/start.sh /start.sh
