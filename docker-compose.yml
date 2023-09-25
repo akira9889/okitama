@@ -1,40 +1,24 @@
 version: "3.8"
 
 volumes:
-  # vendor-store:
-  # node_modules-store:
-  public_volume:
+  vendor-store:
+  node_modules-store:
 
 services:
   app:
     container_name: app
     build:
       context: .
-      dockerfile: ./docker/php/Dockerfile.prod
+      dockerfile: ./docker/php/Dockerfile
       args:
         - ENVIRONMENT=production
-      target: production
     ports:
       - "5173:5173"
     volumes:
-      # - ./src/:/var/www/html
+      - ./src/:/var/www/html
       - ./log:/var/log
-      # - vendor-store:/var/www/html/vendor
-      # - node_modules-store:/var/www/html/node_modules
-      - public_volume:/var/www/html/public
-    environment:
-      - APP_NAME=Okitama
-      - APP_KEY=base64:FybbGVQEZfzWe2p7sUwjCiIz3yg/h+PsI/N+1/iCww4=
-      - APP_URL=http://localhost
-      - DB_CONNECTION=mysql
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_DATABASE=project
-      - DB_USERNAME=root
-      - DB_PASSWORD=password
-      - SESSION_DRIVER=cookie
-      - SANCTUM_STATEFUL_DOMAINS=localhost
-      - SESSION_DOMAIN=localhost
+      - vendor-store:/var/www/html/vendor
+      - node_modules-store:/var/www/html/node_modules
 
   web:
     container_name: nginx
@@ -47,8 +31,7 @@ services:
     ports:
       - "${WEB}:80"
     volumes:
-      # - ./src/:/var/www/html
-      - public_volume:/var/www/html/public
+      - ./src/:/var/www/html
     depends_on:
       - app
 
