@@ -1,0 +1,67 @@
+name: app
+type: Load Balanced Web Service
+
+http:
+  path: '/'
+  healthcheck: '/'
+  target_container: web
+  hosted_zone: Z04857464OFBUL5MN2NG
+
+image:
+  build:
+    dockerfile: ./docker/php/Dockerfile.prod
+    context: .
+    target: production
+    args:
+      ENVIRONMENT: production
+  port: 8080
+
+sidecars:
+  web:
+    port: 80
+    image:
+      build:
+        context: .
+        dockerfile: ./docker/nginx/Dockerfile
+        args:
+          UPSTREAM_NAME: localhost
+          FPM_PORT: 9000
+      depends_on:
+        app:
+          condition: START
+
+taskdef_overrides:
+  - path: "ContainerDefinitions[1].VolumesFrom[-]"
+    value:
+      SourceContainer: "app"
+      ReadOnly: true
+
+cpu: 256
+memory: 512
+count: 1
+exec: true
+network:
+  connect: true
+  vpc:
+    # RDSに紐づいているセキュリティグループ
+    security_groups: [sg-0d90a489feee9f5bc]
+
+secrets:
+  APP_URL: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/APP_URL
+  APP_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/APP_KEY
+  ASSET_URL: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/ASSET_URL
+  DB_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/DB_HOST
+  DB_DATABASE: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/DB_DATABASE
+  DB_USERNAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/DB_USERNAME
+  DB_PASSWORD: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/DB_PASSWORD
+  SESSION_DRIVER: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SESSION_DRIVER
+  SANCTUM_STATEFUL_DOMAINS: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SANCTUM_STATEFUL_DOMAINS
+  SESSION_DOMAIN: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SESSION_DOMAIN
+
+environments:
+  prod:
+    http:
+      alias: 'okitama.sawascle.com'
+  test:
+    http:
+      alias: 'test.sawascle.com'
