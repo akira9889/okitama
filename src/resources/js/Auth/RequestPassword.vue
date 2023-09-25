@@ -28,7 +28,7 @@ function forgotPassword() {
     <form class="space-y-6" @submit.prevent="forgotPassword">
       <div>
         <div class="mt-2">
-          <label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">メールアドレス</label>
+          <label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-black">メールアドレス</label>
           <div class="mt-2">
             <template v-if="errors?.email">
                 <div v-for="error in errors.email" class="text-sm text-red-700 m-1" role="alert">
@@ -36,7 +36,7 @@ function forgotPassword() {
                 </div>
               </template>
             <input v-model="form.email" id="email" name="email" type="email" autocomplete="email" required
-              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6" />
+              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
           </div>
         </div>
         <div class="my-8">
