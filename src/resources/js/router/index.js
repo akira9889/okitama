@@ -4,6 +4,13 @@ import Login from '@/views/auth/Login.vue'
 import Signup from '@/views/auth/Signup.vue'
 import RequestPassword from '@/views/auth/RequestPassword.vue'
 import ResetPassword from '@/views/auth/ResetPassword.vue'
+import SearchCustomer from '@/views/customer/SearchCustomer.vue'
+import RegisterCustomer from '@/views/customer/RegisterCustomer.vue'
+import EditCustomer from '@/views/customer/EditCustomer.vue'
+import Users from '@/views/setting/admin/user/Users.vue'
+import AwaitingUsers from '@/views/setting/admin/user/AwaitingUsers.vue'
+import Area from '@/views/setting/user/Area.vue'
+import DeliveryArea from '@/views/setting/user/DeliveryArea.vue'
 import store from '@/store';
 import AuthService from '@/services/AuthService';
 
@@ -11,13 +18,47 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    redirect: '/mypage',
+    redirect: '/search-customer',
     component: AppLayout,
     meta: {
       requiresAuth: true
     },
     children: [
-
+      {
+        path: "search-customer",
+        name: "search-customer",
+        component: SearchCustomer,
+      },
+      {
+        path: "register-customer",
+        name: "register-customer",
+        component: RegisterCustomer,
+      },
+      {
+        path: "edit-customer/:id",
+        name: "edit-customer",
+        component: EditCustomer,
+      },
+      {
+        path: "users",
+        name: "users",
+        component: Users,
+      },
+      {
+        path: "awaiting-users",
+        name: "awaiting-users",
+        component: AwaitingUsers,
+      },
+      {
+        path: "area",
+        name: "area",
+        component: Area,
+      },
+      {
+        path: "delivery-area",
+        name: "delivery-area",
+        component: DeliveryArea,
+      },
     ]
   },
   {
