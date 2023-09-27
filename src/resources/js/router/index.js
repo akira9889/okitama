@@ -4,8 +4,6 @@ import Login from '@/Auth/Login.vue'
 import Signup from '@/Auth/Signup.vue'
 import RequestPassword from '@/Auth/RequestPassword.vue'
 import ResetPassword from '@/Auth/ResetPassword.vue'
-import Mypage from '@/Mypage.vue'
-import Dashboard from '@/Dashboard.vue'
 import store from '../store';
 import AuthService from '../services/AuthService';
 
@@ -19,16 +17,7 @@ const routes = [
       requiresAuth: true
     },
     children: [
-      {
-        path: 'mypage',
-        name: 'mypage',
-        component: Mypage,
-      },
-      {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: Dashboard,
-      },
+
     ]
   },
   {
@@ -77,7 +66,7 @@ router.beforeEach(async (to, from, next) => {
     const isLoggedIn = await checkAuthStatus()
 
     if (isLoggedIn) {
-      next({ name: 'mypage' })
+      next({ name: '' })
     } else {
       store.commit('auth/setLoggedIn', false)
       next({ name: 'login' })
