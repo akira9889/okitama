@@ -1,5 +1,5 @@
 <script setup>
-import GuestLayout from '../components/GuestLayout.vue';
+import GuestLayout from '@/components/GuestLayout.vue';
 import AuthService from "@/services/AuthService";
 import { ref } from 'vue';
 import { getError } from '@/utils/helpers.js';
