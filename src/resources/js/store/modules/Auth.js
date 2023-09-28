@@ -25,7 +25,7 @@ export const actions = {
       const { data } = await AuthService.registerUser(form)
       commit('setUser', data);
       commit('setLoggedIn', true);
-      router.push('/dashboard');
+      router.push('/search-customer');
     } catch (error) {
       commit('setError', getError(error));
     }
