@@ -2,7 +2,6 @@
 import store from '@/store';
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios';
 
 const router = useRouter()
 const form = ref({
@@ -16,7 +15,7 @@ const errors = computed(() => store.getters['auth/error'])
 const login = async () => {
   await store.dispatch('auth/login', form.value)
   errors.value = null
-  router.push({ name: 'dashboard' });
+  router.push({ name: 'search-customer' });
 }
 </script>
 
