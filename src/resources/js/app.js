@@ -13,8 +13,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
 import { faEye } from '@fortawesome/free-regular-svg-icons'
 import { faEyeSlash } from '@fortawesome/free-regular-svg-icons'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
-library.add(faEye, faEyeSlash)
+library.add(faEye, faEyeSlash, faChevronRight)
 
 const app = createApp(App)
 
