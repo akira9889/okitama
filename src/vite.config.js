@@ -10,6 +10,13 @@ export default defineConfig({
         }),
         vue(),
     ],
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `@import "resources/sass/style.scss";`,
+            },
+        },
+    },
     server: {
         host: true,
     },
