@@ -1,6 +1,5 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
-  顧客検索ページ
+  <div>顧客検索ページ</div>
 </template>

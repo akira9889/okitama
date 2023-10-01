@@ -1,7 +1,5 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  エリア一覧ページ
+  <div>エリア一覧ページ</div>
 </template>

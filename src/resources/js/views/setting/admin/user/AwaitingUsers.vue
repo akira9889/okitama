@@ -1,7 +1,5 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  承認ユーザーページ
+  <div>承認ユーザーページ</div>
 </template>

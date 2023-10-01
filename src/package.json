@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "npm run lint:style && npm run lint:es",
+    "lint": "npm run lint:style && npm run lint:es && npm run format",
     "lint:es": "eslint resources/js/**/*.{vue,js} --fix",
     "lint:style": "stylelint resources/**/*.{css,scss,vue}",
     "format": "prettier .  --write"
