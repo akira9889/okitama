@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router'
 import AppLayout from '@/components/AppLayout.vue'
 import Login from '@/views/auth/Login.vue'
 import Signup from '@/views/auth/Signup.vue'
@@ -11,8 +11,8 @@ import Users from '@/views/setting/admin/user/Users.vue'
 import AwaitingUsers from '@/views/setting/admin/user/AwaitingUsers.vue'
 import Area from '@/views/setting/user/Area.vue'
 import DeliveryArea from '@/views/setting/user/DeliveryArea.vue'
-import store from '@/store';
-import AuthService from '@/services/AuthService';
+import store from '@/store'
+import AuthService from '@/services/AuthService'
 
 const routes = [
   {
@@ -21,80 +21,80 @@ const routes = [
     redirect: '/search-customer',
     component: AppLayout,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
     },
     children: [
       {
-        path: "search-customer",
-        name: "search-customer",
+        path: 'search-customer',
+        name: 'search-customer',
         component: SearchCustomer,
       },
       {
-        path: "register-customer",
-        name: "register-customer",
+        path: 'register-customer',
+        name: 'register-customer',
         component: RegisterCustomer,
       },
       {
-        path: "edit-customer/:id",
-        name: "edit-customer",
+        path: 'edit-customer/:id',
+        name: 'edit-customer',
         component: EditCustomer,
       },
       {
-        path: "users",
-        name: "users",
+        path: 'users',
+        name: 'users',
         component: Users,
       },
       {
-        path: "awaiting-users",
-        name: "awaiting-users",
+        path: 'awaiting-users',
+        name: 'awaiting-users',
         component: AwaitingUsers,
       },
       {
-        path: "area",
-        name: "area",
+        path: 'area',
+        name: 'area',
         component: Area,
       },
       {
-        path: "delivery-area",
-        name: "delivery-area",
+        path: 'delivery-area',
+        name: 'delivery-area',
         component: DeliveryArea,
       },
-    ]
+    ],
   },
   {
     path: '/login',
     name: 'login',
     component: Login,
     meta: {
-      requiresGuest: true
-    }
+      requiresGuest: true,
+    },
   },
   {
     path: '/signup',
     name: 'signup',
     component: Signup,
     meta: {
-      requiresGuest: true
-    }
+      requiresGuest: true,
+    },
   },
   {
     path: '/request-password',
     name: 'requestPassword',
     component: RequestPassword,
-    meta: { requiresGuest: true }
+    meta: { requiresGuest: true },
   },
   {
-    path: "/reset-password",
-    name: "resetPassword",
+    path: '/reset-password',
+    name: 'resetPassword',
     component: ResetPassword,
-    meta: { requiresGuest: true }
+    meta: { requiresGuest: true },
   },
-];
+]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
-});
+  routes,
+})
 
 async function checkAuthStatus() {
   return await AuthService.checkAuthStatus()
@@ -117,4 +117,4 @@ router.beforeEach(async (to, from, next) => {
   }
 })
 
-export default router;
+export default router

@@ -1,6 +1,5 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
-  顧客編集ページ
+  <div>顧客編集ページ</div>
 </template>
