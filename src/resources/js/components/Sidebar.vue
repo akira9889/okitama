@@ -2,6 +2,8 @@
 import MenuItem from '@/components/MenuItem.vue'
 import { ref } from 'vue'
 
+const emit = defineEmits(['onClickMenuItem'])
+
 const menuItems = ref([
   {
     title: 'トップ',
@@ -31,10 +33,19 @@ const menuItems = ref([
     route: null,
   },
 ])
+
+function forwardMenuItemClick() {
+  emit('onClickMenuItem')
+}
 </script>
 
 <template>
   <nav class="w-[180px] transition-all bg-white fixed top-0 bottom-0">
-    <MenuItem v-for="(item, index) in menuItems" :key="index" :item="item" />
+    <MenuItem
+      v-for="(item, index) in menuItems"
+      :key="index"
+      :item="item"
+      @clickMenuItem="forwardMenuItemClick"
+    />
   </nav>
 </template>
