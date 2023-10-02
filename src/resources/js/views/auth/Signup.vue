@@ -4,7 +4,8 @@ import store from '@/store'
 
 const form = ref({
   email: '',
-  name: '',
+  first_name: '',
+  last_name: '',
   password: '',
   password_confirmation: '',
 })
@@ -44,7 +45,7 @@ const signup = async () => {
               type="email"
               autocomplete="email"
               required
-              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
             <template v-if="errors?.email">
               <div
@@ -60,30 +61,55 @@ const signup = async () => {
         </div>
 
         <div>
-          <label
-            for="username"
-            class="block text-sm font-medium leading-6 text-gray-900"
-            >名前</label
-          >
-          <div class="mt-2">
-            <input
-              id="username"
-              v-model="form.name"
-              name="username"
-              type="text"
-              required
-              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-            <template v-if="errors?.name">
-              <div
-                v-for="(error, index) in errors.name"
-                :key="index"
-                class="text-sm text-red-700 m-1"
-                role="alert"
+          <template v-if="errors?.last_name">
+            <div
+              v-for="(error, index) in errors.last_name"
+              :key="index"
+              class="text-sm text-red-700 m-1"
+              role="alert"
+            >
+              {{ error }}
+            </div>
+          </template>
+          <template v-if="errors?.first_name">
+            <div
+              v-for="(error, index) in errors.first_name"
+              :key="index"
+              class="text-sm text-red-700 m-1"
+              role="alert"
+            >
+              {{ error }}
+            </div>
+          </template>
+          <div class="mt-2 flex justify-between">
+            <div>
+              <label
+                for="last_name"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >姓</label
               >
-                {{ error }}
-              </div>
-            </template>
+              <input
+                id="last_name"
+                v-model="form.last_name"
+                type="text"
+                required
+                class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+            <div>
+              <label
+                for="first_name"
+                class="block text-sm font-medium leading-6 text-gray-900"
+                >名</label
+              >
+              <input
+                id="first_name"
+                v-model="form.first_name"
+                type="text"
+                required
+                class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
           </div>
         </div>
 
