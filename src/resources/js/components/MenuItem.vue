@@ -1,10 +1,12 @@
 <script setup>
-import { ref, defineProps, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const { item } = defineProps({
   item: Object,
 })
+
+const emit = defineEmits(['clickMenuItem'])
 
 const isOpen = ref(false)
 const router = useRouter()
@@ -19,6 +21,7 @@ const handleClick = () => {
 
 const goToRoute = (route) => {
   if (route) {
+    emit('clickMenuItem')
     router.push(route)
   }
 }
