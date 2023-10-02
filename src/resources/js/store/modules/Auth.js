@@ -1,6 +1,6 @@
-import router from "@/router";
-import AuthService from "@/services/AuthService";
-import { getError } from "@/utils/helpers";
+import router from '@/router'
+import AuthService from '@/services/AuthService'
+import { getError } from '@/utils/helpers'
 
 export const namespaced = true
 
@@ -9,13 +9,13 @@ export const state = {
   isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
   loading: false,
   error: null,
-};
+}
 
 export const actions = {
-  async getCurrentUser({ commit }) {
+  async getCurrentUser({ commit, dispatch }) {
     try {
       const { data } = await AuthService.getCurrentUser()
-      commit('setUser', data);
+      commit('setUser', data)
     } catch (error) {
       dispatch('logout')
     }
@@ -23,32 +23,32 @@ export const actions = {
   async registerUser({ commit }, form) {
     try {
       const { data } = await AuthService.registerUser(form)
-      commit('setUser', data);
-      commit('setLoggedIn', true);
-      router.push('/search-customer');
+      commit('setUser', data)
+      commit('setLoggedIn', true)
+      router.push('/search-customer')
     } catch (error) {
-      commit('setError', getError(error));
+      commit('setError', getError(error))
     }
   },
   async login({ commit }, form) {
     try {
       const { data } = await AuthService.login(form)
-      commit('setUser', data);
-      commit('setLoggedIn', true);
+      commit('setUser', data)
+      commit('setLoggedIn', true)
     } catch (error) {
       commit('setUser', null)
-      commit('setLoggedIn', false);
-      commit('setError', getError(error));
+      commit('setLoggedIn', false)
+      commit('setError', getError(error))
     }
   },
   async logout({ commit }) {
     try {
-      await AuthService.logout();
-      commit('setUser', null);
-      commit('setLoggedIn', false);
-      router.push('/login');
+      await AuthService.logout()
+      commit('setUser', null)
+      commit('setLoggedIn', false)
+      router.push('/login')
     } catch (error) {
-      commit('setError', error);
+      commit('setError', error)
     }
   },
 }
@@ -65,21 +65,21 @@ export const mutations = {
   },
   setLoggedIn(state, value) {
     state.isLoggedIn = value
-    localStorage.setItem('isLoggedIn', value);
-  }
-};
+    localStorage.setItem('isLoggedIn', value)
+  },
+}
 
 export const getters = {
   authUser: (state) => {
-    return state.user;
+    return state.user
   },
   error: (state) => {
-    return state.error;
+    return state.error
   },
   loading: (state) => {
-    return state.loading;
+    return state.loading
   },
   loggedIn: (state) => {
-    return state.isLoggedIn;
+    return state.isLoggedIn
   },
-};
+}

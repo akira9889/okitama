@@ -1,4 +1,4 @@
-import { createStore } from "vuex";
+import { createStore } from 'vuex'
 
 import * as auth from './modules/Auth'
 
@@ -6,6 +6,6 @@ const store = createStore({
   modules: {
     auth,
   },
-});
+})
 
-export default store;
+export default store

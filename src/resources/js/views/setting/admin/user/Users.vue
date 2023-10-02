@@ -1,7 +1,4 @@
-<script setup>
-
-</script>
-
+<script setup></script>
 <template>
-  ユーザー一覧ページ
+  <div>ユーザー一覧ページ</div>
 </template>

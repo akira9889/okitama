@@ -1,7 +1,5 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  配達地域設定ページ
+  <div>配達地域設定ページ</div>
 </template>
