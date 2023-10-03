@@ -2,7 +2,13 @@
 export default {
   content: ['./resources/**/*.{vue,js,blade.php}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        customBlue: '#60B6D0',
+        customRed: '#F05B5B',
+        customGray: '#C4C4C4',
+      },
+    },
   },
   plugins: [require('@tailwindcss/forms')],
 }
