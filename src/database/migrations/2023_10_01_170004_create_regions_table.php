@@ -15,9 +15,8 @@ return new class extends Migration
             $table->unsignedBigInteger('main_address_id');
             $table->primary('main_address_id');
             $table->foreign('main_address_id')->references('id')->on('main_addresses');
-            $table->foreignId('state_id')->references('id')->on('states');
+            $table->foreignId('prefecture_id')->references('id')->on('prefectures');
             $table->foreignId('city_id')->references('id')->on('cities');
-            $table->timestamps();
         });
     }
 
