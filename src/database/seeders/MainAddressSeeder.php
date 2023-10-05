@@ -13,7 +13,7 @@ class MainAddressSeeder extends Seeder
      */
     public function run(): void
     {
-        $mainAddresses = ['田喜野井', '習志野', '高根台', '茜浜']; // 他の住所も追加可能
+        $mainAddresses = ['田喜野井', '習志野', '高根台', '茜浜', '東葛西'];
 
         foreach ($mainAddresses as $address) {
             MainAddress::create([
