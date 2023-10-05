@@ -13,10 +13,15 @@ class CitySeeder extends Seeder
      */
     public function run(): void
     {
-        $cities = ['船橋市', '習志野市', ];
+        $cities = [
+            12204 => '船橋市',
+            12216 => '習志野市',
+            13123 => '江戸川区',
+        ];
 
-        foreach ($cities as $city) {
+        foreach ($cities as $id => $city) {
             City::create([
+                'id' => $id,
                 'name' => $city
             ]);
         }
