@@ -21,8 +21,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(PrefectureSeeder::class);
-        $this->call(CitySeeder::class);
-        $this->call(MainAddressSeeder::class);
-        $this->call(RegionSeeder::class);
+        $this->call(CityTownSeeder::class);
     }
 }
