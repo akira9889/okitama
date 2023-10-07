@@ -22,7 +22,7 @@ function clickMenuBtn() {
 </script>
 
 <template>
-  <div class="bg-black fixed bottom-0 left-0 w-[100vw] h-[60px] px-2 py-3">
+  <div class="bg-black fixed bottom-0 left-0 w-[100vw] h-[60px] px-2 py-3 z-20">
     <button
       type="button"
       :class="[{ active: openMenuBtn }, 'menu-btn']"

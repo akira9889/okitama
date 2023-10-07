@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AreaController;
+use App\Http\Controllers\Api\PrefectureController;
+use App\Http\Controllers\CityController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getAuthUser']);
 
-Route::middleware('auth:sanctum')->get('/check-auth', function () {
-    return response()->json(true, 200);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'getAuthUser']);
+
+    Route::get('/check-auth', function () {
+        return response()->json(true, 200);
+    });
+
+    Route::apiResource('/area', AreaController::class)->only(['index', 'store']);
+    Route::delete('/area', [AreaController::class, 'delete']);
+    
+    Route::get('/prefecture', [PrefectureController::class, 'fetchPrefectures']);
+    Route::get('/cities', [CityController::class, 'fetchCitiesByPrefectureId']);
 });
