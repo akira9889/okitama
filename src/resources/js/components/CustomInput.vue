@@ -68,7 +68,7 @@ function onChange(event) {
 function onChangeCheck(event) {
   const value = event.target.checked
   const key = event.target.id
-  emit('change', {key, value})
+  emit('change', { key, value })
 }
 </script>
 

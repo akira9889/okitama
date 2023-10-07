@@ -6,12 +6,11 @@ import AreaModal from '@/views/setting/user/Area/AreaModal.vue'
 import { apiClient } from '@/services/API.js'
 import { onMounted, ref } from 'vue'
 
-
 const areas = ref({})
 const modalOpened = ref(false)
 
 const form = ref({
-  delete_towns: []
+  delete_towns: [],
 })
 
 const isEditingArea = ref(false)
@@ -31,8 +30,8 @@ function updateSelectedTowns({ key, value }) {
   if (value) {
     form.value.delete_towns.push(key)
   } else {
-    const index = form.value.delete_towns.indexOf(key);
-    form.value.delete_towns.splice(index, 1);
+    const index = form.value.delete_towns.indexOf(key)
+    form.value.delete_towns.splice(index, 1)
   }
 }
 
@@ -42,43 +41,55 @@ async function deleteTowns() {
   }
   errorMsg.value = {}
   try {
-    await apiClient.delete('/area', {params: form.value})
+    await apiClient.delete('/area', { params: form.value })
     getRegisteredAreas()
     isEditingArea.value = false
     form.value.delete_towns = []
-  } catch({ response }) {
+  } catch ({ response }) {
     errorMsg.value = response.data.errors
   }
-
 }
-
 </script>
 
 <template>
   <Transition name="modal">
-    <AreaModal v-if="modalOpened" v-model="modalOpened" @on-submit="getRegisteredAreas" />
+    <AreaModal
+      v-if="modalOpened"
+      v-model="modalOpened"
+      @on-submit="getRegisteredAreas"
+    />
   </Transition>
 
   <h1 class="text-xl text-center">エリア一覧</h1>
   <div class="text-right">
-    <Btn text="エリアを追加" type="primary" @click="modalOpened = true" class="ml-2" />
+    <Btn
+      text="エリアを追加"
+      type="primary"
+      class="ml-2"
+      @click="modalOpened = true"
+    />
   </div>
 
-  <InputError :errorMsg="errorMsg?.['database']" />
+  <InputError :error-msg="errorMsg?.['database']" />
 
-  <div v-for="(cities, prefecture) in areas" :key="prefecture" class="prefecture-item">
+  <div
+    v-for="(cities, prefecture) in areas"
+    :key="prefecture"
+    class="prefecture-item"
+  >
     <h2 class="text-md mt-4">{{ prefecture }}</h2>
-    <div
-      v-for="(towns, city) in cities"
-      :key="city"
-      class="ml-3 mt-4"
-    >
+    <div v-for="(towns, city) in cities" :key="city" class="ml-3 mt-4">
       <h3 class="text-sm">{{ city }}</h3>
       <div class="town-container">
-        <div v-for="(town, key) in towns"
-          :key="key"
-          class="flex mr-2 ml-3">
-          <CustomInput v-show="isEditingArea" type="checkbox" :label="town" :id="key" @change="updateSelectedTowns" class="town-name text-xs"/>
+        <div v-for="(town, key) in towns" :key="key" class="flex mr-2 ml-3">
+          <CustomInput
+            v-show="isEditingArea"
+            :id="key"
+            type="checkbox"
+            :label="town"
+            class="town-name text-xs"
+            @change="updateSelectedTowns"
+          />
           <p v-if="!isEditingArea" class="town-name text-xs">
             {{ town }}
           </p>
@@ -91,8 +102,14 @@ async function deleteTowns() {
     <div v-if="Object.keys(areas).length">
       <Btn v-if="!isEditingArea" text="編集" @click="isEditingArea = true" />
       <div v-else>
-        <Btn text="キャンセル" @click="isEditingArea = false"/>
-        <Btn text="削除" type="danger" class="ml-2" @click="deleteTowns" :disabled="!form.delete_towns.length" />
+        <Btn text="キャンセル" @click="isEditingArea = false" />
+        <Btn
+          text="削除"
+          type="danger"
+          class="ml-2"
+          :disabled="!form.delete_towns.length"
+          @click="deleteTowns"
+        />
       </div>
     </div>
   </div>

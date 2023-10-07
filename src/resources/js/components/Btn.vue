@@ -5,7 +5,7 @@ const props = defineProps({
   type: String,
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
 })
 
@@ -13,7 +13,7 @@ const btnClasses = computed(() => {
   const cls = [`mt-2 py-2 px-4 text-white rounded-3xl`]
 
   if (props.disabled) {
-    cls.push('bg-red-100');
+    cls.push('bg-red-100')
   } else {
     if (props.type === 'primary') {
       cls.push(`bg-customBlue`)

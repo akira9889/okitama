@@ -82,9 +82,12 @@ async function submit() {
     >
       <form @submit.prevent="submit">
         <div class="px-4 pt-5 pb-4">
-          <InputError :errorMsg="errorMsg?.database" class="mb-2 text-center" />
+          <InputError
+            :error-msg="errorMsg?.database"
+            class="mb-2 text-center"
+          />
 
-          <InputError :errorMsg="errorMsg?.prefecture_id" class="mb-1" />
+          <InputError :error-msg="errorMsg?.prefecture_id" class="mb-1" />
           <CustomInput
             v-model="form.prefecture_id"
             class="mb-4"
@@ -93,7 +96,7 @@ async function submit() {
             :select-options="prefectures"
             @change="changePrefecture"
           />
-          <InputError :errorMsg="errorMsg?.city_id" class="mb-1" />
+          <InputError :error-msg="errorMsg?.city_id" class="mb-1" />
           <CustomInput
             v-model="form.city_id"
             class="mb-4"
@@ -102,7 +105,7 @@ async function submit() {
             :select-options="cities"
             @change="changeCity"
           />
-          <InputError :errorMsg="errorMsg?.town_name" class="mb-1" />
+          <InputError :error-msg="errorMsg?.town_name" class="mb-1" />
           <CustomInput
             v-model="form.town_name"
             class="mb-4"
