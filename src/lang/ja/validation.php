@@ -173,7 +173,11 @@ return [
         'quantity' => '数量',
         'price' => '価格',
         'description' => '説明',
-        'image' => '画像'
+        'image' => '画像',
+        'prefecture_id' => '都道府県',
+        'city_id' => '市区町村',
+        'city_name' => '市区町村',
+        'town_name' => '町名'
     ],
 
 ];
