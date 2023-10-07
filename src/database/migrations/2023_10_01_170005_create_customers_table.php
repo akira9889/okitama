@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('first_name')->nullable();
             $table->string('last_name');
-            $table->foreignId('region_id')->references('main_address_id')->on('regions');
+            $table->foreignId('town_id')->references('id')->on('towns');
             $table->string('address_number');
             $table->boolean('is_dropoff_possible');
             $table->text('information')->nullable();
