@@ -1,9 +1,10 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import store from '@/store'
 import Modal from '@/components/Modal.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import Footer from '@/components/Footer.vue'
+import Toast from '@/components/Toast.vue'
 
 onMounted(() => {
   store.dispatch('auth/getCurrentUser')
@@ -17,6 +18,8 @@ function toggleSidebar() {
 }
 
 const modalOpened = ref(false)
+
+const toasts = computed(() => store.state.toast.toasts)
 </script>
 
 <template>
@@ -43,6 +46,12 @@ const modalOpened = ref(false)
   <!-- Footer -->
   <Footer :sidebar-opened="sidebarOpened" @toggle-sidebar="toggleSidebar" />
   <!-- Footer -->
+
+  <div class="fixed right-[10px] bottom-20">
+    <TransitionGroup name="toast" tag="ul">
+      <Toast v-for="toast in toasts" :key="toast" :toast="toast" />
+    </TransitionGroup>
+  </div>
 </template>
 
 <style scoped>
@@ -54,5 +63,17 @@ const modalOpened = ref(false)
 .modal-enter-from,
 .modal-leave-to {
   opacity: 0;
+}
+
+.toast-move,
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.5s ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>

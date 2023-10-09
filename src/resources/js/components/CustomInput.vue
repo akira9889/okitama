@@ -23,6 +23,10 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  checked: {
+    type: Boolean,
+    default: false,
+  },
   selectOptions: [Array, Object],
 })
 
@@ -134,7 +138,7 @@ function onChangeCheck(event) {
             :type="type"
             :name="name"
             :required="required"
-            :checked="inputValue"
+            :checked="checked"
             class="h-3 w-3 text-customBlue focus:ring-indigo-500 border-gray-300 rounded"
             @change="onChangeCheck"
           />

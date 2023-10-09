@@ -3,7 +3,8 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AreaController;
 use App\Http\Controllers\Api\PrefectureController;
-use App\Http\Controllers\CityController;
+use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\DeliveryAreaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,8 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'getAuthUser']);
 
@@ -28,7 +27,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('/area', AreaController::class)->only(['index', 'store']);
     Route::delete('/area', [AreaController::class, 'delete']);
-    
+
+    Route::get('/delivery-area', [DeliveryAreaController::class, 'getSelectedTowns']);
+    Route::put('/delivery-area', [DeliveryAreaController::class, 'update']);
+
     Route::get('/prefecture', [PrefectureController::class, 'fetchPrefectures']);
     Route::get('/cities', [CityController::class, 'fetchCitiesByPrefectureId']);
 });
