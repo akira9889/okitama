@@ -20,9 +20,4 @@ class Town extends Model
     {
         return $this->belongsTo(City::class);
     }
-
-    public function userTowns()
-    {
-        return $this->hasMany(UserTown::class);
-    }
 }
