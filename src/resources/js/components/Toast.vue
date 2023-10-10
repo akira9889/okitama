@@ -12,20 +12,22 @@ const percent = ref(0)
 
 onMounted(() => {
   // タイマーと進捗バーの設定
-  const startDate = Date.now()
-  const futureDate = Date.now() + toast.value.delay
+  if (toast.value.delay) {
+    const startDate = Date.now()
+    const futureDate = Date.now() + toast.value.delay
 
-  const interval = setInterval(() => {
-    const date = Date.now()
-    percent.value = ((date - startDate) * 100) / (futureDate - startDate)
-    if (percent.value >= 100) {
-      clearInterval(interval)
-    }
-  }, 30)
+    const interval = setInterval(() => {
+      const date = Date.now()
+      percent.value = ((date - startDate) * 100) / (futureDate - startDate)
+      if (percent.value >= 100) {
+        clearInterval(interval)
+      }
+    }, 30)
 
-  setTimeout(() => {
-    close(toast.value.id)
-  }, toast.value.delay)
+    setTimeout(() => {
+      close(toast.value.id)
+    }, toast.value.delay)
+  }
 })
 
 function close(id) {
