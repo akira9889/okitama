@@ -13,7 +13,7 @@ const form = ref({
 
 let firstSelectedTowns = []
 
-const showUpdateBtn = computed(() => {
+const canSubmitUpdate = computed(() => {
   return (
     JSON.stringify(firstSelectedTowns.slice().sort()) !==
     JSON.stringify(form.value.selectedTowns.slice().sort())
@@ -67,9 +67,6 @@ async function submit() {
   <h1 class="text-xl text-center">配達エリア</h1>
 
   <form @submit.prevent="submit">
-    <div class="float-right">
-      <Btn v-if="showUpdateBtn" text="更新" type="submit" />
-    </div>
     <div
       v-for="(cities, prefecture) in areas"
       :key="prefecture"
@@ -94,7 +91,12 @@ async function submit() {
     </div>
 
     <div class="text-center mt-4">
-      <Btn v-if="showUpdateBtn" text="更新" type="submit" />
+      <Btn
+        text="更新"
+        type="submit"
+        bg-color="primary"
+        :disabled="!canSubmitUpdate"
+      />
     </div>
   </form>
 </template>

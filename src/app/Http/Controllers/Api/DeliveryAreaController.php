@@ -6,9 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\DeliveryArea;
 use App\Models\Town;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-
-use function Psy\debug;
 
 class DeliveryAreaController extends Controller
 {
@@ -16,7 +13,6 @@ class DeliveryAreaController extends Controller
     {
         $user = auth()->user();
         $selectedTowns = $user->towns()->pluck('town_id');
-        Log::debug($selectedTowns);
 
         return response()->json($selectedTowns);
     }
