@@ -1,7 +1,7 @@
 <script setup>
+import store from '@/store'
 import Btn from '@/components/Btn.vue'
 import CustomInput from '@/components/CustomInput.vue'
-import InputError from '@/components/InputError.vue'
 import AreaModal from '@/views/setting/user/Area/AreaModal.vue'
 import { apiClient } from '@/services/API.js'
 import { onMounted, ref } from 'vue'
@@ -45,8 +45,15 @@ async function deleteTowns() {
     getRegisteredAreas()
     isEditingArea.value = false
     form.value.delete_towns = []
-  } catch ({ response }) {
-    errorMsg.value = response.data.errors
+    store.dispatch('toast/showToast', {
+      message: 'エリアが削除されました。',
+      delay: 5000,
+    })
+  } catch {
+    store.dispatch('toast/showToast', {
+      message: 'エリアの削除に失敗しました。',
+      type: 'error',
+    })
   }
 }
 </script>
@@ -64,13 +71,11 @@ async function deleteTowns() {
   <div class="text-right">
     <Btn
       text="エリアを追加"
-      type="primary"
+      bg-color="primary"
       class="ml-2"
       @click="modalOpened = true"
     />
   </div>
-
-  <InputError :error-msg="errorMsg?.['database']" />
 
   <div
     v-for="(cities, prefecture) in areas"
@@ -105,7 +110,7 @@ async function deleteTowns() {
         <Btn text="キャンセル" @click="isEditingArea = false" />
         <Btn
           text="削除"
-          type="danger"
+          bg-color="danger"
           class="ml-2"
           :disabled="!form.delete_towns.length"
           @click="deleteTowns"

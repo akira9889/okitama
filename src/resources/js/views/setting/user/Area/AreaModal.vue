@@ -1,4 +1,5 @@
 <script setup>
+import store from '@/store'
 import { apiClient } from '@/services/API.js'
 import CustomInput from '@/components/CustomInput.vue'
 import InputError from '@/components/InputError.vue'
@@ -69,6 +70,10 @@ async function submit() {
     await apiClient.post('/area', form.value)
     closeModal()
     emit('onSubmit')
+    store.dispatch('toast/showToast', {
+      message: 'エリアが登録されました。',
+      delay: 5000,
+    })
   } catch ({ response }) {
     errorMsg.value = response.data.errors
   }
