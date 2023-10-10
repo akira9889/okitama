@@ -86,7 +86,7 @@ class AreaController extends Controller
 
         try {
             $data = $request->validate([
-                'delete_towns.*' => ['required', 'integer']
+                'delete_towns.*' => ['required', 'integer', 'exists:towns,id']
             ]);
 
             $townIds = $data['delete_towns'];
