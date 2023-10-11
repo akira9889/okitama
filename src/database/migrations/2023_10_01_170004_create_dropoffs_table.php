@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('delivery_areas', function (Blueprint $table) {
+        Schema::create('dropoffs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('town_id')->references('id')->on('towns');
-            $table->boolean('default')->default(0);
+            $table->string('name');
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('delivery_areas');
+        Schema::dropIfExists('dropoffs');
     }
 };

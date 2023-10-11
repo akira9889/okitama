@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('delivery_areas', function (Blueprint $table) {
+        Schema::create('customer_dropoff', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('town_id')->references('id')->on('towns');
-            $table->boolean('default')->default(0);
+            $table->foreignId('customer_id')->constrained();
+            $table->foreignId('dropoff_id')->constrained();
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('delivery_areas');
+        Schema::dropIfExists('customer_dropoff');
     }
 };

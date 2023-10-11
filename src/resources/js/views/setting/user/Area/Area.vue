@@ -86,16 +86,16 @@ async function deleteTowns() {
     <div v-for="(towns, city) in cities" :key="city" class="ml-3 mt-4">
       <h3 class="text-sm">{{ city }}</h3>
       <div class="town-container">
-        <div v-for="(town, key) in towns" :key="key" class="flex mr-2 ml-3">
-          <CustomInput
-            v-show="isEditingArea"
-            :id="key"
-            type="checkbox"
-            :label="town"
-            class="town-name text-xs"
-            @change="updateSelectedTowns"
-          />
-          <p v-if="!isEditingArea" class="town-name text-xs">
+        <div v-for="(town, key) in towns" :key="key" class="flex">
+          <div v-if="isEditingArea" class="flex items-center mr-3">
+            <CustomInput
+              :id="key"
+              type="checkbox"
+              @change="updateSelectedTowns"
+            />
+            <labe :for="key" class="ml-1 text-sm">{{ town }}</labe>
+          </div>
+          <p v-if="!isEditingArea" class="ml-6 text-sm">
             {{ town }}
           </p>
         </div>
@@ -103,7 +103,7 @@ async function deleteTowns() {
     </div>
   </div>
 
-  <div class="flex justify-center">
+  <div class="flex justify-center mt-6">
     <div v-if="Object.keys(areas).length">
       <Btn v-if="!isEditingArea" text="編集" @click="isEditingArea = true" />
       <div v-else>
