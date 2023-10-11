@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(PrefectureSeeder::class);
         $this->call(CityTownSeeder::class);
+        $this->call(DropoffSeeder::class);
+        $this->call(DeliveryAreaSeeder::class);
     }
 }
