@@ -1,7 +1,7 @@
 <script setup>
+import store from '@/store'
 import Btn from '@/components/Btn.vue'
 import CustomInput from '@/components/CustomInput.vue'
-import InputError from '@/components/InputError.vue'
 import AreaModal from '@/views/setting/user/Area/AreaModal.vue'
 import { apiClient } from '@/services/API.js'
 import { onMounted, ref } from 'vue'
@@ -45,8 +45,15 @@ async function deleteTowns() {
     getRegisteredAreas()
     isEditingArea.value = false
     form.value.delete_towns = []
-  } catch ({ response }) {
-    errorMsg.value = response.data.errors
+    store.dispatch('toast/showToast', {
+      message: 'エリアが削除されました。',
+      delay: 5000,
+    })
+  } catch {
+    store.dispatch('toast/showToast', {
+      message: 'エリアの削除に失敗しました。',
+      type: 'error',
+    })
   }
 }
 </script>
@@ -64,13 +71,11 @@ async function deleteTowns() {
   <div class="text-right">
     <Btn
       text="エリアを追加"
-      type="primary"
+      bg-color="primary"
       class="ml-2"
       @click="modalOpened = true"
     />
   </div>
-
-  <InputError :error-msg="errorMsg?.['database']" />
 
   <div
     v-for="(cities, prefecture) in areas"
@@ -81,16 +86,16 @@ async function deleteTowns() {
     <div v-for="(towns, city) in cities" :key="city" class="ml-3 mt-4">
       <h3 class="text-sm">{{ city }}</h3>
       <div class="town-container">
-        <div v-for="(town, key) in towns" :key="key" class="flex mr-2 ml-3">
-          <CustomInput
-            v-show="isEditingArea"
-            :id="key"
-            type="checkbox"
-            :label="town"
-            class="town-name text-xs"
-            @change="updateSelectedTowns"
-          />
-          <p v-if="!isEditingArea" class="town-name text-xs">
+        <div v-for="(town, key) in towns" :key="key" class="flex">
+          <div v-if="isEditingArea" class="flex items-center mr-3">
+            <CustomInput
+              :id="key"
+              type="checkbox"
+              @change="updateSelectedTowns"
+            />
+            <labe :for="key" class="ml-1 text-sm">{{ town }}</labe>
+          </div>
+          <p v-if="!isEditingArea" class="ml-6 text-sm">
             {{ town }}
           </p>
         </div>
@@ -98,14 +103,14 @@ async function deleteTowns() {
     </div>
   </div>
 
-  <div class="flex justify-center">
+  <div class="flex justify-center mt-6">
     <div v-if="Object.keys(areas).length">
       <Btn v-if="!isEditingArea" text="編集" @click="isEditingArea = true" />
       <div v-else>
         <Btn text="キャンセル" @click="isEditingArea = false" />
         <Btn
           text="削除"
-          type="danger"
+          bg-color="danger"
           class="ml-2"
           :disabled="!form.delete_towns.length"
           @click="deleteTowns"

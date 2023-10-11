@@ -3,20 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\DeliveryArea;
-use App\Models\Town;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-
-use function Psy\debug;
 
 class DeliveryAreaController extends Controller
 {
     public function getSelectedTowns()
     {
         $user = auth()->user();
-        $selectedTowns = $user->towns()->pluck('town_id');
-        Log::debug($selectedTowns);
+        $selectedTowns = $user->towns()->get();
 
         return response()->json($selectedTowns);
     }
