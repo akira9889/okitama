@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('town_id')->references('id')->on('towns');
+            $table->boolean('default')->default(0);
         });
     }
 
