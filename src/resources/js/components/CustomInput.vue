@@ -2,8 +2,8 @@
 import { ref, watchEffect, computed } from 'vue'
 
 const props = defineProps({
-  modelValue: [String, Number, File],
-  id: String,
+  modelValue: [String, Number, File, Boolean],
+  id: [String, Number],
   label: String,
   type: {
     type: String,
@@ -73,102 +73,101 @@ function onChangeCheck(event) {
   const value = event.target.checked
   const key = event.target.id
   emit('change', { key, value })
+  emit('update:modelValue', event.target.checked)
 }
 </script>
 
 <template>
   <div>
-    <div>
-      <span
-        v-if="prepend"
-        class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-200 text-gray-500 text-sm"
+    <span
+      v-if="prepend"
+      class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-200 text-gray-500 text-sm"
+    >
+      {{ prepend }}
+    </span>
+    <template v-if="type === 'textarea'">
+      <textarea
+        :id="id"
+        :name="name"
+        :required="required"
+        :value="inputValue"
+        :class="inputClasses"
+        :placeholder="label"
+        @input="emit('update:modelValue', $event.target.value)"
+      />
+    </template>
+    <template v-else-if="type === 'file'">
+      <label
+        class="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
       >
-        {{ prepend }}
-      </span>
-      <template v-if="type === 'textarea'">
-        <textarea
+        <input
+          :id="id"
+          :type="type"
+          :name="name"
+          :required="required"
+          :value="inputValue"
+          class="hidden"
+          :placeholder="label"
+          @input="emit('change', $event.target.files[0])"
+        />
+        画像を選択
+      </label>
+    </template>
+    <template v-else-if="type === 'select'">
+      <select
+        :id="id"
+        :name="name"
+        :required="required"
+        :value="inputValue"
+        :class="inputClasses"
+        :placeholder="label"
+        @change="onChange($event)"
+      >
+        <option v-if="label" value="">{{ label }}</option>
+        <option
+          v-for="option of selectOptions"
+          :key="option.key"
+          :value="option.key"
+        >
+          {{ option.text }}
+        </option>
+      </select>
+    </template>
+    <template v-else-if="type === 'checkbox'">
+      <div class="flex items-center">
+        <input
+          :id="id"
+          :type="type"
+          :name="name"
+          :required="required"
+          :checked="checked"
+          class="h-3 w-3 text-customBlue focus:ring-indigo-500 border-gray-300 rounded"
+          @change="onChangeCheck"
+        />
+      </div>
+    </template>
+    <template v-else>
+      <div :class="[type === 'number' ? 'w-1/2' : 'w-full', 'relative']">
+        <input
+          :id="id"
+          :type="type"
           :name="name"
           :required="required"
           :value="inputValue"
           :class="inputClasses"
+          :min="min"
+          step="1"
           :placeholder="label"
+          autocomplete
           @input="emit('update:modelValue', $event.target.value)"
         />
-      </template>
-      <template v-else-if="type === 'file'">
-        <label
-          class="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
-        >
-          <input
-            :type="type"
-            :name="name"
-            :required="required"
-            :value="inputValue"
-            class="hidden"
-            :placeholder="label"
-            @input="emit('change', $event.target.files[0])"
-          />
-          画像を選択
-        </label>
-      </template>
-      <template v-else-if="type === 'select'">
-        <select
-          :name="name"
-          :required="required"
-          :value="inputValue"
-          :class="inputClasses"
-          :placeholder="label"
-          step="1"
-          @change="onChange($event)"
-        >
-          <option v-if="label" value="">{{ label }}</option>
-          <option
-            v-for="option of selectOptions"
-            :key="option.key"
-            :value="option.key"
-          >
-            {{ option.text }}
-          </option>
-        </select>
-      </template>
-      <template v-else-if="type === 'checkbox'">
-        <div class="flex items-center">
-          <input
-            :id="id"
-            :type="type"
-            :name="name"
-            :required="required"
-            :checked="checked"
-            class="h-3 w-3 text-customBlue focus:ring-indigo-500 border-gray-300 rounded"
-            @change="onChangeCheck"
-          />
-          <label :for="id" class="block text-xs text-gray-9000 ml-1">
-            {{ label }}</label
-          >
-        </div>
-      </template>
-      <template v-else>
-        <div :class="[type === 'number' ? 'w-1/2' : 'w-full', 'relative']">
-          <input
-            :type="type"
-            :name="name"
-            :required="required"
-            :value="inputValue"
-            :class="inputClasses"
-            :min="min"
-            step="1"
-            :placeholder="label"
-            autocomplete
-            @input="emit('update:modelValue', $event.target.value)"
-          />
-        </div>
-      </template>
-      <span
-        v-if="append"
-        class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm"
-      >
-        {{ append }}
-      </span>
-    </div>
+      </div>
+    </template>
+    <span
+      v-if="append"
+      class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm"
+    >
+      {{ append }}
+    </span>
   </div>
 </template>

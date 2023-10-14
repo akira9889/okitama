@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\DeliveryArea;
-use App\Models\Town;
 use Illuminate\Http\Request;
 
 class DeliveryAreaController extends Controller
@@ -12,7 +10,7 @@ class DeliveryAreaController extends Controller
     public function getSelectedTowns()
     {
         $user = auth()->user();
-        $selectedTowns = $user->towns()->pluck('town_id');
+        $selectedTowns = $user->towns()->get();
 
         return response()->json($selectedTowns);
     }
