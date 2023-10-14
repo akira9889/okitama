@@ -19,9 +19,17 @@ const deliveryAreas = ref([])
 const dropoffs = ref([])
 
 onMounted(async () => {
-  getDropoffPlace()
+  // setSelectedTownsとgetDropoffPlaceを並行で実行
+  const townsAndDropoffsPromise = Promise.all([setSelectedTowns(), getDropoffPlace()])
+
+  // getDefaultTownは別で実行
+  const defaultTownId = await getDefaultTown()
+
+  // 並行処理の結果を待つ
+  await townsAndDropoffsPromise
+
+  form.value.town_id = defaultTownId || deliveryAreas.value[0]?.key
   form.value.dropoff_ids.push(DROPOFF_PLACE_ID.ENTRANCE)
-  await setSelectedTowns()
 })
 
 async function setSelectedTowns() {
@@ -34,8 +42,6 @@ async function setSelectedTowns() {
   })
 
   deliveryAreas.value = transformedData
-  const defaultTownId = await getDefaultTown()
-  form.value.town_id = defaultTownId || deliveryAreas.value[0]?.key
 }
 
 async function getDefaultTown() {
@@ -75,7 +81,8 @@ async function getDropoffPlace() {
 </script>
 
 <template>
-  <h1 class="text-xl text-center">配達エリア</h1>
+  <h1 class="text-xl text-center">顧客登録
+  </h1>
   <form class="mt-6" @submit.prevent="submit">
     <InputError :error-msg="errorMsg?.last_name" class="mb-2" />
     <InputError :error-msg="errorMsg?.first_name" class="mb-2" />
