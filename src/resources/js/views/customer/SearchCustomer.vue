@@ -62,6 +62,6 @@ const handleSelectCustomer = (customer) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 112px);
+  min-height: calc(calc(var(--vh, 1vh) * 100) - 112px);
 }
 </style>

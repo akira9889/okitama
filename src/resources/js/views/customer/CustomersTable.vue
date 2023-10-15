@@ -49,7 +49,9 @@ const selectCustomer = (customer) => {
               {{ dropoff.name
               }}<span v-if="index < customer.dropoffs.length - 1">, </span>
             </span>
-            <span v-if="!customer.dropoffs.length"><font-awesome-icon :icon="['fas', 'xmark']" /></span>
+            <span v-if="!customer.dropoffs.length"
+              ><font-awesome-icon :icon="['fas', 'xmark']"
+            /></span>
           </TableDetailCell>
         </tr>
       </tbody>
