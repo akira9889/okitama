@@ -20,7 +20,10 @@ const dropoffs = ref([])
 
 onMounted(async () => {
   // setSelectedTownsとgetDropoffPlaceを並行で実行
-  const townsAndDropoffsPromise = Promise.all([setSelectedTowns(), getDropoffPlace()])
+  const townsAndDropoffsPromise = Promise.all([
+    setSelectedTowns(),
+    getDropoffPlace(),
+  ])
 
   // getDefaultTownは別で実行
   const defaultTownId = await getDefaultTown()
@@ -81,8 +84,7 @@ async function getDropoffPlace() {
 </script>
 
 <template>
-  <h1 class="text-xl text-center">顧客登録
-  </h1>
+  <h1 class="text-xl text-center">顧客登録</h1>
   <form class="mt-6" @submit.prevent="submit">
     <InputError :error-msg="errorMsg?.last_name" class="mb-2" />
     <InputError :error-msg="errorMsg?.first_name" class="mb-2" />

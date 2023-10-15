@@ -91,9 +91,7 @@ async function submit() {
               :checked="form.selectedTowns.includes(Number(key))"
               @change="updateSelectedTowns"
             />
-            <label :for="key" class="ml-1 text-sm">{{
-              town
-            }}</label>
+            <label :for="key" class="ml-1 text-sm">{{ town }}</label>
           </div>
         </div>
       </div>
