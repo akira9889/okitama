@@ -8,7 +8,17 @@ import Toast from '@/components/Toast.vue'
 
 onMounted(() => {
   store.dispatch('auth/getCurrentUser')
+
+  setFillHeight()
+
+  // ウィンドウサイズが変更されたときに、再度高さを計算
+  window.addEventListener('resize', setFillHeight)
 })
+
+const setFillHeight = () => {
+  const vh = window.innerHeight * 0.01
+  document.documentElement.style.setProperty('--vh', `${vh}px`)
+}
 
 const sidebarOpened = ref(false)
 
@@ -33,9 +43,9 @@ const toasts = computed(() => store.state.toast.toasts)
   />
   <!-- Sidebar -->
 
-  <div class="min-h-[100vh] bg-gray-200">
+  <div class="main-wrap bg-gray-200">
     <!-- Content -->
-    <main class="px-2 py-4 pb-24 bg-white">
+    <main class="px-2 py-4 pb-24 bg-white h-hull">
       <div class="max-w-4xl mx-auto">
         <router-view />
       </div>
@@ -55,6 +65,11 @@ const toasts = computed(() => store.state.toast.toasts)
 </template>
 
 <style scoped>
+.main-wrap {
+  min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 0.3s ease;
