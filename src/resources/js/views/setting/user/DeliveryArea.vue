@@ -31,9 +31,9 @@ onMounted(() => {
 })
 
 async function getSelectedTown() {
-  const { data } = await apiClient.get('/delivery-area')
-  form.value.selectedTowns = data
-  firstSelectedTowns = [...data]
+  const { data } = await apiClient.get('/selected-towns')
+  form.value.selectedTowns = data.map((town) => town.id)
+  firstSelectedTowns = [...data.map((town) => town.id)]
 }
 
 function updateSelectedTowns({ key, value }) {
@@ -48,6 +48,9 @@ function updateSelectedTowns({ key, value }) {
 
 async function submit() {
   try {
+    if (!canSubmitUpdate.value) {
+      return
+    }
     await apiClient.put('/delivery-area', form.value)
     store.dispatch('toast/showToast', {
       message: '配達エリアを更新しました。',
@@ -75,16 +78,20 @@ async function submit() {
       <h2 class="text-md mt-4">{{ prefecture }}</h2>
       <div v-for="(towns, city) in cities" :key="city" class="ml-3 mt-4">
         <h3 class="text-sm">{{ city }}</h3>
-        <div class="town-container">
-          <div v-for="(town, key) in towns" :key="key" class="flex mr-2 ml-3">
+        <div class="flex flex-wrap">
+          <div
+            v-for="(town, key) in towns"
+            :key="key"
+            class="flex items-center mr-3"
+          >
             <CustomInput
               :id="key"
               type="checkbox"
-              :label="town"
-              class="town-name text-xs"
+              class="text-xs"
               :checked="form.selectedTowns.includes(Number(key))"
               @change="updateSelectedTowns"
             />
+            <label :for="key" class="ml-1 text-sm">{{ town }}</label>
           </div>
         </div>
       </div>
@@ -102,17 +109,6 @@ async function submit() {
 </template>
 
 <style scoped>
-.town-container {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 4px;
-}
-
-.town-name {
-  margin-bottom: 10px;
-  margin-right: 10px;
-}
-
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 0.3s ease;
