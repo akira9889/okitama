@@ -7,6 +7,7 @@ export default {
         customBlue: '#60B6D0',
         customRed: '#F05B5B',
         customGray: '#C4C4C4',
+        customGreen: '#C3FFBE',
       },
     },
   },
