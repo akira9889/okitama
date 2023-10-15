@@ -4,11 +4,26 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+    public function index(Request $request)
+    {
+        $data = $request->validate([
+            'search' => ['string', 'max:20']
+        ]);
+        $search = $data['search'];
+
+        $customers = Customer::with(['dropoffs', 'town'])
+                        ->whereRaw("CONCAT(last_name, COALESCE(first_name, '')) LIKE ?", ["{$search}%"])
+                        ->get();
+
+        return CustomerResource::collection($customers);
+    }
+
     public function store(CustomerRequest $request) {
         $data = $request->validated();
 

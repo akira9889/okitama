@@ -43,7 +43,7 @@ watchEffect(() => {
 
 const inputClasses = computed(() => {
   const cls = [
-    `block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 sm:text-sm w-full`,
+    `block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 sm:text-sm w-full h-full`,
   ]
 
   if (props.append && !props.prepend) {

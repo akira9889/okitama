@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Customer extends Model
@@ -18,5 +19,10 @@ class Customer extends Model
     public function dropoffs(): BelongsToMany
     {
         return $this->belongsToMany(Dropoff::class);
+    }
+
+    public function town(): BelongsTo
+    {
+        return $this->belongsTo(Town::class);
     }
 }
