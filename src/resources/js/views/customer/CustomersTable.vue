@@ -17,7 +17,7 @@ const selectCustomer = (customer) => {
 </script>
 
 <template>
-  <div class="overflow-x-auto w-full whitespace-nowrap">
+  <div class="w-full h-full whitespace-nowrap overflow-auto">
     <table class="w-full">
       <thead>
         <tr>
