@@ -41,23 +41,11 @@ watchEffect(() => {
   inputValue.value = props.modelValue
 })
 
-const inputClasses = computed(() => {
-  const cls = [
-    `block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 sm:text-sm w-full h-full`,
-  ]
+const inputClasses = ref(
+  'block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 sm:text-sm w-full h-full rounded-md',
+)
 
-  if (props.append && !props.prepend) {
-    cls.push(`rounded-l-md`)
-  } else if (props.prepend && !props.append) {
-    cls.push(`rounded-r-md`)
-  } else if (!props.prepend && !props.append) {
-    cls.push('rounded-md')
-  }
-
-  return cls.join(' ')
-})
-
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits(['update:modelValue', 'change', 'focus', 'blur'])
 
 function onChange(event) {
   const selectedIndex = event.target.selectedIndex
@@ -75,16 +63,18 @@ function onChangeCheck(event) {
   emit('change', { key, value })
   emit('update:modelValue', event.target.checked)
 }
+
+function handleFocus(event) {
+    emit('focus', event)
+  }
+
+  function handleBlur(event) {
+    emit('blur', event)
+  }
 </script>
 
 <template>
   <div>
-    <span
-      v-if="prepend"
-      class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-200 text-gray-500 text-sm"
-    >
-      {{ prepend }}
-    </span>
     <template v-if="type === 'textarea'">
       <textarea
         :id="id"
@@ -146,8 +136,8 @@ function onChangeCheck(event) {
         />
       </div>
     </template>
-    <template v-else>
-      <div :class="[type === 'number' ? 'w-1/2' : 'w-full', 'relative']">
+    <template v-else-if="type === 'text'">
+      <div c>
         <input
           :id="id"
           :type="type"
@@ -155,19 +145,42 @@ function onChangeCheck(event) {
           :required="required"
           :value="inputValue"
           :class="inputClasses"
-          :min="min"
-          step="1"
           :placeholder="label"
           autocomplete
           @input="emit('update:modelValue', $event.target.value)"
         />
       </div>
     </template>
-    <span
-      v-if="append"
-      class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm"
-    >
-      {{ append }}
-    </span>
+    <template v-else-if="type === 'search'">
+      <div class="relative">
+        <input
+          :id="id"
+          :type="type"
+          :name="name"
+          :required="required"
+          :value="inputValue"
+          :class="inputClasses"
+          :placeholder="label"
+          autocomplete
+          @input="emit('update:modelValue', $event.target.value)"
+          @focus="handleFocus"
+          @blur="handleBlur"
+        />
+        <span
+          v-show="inputValue"
+          class="absolute top-1/2 right-2 -translate-y-1/2 bg-customGray w-5 h-5 rounded-full text-white text-center leading-5"
+          @click="emit('update:modelValue', '')"
+          ><font-awesome-icon :icon="['fas', 'xmark']"
+        /></span>
+      </div>
+    </template>
   </div>
 </template>
+
+<style lang="scss" scoped>
+input[type='search'] {
+  &::-webkit-search-cancel-button {
+    appearance: none;
+  }
+}
+</style>

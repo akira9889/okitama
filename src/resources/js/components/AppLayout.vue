@@ -45,8 +45,8 @@ const toasts = computed(() => store.state.toast.toasts)
 
   <div class="main-wrap bg-gray-200">
     <!-- Content -->
-    <main class="px-2 py-4 pb-24 bg-white h-hull">
-      <div class="max-w-4xl mx-auto">
+    <main class="px-2 py-4 pb-[60px] bg-white h-[100dvh]">
+      <div class="max-w-4xl mx-auto h-full w-full">
         <router-view />
       </div>
     </main>
