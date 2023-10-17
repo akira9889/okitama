@@ -20,6 +20,8 @@ watch(
     if (timer) {
       clearTimeout(timer)
     }
+    console.log('New search:', newSearch)
+    console.log('Old search:', oldSearch)
 
     //iosでテキストを確定しないでキーボードを閉じるとvalueが空になり顧客が一瞬からになるため。
     if (!newSearch && oldSearch) {
