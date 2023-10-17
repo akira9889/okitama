@@ -46,7 +46,7 @@ const inputClasses = ref(
   'block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 sm:text-sm w-full h-full rounded-md',
 )
 
-const emit = defineEmits(['update:modelValue', 'change', 'focus', 'blur'])
+const emit = defineEmits(['update:modelValue', 'change', 'clearInput'])
 
 function onChange(event) {
   const selectedIndex = event.target.selectedIndex
@@ -67,10 +67,9 @@ function onChangeCheck(event) {
 
 const inputSearchRef = ref(null)
 
-function clearInput(event) {
-  event.preventDefault()
+function clearInput() {
   emit('update:modelValue', '')
-  inputSearchRef.value.focus()
+  emit('clearInput')
 }
 </script>
 
