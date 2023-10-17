@@ -43,10 +43,10 @@ const toasts = computed(() => store.state.toast.toasts)
   />
   <!-- Sidebar -->
 
-  <div class="main-wrap bg-gray-200">
+  <div class="main-wrap bg-white">
     <!-- Content -->
-    <main class="px-2 py-4 pb-[60px] bg-white h-[100dvh]">
-      <div class="max-w-4xl mx-auto h-full w-full">
+    <main class="px-2 py-4 pb-[60px] bg-white">
+      <div class="max-w-4xl mx-auto w-full">
         <router-view />
       </div>
     </main>
