@@ -28,6 +28,7 @@ const props = defineProps({
     default: false,
   },
   selectOptions: [Array, Object],
+  focus: Boolean,
 })
 
 const id = computed(() => {
@@ -64,13 +65,13 @@ function onChangeCheck(event) {
   emit('update:modelValue', event.target.checked)
 }
 
-function handleFocus(event) {
-    emit('focus', event)
-  }
+const inputSearchRef = ref(null)
 
-  function handleBlur(event) {
-    emit('blur', event)
-  }
+function clearInput(event) {
+  event.preventDefault()
+  emit('update:modelValue', '')
+  inputSearchRef.value.focus()
+}
 </script>
 
 <template>
@@ -155,21 +156,21 @@ function handleFocus(event) {
       <div class="relative">
         <input
           :id="id"
+          ref="inputSearchRef"
+          v-focus="focus"
           :type="type"
           :name="name"
           :required="required"
           :value="inputValue"
           :class="inputClasses"
           :placeholder="label"
-          autocomplete
+          enterkeyhint="search"
           @input="emit('update:modelValue', $event.target.value)"
-          @focus="handleFocus"
-          @blur="handleBlur"
         />
         <span
           v-show="inputValue"
           class="absolute top-1/2 right-2 -translate-y-1/2 bg-customGray w-5 h-5 rounded-full text-white text-center leading-5"
-          @click="emit('update:modelValue', '')"
+          @click="clearInput"
           ><font-awesome-icon :icon="['fas', 'xmark']"
         /></span>
       </div>
