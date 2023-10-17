@@ -67,8 +67,7 @@ function onChangeCheck(event) {
 
 const inputSearchRef = ref(null)
 
-function clearInput(event) {
-  event.preventDefault()
+function clearInput() {
   emit('update:modelValue', '')
   inputSearchRef.value.focus()
 }
