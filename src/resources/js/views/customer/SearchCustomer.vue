@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, onMounted, computed } from 'vue'
+import { reactive, watch, onMounted, computed } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import CustomersTable from './CustomersTable.vue'
 import CustomerDetail from './CustomerDetail.vue'
@@ -16,10 +16,16 @@ let timer = null
 
 watch(
   () => form.search,
-  (newSearch) => {
+  (newSearch, oldSearch) => {
     if (timer) {
       clearTimeout(timer)
     }
+
+    //iosでテキストを確定しないでキーボードを閉じるとvalueが空になり顧客が一瞬からになるため。
+    if (!newSearch && oldSearch) {
+      return
+    }
+
     if (!newSearch) {
       store.commit('searchCustomer/SET_CUSTOMERS', [])
       return
