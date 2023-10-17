@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, onMounted, computed } from 'vue'
+import { reactive, watch, onMounted, computed } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import CustomersTable from './CustomersTable.vue'
 import CustomerDetail from './CustomerDetail.vue'
@@ -20,6 +20,7 @@ watch(
     if (timer) {
       clearTimeout(timer)
     }
+    
     console.log('New search:', newSearch)
     console.log('Old search:', oldSearch)
 
