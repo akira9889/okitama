@@ -18,6 +18,20 @@ library.add(faEye, faEyeSlash, faChevronRight, faXmark)
 
 const app = createApp(App)
 
+app.directive('focus', {
+  mounted(el, binding) {
+    if (binding.value) {
+      el.focus()
+    }
+  },
+
+  updated(el, binding) {
+    if (binding.value) {
+      el.focus()
+    }
+  },
+})
+
 app
   .component('FontAwesomeIcon', FontAwesomeIcon)
   .use(store)

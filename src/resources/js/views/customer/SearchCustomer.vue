@@ -32,21 +32,12 @@ watch(
 
 onMounted(() => {
   store.commit('searchCustomer/SET_CUSTOMERS', [])
+
 })
 
 const handleSelectCustomer = (customer) => {
   customers.value = [customer]
 }
-
-const isActive = ref(false)
-
-  const handleFocus = () => {
-    isActive.value = true
-  }
-
-  const handleBlur = () => {
-    isActive.value = false
-  }
 </script>
 
 <template>
@@ -54,11 +45,10 @@ const isActive = ref(false)
       v-model="form.search"
       type="search"
       label="検索"
+      :focus="true"
       class="fixed z-30 left-1/2 bottom-[12px] -translate-x-1/2 w-2/3"
-      @focus="handleFocus"
-      @blur="handleBlur"
-    />
-  <div :class="['customers-wrap', { 'active': isActive }]">
+      />
+  <div class="customers-wrap">
     <CustomerDetail v-if="customers.length === 1" :customer="customers[0]" />
     <CustomersTable
       v-else-if="customers.length > 1"
@@ -76,15 +66,10 @@ const isActive = ref(false)
   align-items: center;
   width: 100%;
   overflow-y: scroll;
-  transition: all .3s;
-  bottom: 100%;
-  
-  &.active {
-    height: 50dvh;
-    position: absolute;
-    bottom: 60px;
-    left: 0;
-    padding: 24px 8px;
-  }
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 24px 8px;
 }
 </style>
