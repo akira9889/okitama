@@ -16,14 +16,19 @@ let timer = null
 
 watch(
   () => form.search,
-  (newSearch) => {
+  (newSearch, oldSearch) => {
     if (timer) {
       clearTimeout(timer)
     }
-    if (!newSearch) {
-      store.commit('searchCustomer/SET_CUSTOMERS', [])
+    
+    console.log('New search:', newSearch)
+    console.log('Old search:', oldSearch)
+
+    //iosでテキストを確定しないでキーボードを閉じるとvalueが空になり顧客が一瞬からになるため。
+    if (!newSearch && oldSearch) {
       return
     }
+
     timer = setTimeout(() => {
       store.dispatch('searchCustomer/getCustomers', form)
     }, 1000)
@@ -37,16 +42,20 @@ onMounted(() => {
 const handleSelectCustomer = (customer) => {
   customers.value = [customer]
 }
+
+const searchInputFocus = ref(false)
 </script>
 
 <template>
+  <CustomInput
+    v-model="form.search"
+    type="search"
+    label="検索"
+    :focus="true"
+    class="fixed z-30 left-1/2 bottom-[12px] -translate-x-1/2 w-2/3"
+    @clear-input="searchInputFocus"
+  />
   <div class="customers-wrap">
-    <CustomInput
-      v-model="form.search"
-      type="text"
-      label="検索"
-      class="fixed z-30 left-1/2 bottom-[12px] -translate-x-1/2 w-2/3"
-    />
     <CustomerDetail v-if="customers.length === 1" :customer="customers[0]" />
     <CustomersTable
       v-else-if="customers.length > 1"
@@ -57,11 +66,17 @@ const handleSelectCustomer = (customer) => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .customers-wrap {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 112px);
+  width: 100%;
+  overflow-y: scroll;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 24px 8px;
 }
 </style>

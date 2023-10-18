@@ -184,7 +184,7 @@ async function getDropoffPlace() {
       />
     </div>
 
-    <div class="mt-6 text-center">
+    <div class="mt-6 text-center pb-6">
       <Btn type="submit" text="追加" bg-color="primary" />
     </div>
   </form>
