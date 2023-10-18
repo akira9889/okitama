@@ -46,7 +46,13 @@ const inputClasses = ref(
   'block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 sm:text-sm w-full h-full rounded-md',
 )
 
-const emit = defineEmits(['update:modelValue', 'change', 'clearInput'])
+const emit = defineEmits([
+  'update:modelValue',
+  'change',
+  'clearInput',
+  'focus',
+  'blur',
+])
 
 function onChange(event) {
   const selectedIndex = event.target.selectedIndex
@@ -70,6 +76,14 @@ const inputSearchRef = ref(null)
 function clearInput() {
   emit('update:modelValue', '')
   emit('clearInput')
+}
+
+function handleFocus() {
+  emit('focus')
+}
+
+function handleBlur() {
+  emit('blur')
 }
 </script>
 
@@ -165,6 +179,8 @@ function clearInput() {
           :placeholder="label"
           enterkeyhint="search"
           @input="emit('update:modelValue', $event.target.value)"
+          @focus="handleFocus"
+          @blur="handleBlur"
         />
         <span
           v-show="inputValue"
