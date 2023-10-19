@@ -53,7 +53,7 @@ COPY --from=build /var/www/html/public/build /var/www/html/public/build
 COPY ./docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
-RUN composer install \
+RUN composer install && \
     php artisan cache:clear && \
     php artisan config:clear && \
     chmod -R 777 storage
