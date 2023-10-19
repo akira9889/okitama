@@ -1,7 +1,7 @@
 <script setup>
 import TableHeaderCell from '@/components/Table/TableHeaderCell.vue'
-import { computed } from 'vue'
-import TableDetailCell from '../../components/Table/TableDetailCell.vue'
+import { ref, computed, watch, nextTick, onMounted } from 'vue'
+import TableDetailCell from '@/components/Table/TableDetailCell.vue'
 import { useStore } from 'vuex'
 const props = defineProps({
   customers: Array,
@@ -14,10 +14,53 @@ const customers = computed(() => props.customers)
 const selectCustomer = (customer) => {
   store.commit('searchCustomer/SET_CUSTOMERS', [customer])
 }
+
+const tableRef = ref(null)
+
+const showScrollBar = ref(false)
+
+const scrollProgress = ref(0)
+const clientHeight = ref(0)
+const scrollHeight = ref(0)
+
+const SCROLL_BAR_HEIGHT_RATIO = 610
+const scrollBarHeight = computed(
+  () => (clientHeight.value / scrollHeight.value) * SCROLL_BAR_HEIGHT_RATIO,
+)
+
+onMounted(() => {
+  setScrollBar()
+})
+
+watch(customers, async () => {
+  await nextTick()
+  setScrollBar()
+})
+
+function setScrollBar() {
+  const {
+    scrollHeight: currentScrollHeight,
+    clientHeight: currentClientHeight,
+  } = tableRef.value
+
+  if (currentClientHeight < currentScrollHeight) {
+    showScrollBar.value = true
+  } else {
+    showScrollBar.value = false
+  }
+
+  clientHeight.value = currentClientHeight
+  scrollHeight.value = currentScrollHeight
+}
+
+const handleScroll = (e) => {
+  const { scrollTop } = e.target
+  scrollProgress.value = scrollTop / (scrollHeight.value - clientHeight.value)
+}
 </script>
 
 <template>
-  <div class="w-full h-full whitespace-nowrap overflow-auto">
+  <div ref="tableRef" class="customers-table" @scroll="handleScroll">
     <table class="w-full">
       <thead>
         <tr>
@@ -56,13 +99,53 @@ const selectCustomer = (customer) => {
         </tr>
       </tbody>
     </table>
+    <div
+      v-if="showScrollBar"
+      class="scrollbar-wrap"
+      :style="{
+        height: clientHeight + 'px',
+      }"
+    >
+      <div
+        class="scrollbar"
+        :style="{
+          marginTop: (clientHeight - scrollBarHeight) * scrollProgress + 'px',
+          height: scrollBarHeight + 'px',
+        }"
+      />
+    </div>
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.customers-table {
+  width: 100%;
+  white-space: nowrap;
+  overflow: auto;
+  height: calc(100dvh - 76px);
+  position: relative;
+}
+
 thead th {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.scrollbar-wrap {
+  width: 6px;
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  right: 2px;
+  background: #efefef;
+  overflow: hidden;
+}
+
+.scrollbar {
+  margin: 0 auto;
+  width: 4px;
+  background: #bebebe;
+  border-radius: 8px;
 }
 </style>

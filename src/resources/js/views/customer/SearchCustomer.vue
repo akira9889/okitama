@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import CustomersTable from './CustomersTable.vue'
 import CustomerDetail from './CustomerDetail.vue'
@@ -12,72 +12,47 @@ const form = reactive({
 
 const customers = computed(() => store.state.searchCustomer.customers)
 
-let timer = null
+const customInputRef = ref(null)
+const customersTableRef = ref(null)
 
-watch(
-  () => form.search,
-  (newSearch, oldSearch) => {
-    if (timer) {
-      clearTimeout(timer)
-    }
-
-    console.log('New search:', newSearch)
-    console.log('Old search:', oldSearch)
-
-    //iosでテキストを確定しないでキーボードを閉じるとvalueが空になり顧客が一瞬からになるため。
-    if (!newSearch && oldSearch) {
-      return
-    }
-
-    timer = setTimeout(() => {
-      store.dispatch('searchCustomer/getCustomers', form)
-    }, 1000)
-  },
-)
-
-onMounted(() => {
-  store.commit('searchCustomer/SET_CUSTOMERS', [])
-})
-
-const handleSelectCustomer = (customer) => {
+const onSelectCustomer = (customer) => {
   customers.value = [customer]
 }
 
-const isInputFocused = ref(false)
+onMounted(() => {
+  store.dispatch('searchCustomer/getCustomers', form)
+})
 
-function activateInputFocus() {
-  isInputFocused.value = true
+async function submit() {
+  await store.dispatch('searchCustomer/getCustomers', form)
+  customInputRef.value.blurInput()
+  scrollToTop()
 }
 
-const isActive = ref(false)
-
-const activateCustomersWrap = () => {
-  isActive.value = true
-}
-
-const deactivateCustomersWrap = () => {
-  isActive.value = false
+function scrollToTop() {
+  window.scrollTo(0, 0)
 }
 </script>
 
 <template>
-  <CustomInput
-    v-model="form.search"
-    type="search"
-    label="検索"
-    :focus="isInputFocused"
-    class="fixed z-30 left-1/2 bottom-[12px] -translate-x-1/2 w-2/3"
-    @clear-input="activateInputFocus"
-    @focus="activateCustomersWrap"
-    @blur="deactivateCustomersWrap"
-  />
+  <form @submit.prevent="submit">
+    <CustomInput
+      ref="customInputRef"
+      v-model="form.search"
+      type="search"
+      label="検索"
+      :focus="true"
+      class="fixed z-30 left-1/2 bottom-[12px] -translate-x-1/2 w-2/3"
+    />
+  </form>
   <div class="customers">
-    <div :class="['customers-wrap', { active: isActive }]">
+    <div class="customers-wrap">
       <CustomerDetail v-if="customers.length === 1" :customer="customers[0]" />
       <CustomersTable
         v-else-if="customers.length > 1"
+        ref="customersTableRef"
         :customers="customers"
-        @select-customer="handleSelectCustomer"
+        @select-customer="onSelectCustomer"
       />
       <div v-else class="text-center">顧客が見つかりません</div>
     </div>
@@ -86,24 +61,15 @@ const deactivateCustomersWrap = () => {
 
 <style lang="scss" scoped>
 .customers {
-  height: calc(100vh - 76px);
+  min-height: calc(100dvh - 76px);
   position: relative;
 }
 
 .customers-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  padding-bottom: 8px;
-
-  &.active {
-    height: 50%;
-    position: absolute;
-    left: 0;
-    top: 50%;
-  }
+  padding-bottom: 24px;
 }
 </style>
