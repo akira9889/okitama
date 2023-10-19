@@ -46,7 +46,10 @@ function scrollToTop() {
     />
   </form>
   <div class="customers">
-    <div class="customers-wrap">
+    <div
+      class="customers-wrap"
+      :class="{ 'absolute top-1/2 -translate-y-1/2': customers.length !== 1 }"
+    >
       <CustomerDetail v-if="customers.length === 1" :customer="customers[0]" />
       <CustomersTable
         v-else-if="customers.length > 1"
@@ -66,9 +69,6 @@ function scrollToTop() {
 }
 
 .customers-wrap {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   width: 100%;
   padding-bottom: 24px;
 }
