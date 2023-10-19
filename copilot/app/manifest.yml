@@ -11,7 +11,6 @@ image:
   build:
     dockerfile: ./docker/php/Dockerfile
     context: .
-    target: production
   port: 8080
 
 sidecars:
@@ -62,8 +61,14 @@ environments:
       alias: 'okitama.sawascle.com'
     variables:
       APP_ENV: production
+    image:
+      build:
+        target: production
   test:
     http:
       alias: 'test.sawascle.com'
     variables:
       APP_ENV: test
+    image:
+      build:
+        target: test
