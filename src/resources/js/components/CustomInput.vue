@@ -31,6 +31,10 @@ const props = defineProps({
   focus: Boolean,
 })
 
+const emit = defineEmits(['update:modelValue', 'change'])
+
+defineExpose({ blurInput })
+
 const id = computed(() => {
   if (props.id) return props.id
   return `id-${Math.floor(1000000 + Math.random() * 1000000)}`
@@ -38,15 +42,17 @@ const id = computed(() => {
 
 const inputValue = ref(props.modelValue)
 
+const isInputFocused = ref(props.focus)
+
+const inputClasses = ref(
+  'block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 w-full h-full rounded-md',
+)
+
+const searchInputRef = ref(null)
+
 watchEffect(() => {
   inputValue.value = props.modelValue
 })
-
-const inputClasses = ref(
-  'block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 sm:text-sm w-full h-full rounded-md',
-)
-
-const emit = defineEmits(['update:modelValue', 'change', 'clearInput'])
 
 function onChange(event) {
   const selectedIndex = event.target.selectedIndex
@@ -65,11 +71,8 @@ function onChangeCheck(event) {
   emit('update:modelValue', event.target.checked)
 }
 
-const inputSearchRef = ref(null)
-
-function clearInput() {
-  emit('update:modelValue', '')
-  emit('clearInput')
+function blurInput() {
+  searchInputRef.value.blur()
 }
 </script>
 
@@ -155,8 +158,8 @@ function clearInput() {
       <div class="relative">
         <input
           :id="id"
-          ref="inputSearchRef"
-          v-focus="focus"
+          ref="searchInputRef"
+          v-focus="isInputFocused"
           :type="type"
           :name="name"
           :required="required"
@@ -169,7 +172,7 @@ function clearInput() {
         <span
           v-show="inputValue"
           class="absolute top-1/2 right-2 -translate-y-1/2 bg-customGray w-5 h-5 rounded-full text-white text-center leading-5"
-          @click="clearInput"
+          @click="emit('update:modelValue', '')"
           ><font-awesome-icon :icon="['fas', 'xmark']"
         /></span>
       </div>
