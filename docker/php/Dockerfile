@@ -41,6 +41,30 @@ COPY ./docker/php/php.devlopment.ini /usr/local/etc/php/php.ini
 
 CMD [ "/start.sh" ]
 
+# テスト環境
+FROM base AS test
+
+RUN apt update && \
+    apt install -y vim
+
+COPY ./src/ .
+COPY --from=build /var/www/html/public/build /var/www/html/public/build
+
+COPY ./docker/start.sh /start.sh
+RUN chmod +x /start.sh
+
+RUN composer install && \
+    php artisan cache:clear && \
+    php artisan config:clear && \
+    chmod -R 777 storage
+
+COPY ./docker/php/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
+COPY ./docker/php/php.production.ini /usr/local/etc/php/php.ini
+
+VOLUME /var/www/html/public
+
+CMD [ "/start.sh" ]
+
 # 本番環境
 FROM base AS production
 
@@ -59,6 +83,5 @@ COPY ./docker/php/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY ./docker/php/php.production.ini /usr/local/etc/php/php.ini
 
 VOLUME /var/www/html/public
-
 
 CMD [ "/start.sh" ]

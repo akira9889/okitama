@@ -1,43 +1,40 @@
-#/!bin/bash
+#!/bin/bash
 
-if [ "$APP_ENV" = "production" ]; then
-  # 本番環境で実行するコマンド
-  echo "Set config"
-  echo DB_HOST=$DB_HOST >> .env.production &&
-  echo DB_DATABASE=$DB_DATABASE >> .env.production &&
-  echo DB_USERNAME=$DB_USERNAME >> .env.production &&
-  echo DB_PASSWORD=$DB_PASSWORD >> .env.production &&
-  echo APP_NAME=$APP_NAME >> .env.production &&
-  echo APP_KEY=$APP_KEY >> .env.production &&
-  echo APP_URL=$APP_URL >> .env.production &&
-  echo SESSION_DRIVER=$SESSION_DRIVER >> .env.production &&
-  echo SANCTUM_STATEFUL_DOMAINS=$SANCTUM_STATEFUL_DOMAINS >> .env.production &&
-  echo SESSION_DOMAIN=$SESSION_DOMAIN >> .env.production &&
+set_env_variables() {
+  local env_file=".env.$1"
+  echo "Set config to $env_file"
+  echo DB_HOST=$DB_HOST >> $env_file
+  echo DB_DATABASE=$DB_DATABASE >> $env_file
+  echo DB_USERNAME=$DB_USERNAME >> $env_file
+  echo DB_PASSWORD=$DB_PASSWORD >> $env_file
+  echo APP_NAME=$APP_NAME >> $env_file
+  echo APP_KEY=$APP_KEY >> $env_file
+  echo APP_URL=$APP_URL >> $env_file
+  echo SESSION_DRIVER=$SESSION_DRIVER >> $env_file
+  echo SANCTUM_STATEFUL_DOMAINS=$SANCTUM_STATEFUL_DOMAINS >> $env_file
+  echo SESSION_DOMAIN=$SESSION_DOMAIN >> $env_file
   echo 'Laravel env variables configured'
+}
+
+cache_config() {
   echo "Cache config"
-  php artisan config:cache --env=production
-  echo "Migrate"
-  php artisan migrate --force
-  php-fpm
-elif [ "$APP_ENV" = "test" ]; then
-  # テスト環境で実行するコマンド
-  echo "Set config"
-  echo DB_HOST=$DB_HOST >> .env.test &&
-  echo DB_DATABASE=$DB_DATABASE >> .env.test &&
-  echo DB_USERNAME=$DB_USERNAME >> .env.test &&
-  echo DB_PASSWORD=$DB_PASSWORD >> .env.test &&
-  echo APP_NAME=$APP_NAME >> .env.test &&
-  echo APP_KEY=$APP_KEY >> .env.test &&
-  echo APP_URL=$APP_URL >> .env.test &&
-  echo SESSION_DRIVER=$SESSION_DRIVER >> .env.test &&
-  echo SANCTUM_STATEFUL_DOMAINS=$SANCTUM_STATEFUL_DOMAINS >> .env.test &&
-  echo SESSION_DOMAIN=$SESSION_DOMAIN >> .env.test &&
-  echo 'Laravel env variables configured'
-  echo "Cache config"
-  php artisan config:cache --env=test
-  echo "Migrate"
-  php artisan migrate --force
-  php-fpm
-else
-  php-fpm
+  php artisan config:cache --env=$1
+}
+
+run_migrations() {
+  if [ "$1" = "production" ]; then
+    echo "Migrate"
+    php artisan migrate --force
+  elif [ "$1" = "test" ]; then
+    echo "Migrate and seed"
+    php artisan migrate:refresh --seed --force
+  fi
+}
+
+if [ "$APP_ENV" = "production" ] || [ "$APP_ENV" = "test" ]; then
+  set_env_variables $APP_ENV
+  cache_config $APP_ENV
+  run_migrations $APP_ENV
 fi
+
+php-fpm
