@@ -1,6 +1,6 @@
 <script setup>
 import TableHeaderCell from '@/components/Table/TableHeaderCell.vue'
-import { ref, computed, watch, nextTick, onMounted } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import TableDetailCell from '@/components/Table/TableDetailCell.vue'
 import { useStore } from 'vuex'
 const props = defineProps({
@@ -30,6 +30,11 @@ const scrollBarHeight = computed(
 
 onMounted(() => {
   setScrollBar()
+  window.addEventListener('resize', setScrollBar)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', setScrollBar)
 })
 
 watch(customers, async () => {
@@ -53,9 +58,11 @@ function setScrollBar() {
   scrollHeight.value = currentScrollHeight
 }
 
+const MAX_SCROLL_PROGRESS = 1
 const handleScroll = (e) => {
   const { scrollTop } = e.target
-  scrollProgress.value = scrollTop / (scrollHeight.value - clientHeight.value)
+  const maxScroll = scrollHeight.value - clientHeight.value
+  scrollProgress.value = Math.min(MAX_SCROLL_PROGRESS, scrollTop / maxScroll)
 }
 </script>
 
