@@ -3,6 +3,10 @@ import store from '@/store'
 
 export const apiClient = axios.create({
   baseURL: '/api',
+  headers: {
+    Accept: 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+  },
 })
 
 apiClient.interceptors.response.use(
