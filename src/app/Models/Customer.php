@@ -11,6 +11,8 @@ class Customer extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'first_name', 'last_name', 'town_id', 'address_number',
         'room_number', 'is_dropoff_possible', 'description'
