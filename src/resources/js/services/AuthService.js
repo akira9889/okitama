@@ -3,6 +3,10 @@ import store from '@/store'
 
 export const authClient = axios.create({
   baseURL: '/',
+  headers: {
+    Accept: 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+  },
 })
 
 authClient.interceptors.response.use(

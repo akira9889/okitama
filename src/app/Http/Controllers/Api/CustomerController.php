@@ -17,14 +17,20 @@ class CustomerController extends Controller
         ]);
         $search = $data['search'];
 
+        $deliveryAreas = $request->user()->towns()->get()->pluck('id');
+
         $customers = Customer::with(['dropoffs', 'town'])
-                        ->whereRaw("CONCAT(last_name, COALESCE(first_name, '')) LIKE ?", ["{$search}%"])
+                        ->where('full_name', 'LIKE', $search . '%')
+                        ->whereIn('town_id', $deliveryAreas)
+                        ->orderBy('town_id')
+                        ->orderBy('address_number')
                         ->get();
 
         return CustomerResource::collection($customers);
     }
 
-    public function store(CustomerRequest $request) {
+    public function store(CustomerRequest $request)
+    {
         $data = $request->validated();
 
         $customer = new Customer;
