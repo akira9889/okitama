@@ -27,6 +27,7 @@ async function submit() {
   await store.dispatch('searchCustomer/getCustomers', form)
   customInputRef.value.blurInput()
   scrollToTop()
+  customersTableRef.value.scrollToTop()
 }
 
 function scrollToTop() {

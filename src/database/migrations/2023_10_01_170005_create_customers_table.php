@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('first_name')->nullable();
             $table->string('last_name');
-            $table->foreignId('town_id')->references('id')->on('towns');
+            $table->string('full_name');
+            $table->foreignId('town_id')->constrained();
             $table->string('address_number')->nullable();
             $table->string('room_number')->nullable();
             $table->boolean('is_dropoff_possible');
             $table->text('description')->nullable();
-            $table->timestamps();
+
+            $table->index(['full_name', 'town_id']);
         });
     }
 

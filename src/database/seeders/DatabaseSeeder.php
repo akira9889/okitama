@@ -24,5 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CityTownSeeder::class);
         $this->call(DropoffSeeder::class);
         $this->call(DeliveryAreaSeeder::class);
+        $this->call(CustomerSeeder::class);
+        $this->call(CustomerDropoffSeeder::class);
     }
 }
