@@ -1,4 +1,5 @@
 <script setup>
+import { scrollToTop } from '@/constants.js'
 import { ref, reactive, onMounted, computed } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import CustomersTable from './CustomersTable.vue'
@@ -27,11 +28,7 @@ async function submit() {
   await store.dispatch('searchCustomer/getCustomers', form)
   customInputRef.value.blurInput()
   scrollToTop()
-  customersTableRef.value.scrollToTop()
-}
-
-function scrollToTop() {
-  window.scrollTo(0, 0)
+  customersTableRef.value.tableScrollToTop()
 }
 </script>
 

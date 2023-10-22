@@ -1,14 +1,18 @@
 <script setup>
 import { apiClient } from '@/services/API.js'
-import { DROPOFF_PLACE_ID } from '@/constants.js'
+import { DROPOFF_PLACE_ID, scrollToTop } from '@/constants.js'
 import { ref, onMounted } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import InputError from '@/components/InputError.vue'
 import Btn from '@/components/Btn.vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const form = ref({
+  last_name: '',
+  first_name: '',
   dropoff_ids: [],
-  is_dropoff_possible: true,
   is_checked_default: false,
   town_id: '',
 })
@@ -19,21 +23,26 @@ const deliveryAreas = ref([])
 const dropoffs = ref([])
 
 onMounted(async () => {
-  // setSelectedTownsとgetDropoffPlaceを並行で実行
+  await initializeForm()
+})
+
+async function initializeForm() {
+  form.value.dropoff_ids = []
+  form.value.is_checked_default = false
+  form.value.town_id = ''
+
   const townsAndDropoffsPromise = Promise.all([
     setSelectedTowns(),
     getDropoffPlace(),
   ])
 
-  // getDefaultTownは別で実行
   const defaultTownId = await getDefaultTown()
 
-  // 並行処理の結果を待つ
   await townsAndDropoffsPromise
-
   form.value.town_id = defaultTownId || deliveryAreas.value[0]?.key
   form.value.dropoff_ids.push(DROPOFF_PLACE_ID.ENTRANCE)
-})
+  scrollToTop()
+}
 
 async function setSelectedTowns() {
   const { data } = await apiClient.get('/selected-towns')
@@ -56,22 +65,26 @@ function changeTown({ value }) {
   form.value.town_id = value
 }
 
-function checkDropoff({ value }) {
-  form.value.is_dropoff_possible = value
-}
-
 function checkDropoffPlace({ key, value }) {
+  const dropoffId = Number(key)
+
   if (value) {
-    form.value.dropoff_ids.push(key)
+    form.value.dropoff_ids.push(dropoffId)
   } else {
-    const index = form.value.dropoff_ids.indexOf(key)
-    form.value.dropoff_ids.splice(index, 1)
+    form.value.dropoff_ids = form.value.dropoff_ids.filter(
+      (id) => id !== dropoffId,
+    )
   }
 }
 
 async function submit() {
   try {
     await apiClient.post('/customer', form.value)
+    store.dispatch('toast/showToast', {
+      message: '顧客を追加しました',
+      delay: 5000,
+    })
+    initializeForm()
   } catch ({ response }) {
     errorMsg.value = response.data.errors
   }
@@ -88,15 +101,15 @@ async function getDropoffPlace() {
   <form class="mt-6" @submit.prevent="submit">
     <InputError :error-msg="errorMsg?.last_name" class="mb-2" />
     <InputError :error-msg="errorMsg?.first_name" class="mb-2" />
-    <label for="last_name">フリガナ</label>
+    <label for="last_name">ふりがな</label>
     <div class="flex">
       <CustomInput
         id="last_name"
         v-model="form.last_name"
-        label="姓"
+        label="せい"
         class="name"
       />
-      <CustomInput v-model="form.first_name" label="名" class="name" />
+      <CustomInput v-model="form.first_name" label="めい" class="name" />
     </div>
 
     <div class="mt-6">
@@ -146,17 +159,7 @@ async function getDropoffPlace() {
         class="mt-1"
       />
     </div>
-    <hr class="mt-6 bg-red-800" />
-    <div class="flex items-center mt-6">
-      <label for="is_dropoff_possible" class="mr-2">置き配可能</label>
-      <CustomInput
-        id="is_dropoff_possible"
-        type="checkbox"
-        :checked="form.is_dropoff_possible"
-        @change="checkDropoff"
-      />
-    </div>
-
+    <hr class="mt-6" />
     <div class="flex mt-4">
       <label class="mr-2">置き配場所</label>
       <div
@@ -167,7 +170,7 @@ async function getDropoffPlace() {
         <CustomInput
           :id="dropoff.id"
           type="checkbox"
-          :checked="form.dropoff_ids.includes(Number(dropoff.id))"
+          :checked="form.dropoff_ids.includes(dropoff.id)"
           @change="checkDropoffPlace"
         />
         <label :for="dropoff.id" class="ml-1 text-sm">{{ dropoff.name }}</label>

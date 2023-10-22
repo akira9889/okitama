@@ -27,7 +27,6 @@ class CustomerFactory extends Factory
             'town_id' => \App\Models\Town::inRandomOrder()->first()->id,
             'address_number' => implode('-', str_split(fake()->randomNumber(3, true))),
             'room_number' => fake()->buildingNumber(),
-            'is_dropoff_possible' => fake()->boolean,
             'description' => fake()->realText,
         ];
     }

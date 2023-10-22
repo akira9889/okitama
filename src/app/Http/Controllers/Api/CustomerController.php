@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CustomerRequest;
+use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class CustomerController extends Controller
         return CustomerResource::collection($customers);
     }
 
-    public function store(CustomerRequest $request)
+    public function store(StoreCustomerRequest $request)
     {
         $data = $request->validated();
 
@@ -39,6 +40,12 @@ class CustomerController extends Controller
         $customerData = array_filter($data, function ($key) use ($customer) {
             return in_array($key, $customer->getFillable());
         }, ARRAY_FILTER_USE_KEY);
+
+        $customerData['full_name'] = $data['last_name'];
+        if (isset($data['first_name'])) {
+            $customerData['full_name'] = $data['last_name'] . $data['first_name'];
+        }
+
         $customer->fill($customerData)->save();
 
         $customer->dropoffs()->attach($data['dropoff_ids']);
@@ -58,7 +65,26 @@ class CustomerController extends Controller
         }
     }
 
+    public function show(Customer $customer)
+    {
+        $customer->load('town', 'dropoffs');
+        return new CustomerResource($customer);
+    }
 
+    public function update(UpdateCustomerRequest $request,Customer $customer)
+    {
+        $data = $request->validated();
+
+        //Customerテーブルのカラムだけを抽出して保存
+        $customerData = array_filter($data, function ($key) use ($customer) {
+            return in_array($key, $customer->getFillable());
+        }, ARRAY_FILTER_USE_KEY);
+        $customerData['full_name'] = $data['last_name'] . $data['first_name'];
+
+        $customer->fill($customerData)->save();
+
+        $customer->dropoffs()->sync($data['dropoff_ids']);
+    }
 
     public function getDefaultTown()
     {

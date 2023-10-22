@@ -44,6 +44,8 @@ const inputValue = ref(props.modelValue)
 
 const isInputFocused = ref(props.focus)
 
+const isChecked = ref(props.checked)
+
 const inputClasses = ref(
   'block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 w-full h-full rounded-md',
 )
@@ -52,6 +54,7 @@ const searchInputRef = ref(null)
 
 watchEffect(() => {
   inputValue.value = props.modelValue
+  isChecked.value = props.checked
 })
 
 function onChange(event) {
@@ -85,6 +88,7 @@ function blurInput() {
         :required="required"
         :value="inputValue"
         :class="inputClasses"
+        class="min-h-[160px]"
         :placeholder="label"
         @input="emit('update:modelValue', $event.target.value)"
       />
@@ -133,7 +137,7 @@ function blurInput() {
           :type="type"
           :name="name"
           :required="required"
-          :checked="checked"
+          :checked="isChecked"
           class="h-3 w-3 text-customBlue focus:ring-indigo-500 border-gray-300 rounded"
           @change="onChangeCheck"
         />

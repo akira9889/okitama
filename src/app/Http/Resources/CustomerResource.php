@@ -24,7 +24,10 @@ class CustomerResource extends JsonResource
             'id' => $this->id,
             'last_name' => $this->last_name,
             'first_name' => $this->first_name,
-            'address' => $this->town->name . $this->address_number,
+            'town_id' => $this->town->id,
+            'town_name' => $this->town->name,
+            'address_number' => $this->address_number,
+            'room_number' => $this->room_number,
             'dropoffs' => DropoffResource::collection($this->dropoffs),
             'description' => $this->description
         ];
