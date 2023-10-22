@@ -8,7 +8,6 @@ import Btn from '@/components/Btn.vue'
 
 const form = ref({
   dropoff_ids: [],
-  is_dropoff_possible: true,
   is_checked_default: false,
   town_id: '',
 })
@@ -56,10 +55,6 @@ function changeTown({ value }) {
   form.value.town_id = value
 }
 
-function checkDropoff({ value }) {
-  form.value.is_dropoff_possible = value
-}
-
 function checkDropoffPlace({ key, value }) {
   if (value) {
     form.value.dropoff_ids.push(key)
@@ -88,15 +83,15 @@ async function getDropoffPlace() {
   <form class="mt-6" @submit.prevent="submit">
     <InputError :error-msg="errorMsg?.last_name" class="mb-2" />
     <InputError :error-msg="errorMsg?.first_name" class="mb-2" />
-    <label for="last_name">フリガナ</label>
+    <label for="last_name">ふりがな</label>
     <div class="flex">
       <CustomInput
         id="last_name"
         v-model="form.last_name"
-        label="姓"
+        label="せい"
         class="name"
       />
-      <CustomInput v-model="form.first_name" label="名" class="name" />
+      <CustomInput v-model="form.first_name" label="めい" class="name" />
     </div>
 
     <div class="mt-6">
@@ -146,17 +141,7 @@ async function getDropoffPlace() {
         class="mt-1"
       />
     </div>
-    <hr class="mt-6 bg-red-800" />
-    <div class="flex items-center mt-6">
-      <label for="is_dropoff_possible" class="mr-2">置き配可能</label>
-      <CustomInput
-        id="is_dropoff_possible"
-        type="checkbox"
-        :checked="form.is_dropoff_possible"
-        @change="checkDropoff"
-      />
-    </div>
-
+    <hr class="mt-6" />
     <div class="flex mt-4">
       <label class="mr-2">置き配場所</label>
       <div
