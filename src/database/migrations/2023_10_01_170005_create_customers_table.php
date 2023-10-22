@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreignId('town_id')->constrained();
             $table->string('address_number')->nullable();
             $table->string('room_number')->nullable();
-            $table->boolean('is_dropoff_possible');
             $table->text('description')->nullable();
 
             $table->index(['full_name', 'town_id']);
