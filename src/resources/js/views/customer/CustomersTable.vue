@@ -1,10 +1,11 @@
 <script setup>
+import { scrollToTop } from '@/constants.js'
 import TableHeaderCell from '@/components/Table/TableHeaderCell.vue'
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import TableDetailCell from '@/components/Table/TableDetailCell.vue'
 import { useStore } from 'vuex'
 
-defineExpose({ scrollToTop })
+defineExpose({ tableScrollToTop })
 
 const props = defineProps({
   customers: Array,
@@ -68,8 +69,8 @@ const handleScroll = (e) => {
   scrollProgress.value = Math.min(MAX_SCROLL_PROGRESS, scrollTop / maxScroll)
 }
 
-function scrollToTop() {
-  tableRef.value.scrollTo(0, 0)
+function tableScrollToTop() {
+  scrollToTop(tableRef.value)
 }
 </script>
 
@@ -139,6 +140,10 @@ function scrollToTop() {
   overflow: auto;
   height: calc(100dvh - 76px);
   position: relative;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 thead th {
