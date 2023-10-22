@@ -15,6 +15,7 @@ class DropoffResource extends JsonResource
     public function toArray(Request $request): array
     {
         $dropoffData = [
+            'id' => $this->id,
             'name' => $this->name,
         ];
 

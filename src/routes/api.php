@@ -39,5 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/customer', [CustomerController::class, 'index']);
     Route::post('/customer', [CustomerController::class, 'store']);
+    Route::get('/customer/{customer}', [CustomerController::class, 'show']);
+    Route::put('/customer/{customer}', [CustomerController::class, 'update']);
+
     Route::get('/default-town', [CustomerController::class, 'getDefaultTown']);
 });

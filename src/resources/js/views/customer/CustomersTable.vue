@@ -93,9 +93,10 @@ function scrollToTop() {
           <TableDetailCell class="border-b p-2 text-customBlue underline">
             {{ customer.last_name }} {{ customer.first_name }}
           </TableDetailCell>
-          <TableDetailCell class="border-b p-2">{{
-            customer.address
-          }}</TableDetailCell>
+          <TableDetailCell class="border-b p-2">
+            {{ customer.town_name }}{{ customer.address_number
+            }}{{ customer.room_number }}</TableDetailCell
+          >
           <TableDetailCell
             :class="[
               customer.dropoffs.length ? 'bg-customGreen' : 'bg-red-300',

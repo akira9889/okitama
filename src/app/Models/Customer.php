@@ -14,8 +14,8 @@ class Customer extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'first_name', 'last_name', 'town_id', 'address_number',
-        'room_number', 'is_dropoff_possible', 'description'
+        'first_name', 'last_name', 'full_name',
+        'town_id', 'address_number', 'room_number', 'description'
     ];
 
     public function dropoffs(): BelongsToMany
