@@ -41,7 +41,11 @@ class CustomerController extends Controller
             return in_array($key, $customer->getFillable());
         }, ARRAY_FILTER_USE_KEY);
 
-        $customerData['full_name'] = $data['last_name'] . $data['first_name'];
+        $customerData['full_name'] = $data['last_name'];
+        if (isset($data['first_name'])) {
+            $customerData['full_name'] = $data['last_name'] . $data['first_name'];
+        }
+
         $customer->fill($customerData)->save();
 
         $customer->dropoffs()->attach($data['dropoff_ids']);
