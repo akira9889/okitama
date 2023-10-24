@@ -9,7 +9,6 @@ export const state = {
   prevForm: {},
 }
 
-// 共通の処理を関数にまとめる
 function resetCustomerData(commit) {
   commit('SET_CUSTOMER_DETAIL', {})
   commit('SET_CUSTOMERS', [])
