@@ -1,6 +1,6 @@
 <script setup>
 import Btn from '@/components/Btn.vue'
-import { computed, onMounted } from 'vue'
+import { computed, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 
 defineProps({ customer: Object })
@@ -8,12 +8,13 @@ defineProps({ customer: Object })
 const store = useStore()
 const showBackButton = computed(() => store.state.searchCustomer.showBackButton)
 
-onMounted(() => {
-  store.commit('searchCustomer/SET_SHOW_BACK_BUTTON', true)
+onUnmounted(() => {
+  store.commit('searchCustomer/SET_SHOW_BACK_BUTTON', false)
 })
 
 const goBack = () => {
   store.commit('searchCustomer/SET_CUSTOMER_DETAIL', {})
+  store.commit('searchCustomer/SET_PREV_FORM', {})
 }
 </script>
 
@@ -25,7 +26,13 @@ const goBack = () => {
         {{ customer.last_name }} {{ customer.first_name }}
       </p>
       <p class="mt-4">住所</p>
-      <p class="mt-2">{{ customer.address }}</p>
+      <div class="flex w-full justify-center">
+        <div>
+          {{ customer.town_name + customer.address_number }}
+        </div>
+        &emsp;
+        <div>{{ customer.room_number }}</div>
+      </div>
     </div>
 
     <div v-if="customer.dropoffs.length" class="flex items-center">
