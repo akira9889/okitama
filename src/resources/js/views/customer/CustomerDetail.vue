@@ -1,6 +1,6 @@
 <script setup>
 import Btn from '@/components/Btn.vue'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 
 defineProps({ customer: Object })
@@ -8,8 +8,12 @@ defineProps({ customer: Object })
 const store = useStore()
 const showBackButton = computed(() => store.state.searchCustomer.showBackButton)
 
+onMounted(() => {
+  store.commit('searchCustomer/SET_SHOW_BACK_BUTTON', true)
+})
+
 const goBack = () => {
-  store.dispatch('searchCustomer/getCustomers')
+  store.commit('searchCustomer/SET_CUSTOMER_DETAIL', {})
 }
 </script>
 

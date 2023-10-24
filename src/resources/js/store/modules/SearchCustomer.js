@@ -4,32 +4,51 @@ export const namespaced = true
 
 export const state = {
   customers: [],
-  prevSearch: '',
+  customerDetail: {},
   showBackButton: false,
+  prevForm: {},
+}
+
+// 共通の処理を関数にまとめる
+function resetCustomerData(commit) {
+  commit('SET_CUSTOMER_DETAIL', {})
+  commit('SET_CUSTOMERS', [])
 }
 
 export const actions = {
-  async getCustomers({ state, commit }, form = { search: state.prevSearch }) {
-    if (!form.search) {
-      commit('SET_SEARCH_FORM', form.search)
-      commit('SET_CUSTOMERS', [])
+  async getCustomers({ state, commit }, form) {
+    const submitForm = { ...form }
+
+    if (form.searchType === 'name') {
+      if (!form.searchQuery) {
+        resetCustomerData(commit)
+        return
+      }
+      delete submitForm.town_id
+      delete submitForm.searchAddress
+    } else if (form.searchType === 'address') {
+      if (!form.town_id || !form.searchAddress) {
+        resetCustomerData(commit)
+        return
+      }
+      delete submitForm.searchQuery
+    }
+
+    if (JSON.stringify(submitForm) === JSON.stringify(state.prevForm)) {
       return
     }
 
-    //テーブルリストから顧客詳細(1人)のコンポーネント(CustomerDetail)からgoBack関数を実行させるための条件式
-    if (state.prevSearch === form.search && state.customers.length !== 1) {
-      return
-    }
+    commit('SET_PREV_FORM', submitForm)
 
-    const { data } = await apiClient.get('/customer', { params: form })
-    commit('SET_CUSTOMERS', data)
+    const { data } = await apiClient.get('/customer', { params: submitForm })
 
     if (data.length > 1) {
-      commit('SET_SEARCH_FORM', form.search)
-      commit('SET_SHOW_BACK_BUTTON', true)
+      commit('SET_CUSTOMER_DETAIL', {})
+      commit('SET_CUSTOMERS', data)
+    } else if (data.length === 1) {
+      commit('SET_CUSTOMER_DETAIL', data[0])
     } else {
-      commit('SET_SEARCH_FORM', form.search)
-      commit('SET_SHOW_BACK_BUTTON', false)
+      resetCustomerData(commit)
     }
   },
 }
@@ -38,8 +57,11 @@ export const mutations = {
   SET_CUSTOMERS(state, data) {
     state.customers = data
   },
-  SET_SEARCH_FORM(state, query) {
-    state.prevSearch = query
+  SET_CUSTOMER_DETAIL(state, data) {
+    state.customerDetail = data
+  },
+  SET_PREV_FORM(state, form) {
+    state.prevForm = form
   },
   SET_SHOW_BACK_BUTTON(state, value) {
     state.showBackButton = value
