@@ -15,10 +15,6 @@ const store = useStore()
 
 const customers = computed(() => props.customers)
 
-const selectCustomer = (customer) => {
-  store.commit('searchCustomer/SET_CUSTOMERS', [customer])
-}
-
 const tableRef = ref(null)
 
 const showScrollBar = ref(false)
@@ -45,6 +41,10 @@ watch(customers, async () => {
   await nextTick()
   setScrollBar()
 })
+
+const selectCustomer = (customer) => {
+  store.commit('searchCustomer/SET_CUSTOMER_DETAIL', customer)
+}
 
 function setScrollBar() {
   const {
@@ -91,18 +91,20 @@ function tableScrollToTop() {
           :class="{ 'bg-gray-100': id % 2 !== 0 }"
           @click="selectCustomer(customer)"
         >
-          <TableDetailCell class="border-b p-2 text-customBlue underline">
+          <TableDetailCell class="text-customBlue underline">
             {{ customer.last_name }} {{ customer.first_name }}
           </TableDetailCell>
-          <TableDetailCell class="border-b p-2">
-            {{ customer.town_name }}{{ customer.address_number
-            }}{{ customer.room_number }}</TableDetailCell
-          >
+          <TableDetailCell>
+            <div class="flex w-full">
+              <div>
+                {{ customer.town_name + customer.address_number }}
+              </div>
+              &emsp;
+              <div>{{ customer.room_number }}</div>
+            </div>
+          </TableDetailCell>
           <TableDetailCell
-            :class="[
-              customer.dropoffs.length ? 'bg-customGreen' : 'bg-red-300',
-              'border-b p-2',
-            ]"
+            :class="customer.dropoffs.length ? 'bg-customGreen' : 'bg-red-300'"
           >
             <span v-for="(dropoff, index) in customer.dropoffs" :key="index">
               {{ dropoff.name
@@ -138,7 +140,7 @@ function tableScrollToTop() {
   width: 100%;
   white-space: nowrap;
   overflow: auto;
-  height: calc(100dvh - 76px);
+  height: $customer-table-height;
   position: relative;
 
   &::-webkit-scrollbar {

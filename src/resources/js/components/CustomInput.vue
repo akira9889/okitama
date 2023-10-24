@@ -11,14 +11,6 @@ const props = defineProps({
   },
   name: String,
   required: Boolean,
-  prepend: {
-    type: String,
-    default: '',
-  },
-  append: {
-    type: String,
-    default: '',
-  },
   min: {
     type: Number,
     default: 1,
@@ -29,6 +21,7 @@ const props = defineProps({
   },
   selectOptions: [Array, Object],
   focus: Boolean,
+  radioValue: String,
 })
 
 const emit = defineEmits(['update:modelValue', 'change'])
@@ -46,9 +39,19 @@ const isInputFocused = ref(props.focus)
 
 const isChecked = ref(props.checked)
 
-const inputClasses = ref(
-  'block px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 w-full h-full rounded-md',
-)
+const inputClasses = computed(() => {
+  const cls = [
+    'block px-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:rin-customBlue-500 focus:border-customBlue-500 focus:z-10 w-full h-full rounded-md',
+  ]
+
+  if (props.type === 'select') {
+    cls.push(`py-1`)
+  } else {
+    cls.push(`py-2`)
+  }
+
+  return cls.join(' ')
+})
 
 const searchInputRef = ref(null)
 
@@ -76,6 +79,10 @@ function onChangeCheck(event) {
 
 function blurInput() {
   searchInputRef.value.blur()
+}
+
+function changeRadio(e) {
+  emit('update:modelValue', e.target.value)
 }
 </script>
 
@@ -179,6 +186,21 @@ function blurInput() {
           @click="emit('update:modelValue', '')"
           ><font-awesome-icon :icon="['fas', 'xmark']"
         /></span>
+      </div>
+    </template>
+    <template v-else-if="type === 'radio'">
+      <div class="flex items-center">
+        <input
+          :id="id"
+          :type="type"
+          :name="name"
+          :required="required"
+          :placeholder="label"
+          :value="radioValue"
+          :checked="inputValue === radioValue"
+          class="h-3 w-3 text-customBlue focus:ring-indigo-500 border-gray-300 rounded-full"
+          @change="changeRadio"
+        />
       </div>
     </template>
   </div>

@@ -14,18 +14,30 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $data = $request->validate([
-            'search' => ['string', 'max:20']
+            'searchType' => ['required', 'string'],
+            'searchQuery' => ['string', 'max:20', 'nullable'],
+            'town_id' => ['integer', 'nullable'],
+            'searchAddress' => ['string', 'max:20', 'nullable'],
         ]);
-        $search = $data['search'];
 
         $deliveryAreas = $request->user()->towns()->get()->pluck('id');
 
-        $customers = Customer::with(['dropoffs', 'town'])
-                        ->where('full_name', 'LIKE', $search . '%')
-                        ->whereIn('town_id', $deliveryAreas)
-                        ->orderBy('town_id')
-                        ->orderBy('address_number')
-                        ->get();
+        $query = Customer::with(['dropoffs', 'town']);
+
+        if ($data['searchType'] === 'name') {
+            $query->where('full_name', 'LIKE', $data['searchQuery'] . '%')
+                ->whereIn('town_id', $deliveryAreas)
+                ->orderBy('town_id')
+                ->orderBy('address_number');
+        } elseif ($data['searchType'] === 'address') {
+            $query->where('town_id', $data['town_id'])
+                ->where('address_number', $data['searchAddress'])
+                ->orderBy('town_id')
+                ->orderBy('address_number');
+        }
+
+
+        $customers = $query->get();
 
         return CustomerResource::collection($customers);
     }
@@ -71,7 +83,7 @@ class CustomerController extends Controller
         return new CustomerResource($customer);
     }
 
-    public function update(UpdateCustomerRequest $request,Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     {
         $data = $request->validated();
 

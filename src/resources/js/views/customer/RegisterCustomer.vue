@@ -9,13 +9,15 @@ import { useStore } from 'vuex'
 
 const store = useStore()
 
-const form = ref({
+const DEFAULT_FORM = {
   last_name: '',
   first_name: '',
   dropoff_ids: [],
   is_checked_default: false,
   town_id: '',
-})
+}
+
+const form = ref({ ...DEFAULT_FORM })
 
 const errorMsg = ref({})
 
@@ -27,9 +29,7 @@ onMounted(async () => {
 })
 
 async function initializeForm() {
-  form.value.dropoff_ids = []
-  form.value.is_checked_default = false
-  form.value.town_id = ''
+  form.value = { ...DEFAULT_FORM }
 
   const townsAndDropoffsPromise = Promise.all([
     setSelectedTowns(),

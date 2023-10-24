@@ -22,7 +22,7 @@ function clickMenuBtn() {
 </script>
 
 <template>
-  <div class="bg-black fixed bottom-0 left-0 w-[100vw] h-[60px] px-2 py-3 z-20">
+  <div class="header">
     <button
       type="button"
       :class="[{ active: openMenuBtn }, 'menu-btn']"
@@ -36,6 +36,17 @@ function clickMenuBtn() {
 </template>
 
 <style lang="scss" scoped>
+.header {
+  background-color: #000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: $header-height;
+  padding: 0.75rem 0.5rem;
+  z-index: 30;
+}
+
 .menu-btn {
   position: relative;
   width: 32px;

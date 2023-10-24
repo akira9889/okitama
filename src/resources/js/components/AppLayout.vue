@@ -3,7 +3,7 @@ import { onMounted, ref, computed } from 'vue'
 import store from '@/store'
 import Modal from '@/components/Modal.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import Footer from '@/components/Footer.vue'
+import Header from '@/components/Header.vue'
 import Toast from '@/components/Toast.vue'
 
 onMounted(() => {
@@ -36,6 +36,11 @@ const toasts = computed(() => store.state.toast.toasts)
   <Transition name="modal">
     <Modal v-if="modalOpened" @click-modal="toggleSidebar" />
   </Transition>
+
+  <!-- Header -->
+  <Header :sidebar-opened="sidebarOpened" @toggle-sidebar="toggleSidebar" />
+  <!-- Header -->
+
   <!-- Sidebar -->
   <Sidebar
     :class="{ '-ml-[180px]': !sidebarOpened }"
@@ -45,17 +50,13 @@ const toasts = computed(() => store.state.toast.toasts)
 
   <div class="main-wrap bg-white">
     <!-- Content -->
-    <main class="px-2 py-4 pb-[60px] bg-white">
+    <main class="main">
       <div class="max-w-4xl mx-auto w-full">
         <router-view />
       </div>
     </main>
     <!-- Content -->
   </div>
-
-  <!-- Footer -->
-  <Footer :sidebar-opened="sidebarOpened" @toggle-sidebar="toggleSidebar" />
-  <!-- Footer -->
 
   <div class="fixed right-[10px] bottom-20">
     <TransitionGroup name="toast" tag="ul">
@@ -64,7 +65,12 @@ const toasts = computed(() => store.state.toast.toasts)
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+.main {
+  padding: $header-height 0.5rem $footer-height;
+  background-color: #fff;
+}
+
 .main-wrap {
   min-height: 100vh;
   min-height: calc(var(--vh, 1vh) * 100);
