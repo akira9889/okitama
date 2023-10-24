@@ -5,6 +5,9 @@ import { ref, onMounted, watch } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import InputError from '@/components/InputError.vue'
 import Btn from '@/components/Btn.vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const form = ref({
   dropoff_ids: [],
@@ -81,6 +84,10 @@ async function submit() {
   try {
     await apiClient.put(`/customer/${route.params.id}`, form.value)
     errorMsg.value = {}
+    store.dispatch('toast/showToast', {
+      message: '顧客を更新しました',
+      delay: 5000,
+    })
   } catch ({ response }) {
     errorMsg.value = response.data.errors
   }
