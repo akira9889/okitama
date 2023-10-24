@@ -41,11 +41,19 @@ function forwardMenuItemClick() {
 
 <template>
   <nav class="w-[180px] transition-all bg-white fixed top-0 bottom-0 z-20">
-    <MenuItem
-      v-for="(item, index) in menuItems"
-      :key="index"
-      :item="item"
-      @click-menu-item="forwardMenuItemClick"
-    />
+    <div class="sidebar-inner">
+      <MenuItem
+        v-for="(item, index) in menuItems"
+        :key="index"
+        :item="item"
+        @click-menu-item="forwardMenuItemClick"
+      />
+    </div>
   </nav>
 </template>
+
+<style lang="scss" scoped>
+.sidebar-inner {
+  margin-top: $header-height;
+}
+</style>
