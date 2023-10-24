@@ -44,6 +44,7 @@ watch(customers, async () => {
 
 const selectCustomer = (customer) => {
   store.commit('searchCustomer/SET_CUSTOMER_DETAIL', customer)
+  store.commit('searchCustomer/SET_SHOW_BACK_BUTTON', true)
 }
 
 function setScrollBar() {

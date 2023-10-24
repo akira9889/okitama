@@ -1,11 +1,14 @@
 <script setup>
 import { apiClient } from '@/services/API.js'
 import { scrollToTop } from '@/constants.js'
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, onUnmounted } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import CustomersTable from './CustomersTable.vue'
 import CustomerDetail from './CustomerDetail.vue'
 import { useStore } from 'vuex'
+import { onBeforeRouteLeave } from 'vue-router'
+
+onBeforeRouteLeave(clearState)
 
 const store = useStore()
 const form = reactive({
@@ -16,7 +19,8 @@ const form = reactive({
 const customers = computed(() => store.state.searchCustomer.customers)
 const customerDetail = computed(() => store.state.searchCustomer.customerDetail)
 
-const customInputRef = ref(null)
+const nameInputRef = ref(null)
+const addressInputRef = ref(null)
 const customersTableRef = ref(null)
 
 const deliveryAreas = ref([])
@@ -26,12 +30,27 @@ onMounted(async () => {
   form.town_id = deliveryAreas.value[0]?.key
 })
 
+onUnmounted(clearState)
+
+function clearState() {
+  store.commit('searchCustomer/CLEAR_PREV_FORM')
+  store.commit('searchCustomer/SET_CUSTOMER_DETAIL', {})
+  store.commit('searchCustomer/SET_PREV_FORM', {})
+}
+
 async function submit() {
   await store.dispatch('searchCustomer/getCustomers', form)
   scrollToTop()
-  if (customers.value > 1) {
-    customInputRef.value.blurInput()
+  if (
+    Object.keys(customerDetail.value).length === 0 &&
+    customers.value.length > 1
+  ) {
     customersTableRef.value.tableScrollToTop()
+  }
+  if (form.searchType === 'name') {
+    nameInputRef.value.blurInput()
+  } else {
+    addressInputRef.value.blurInput()
   }
 }
 
@@ -60,7 +79,7 @@ function changeTown({ value }) {
       <div class="w-2/3 flex">
         <CustomInput
           v-if="form.searchType === 'name'"
-          ref="customInputRef"
+          ref="nameInputRef"
           v-model="form.searchQuery"
           type="search"
           label="なまえ"
@@ -77,6 +96,7 @@ function changeTown({ value }) {
             @change="changeTown"
           />
           <CustomInput
+            ref="addressInputRef"
             v-model="form.searchAddress"
             type="search"
             label="番地"
@@ -112,7 +132,11 @@ function changeTown({ value }) {
   <div class="customers">
     <div
       class="customers-wrap"
-      :class="{ 'absolute top-1/2 -translate-y-1/2': customers.length !== 1 }"
+      :class="{
+        'absolute top-1/2 -translate-y-1/2':
+          (Object.keys(customerDetail).length === 0 && customers.length > 1) ||
+          (Object.keys(customerDetail).length === 0 && customers.length === 0),
+      }"
     >
       <CustomerDetail
         v-if="Object.keys(customerDetail).length > 0"
@@ -132,7 +156,7 @@ function changeTown({ value }) {
 
 <style lang="scss" scoped>
 .customers {
-  height: calc(100dvh - $header-height - $footer-height);
+  min-height: calc(100dvh - $header-height - $footer-height);
   position: relative;
 }
 
