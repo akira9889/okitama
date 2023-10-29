@@ -1,6 +1,8 @@
 <script setup>
+import { apiClient } from '@/services/API.js'
 import Btn from '@/components/Btn.vue'
-import { computed, onUnmounted } from 'vue'
+import CustomInput from '@/components/CustomInput.vue'
+import { computed,  onUnmounted, ref } from 'vue'
 import { useStore } from 'vuex'
 
 defineProps({ customer: Object })
@@ -15,6 +17,24 @@ onUnmounted(() => {
 const goBack = () => {
   store.commit('searchCustomer/SET_CUSTOMER_DETAIL', {})
   store.commit('searchCustomer/SET_PREV_FORM', {})
+}
+
+const fileUrl = ref('')
+const form = ref({})
+
+function previewImage(file) {
+  if (file) {
+    form.value.file = file
+    fileUrl.value = URL.createObjectURL(file)
+  }
+}
+
+function submit() {
+  const formData = new FormData()
+  if (form.value.file instanceof File) {
+    formData.append('file', form.value.file)
+  }
+  apiClient.post('/dropoff', formData)
 }
 </script>
 
@@ -76,6 +96,18 @@ const goBack = () => {
         <Btn text="編集" />
       </router-link>
     </div>
+
+    <CustomInput model-value="" type="file" @change="previewImage" />
+
+    <div class="max-h-[300px]">
+      <img
+        v-if="fileUrl"
+        :src="fileUrl"
+        alt="プレビュー画像"
+        class="inline-block max-h-[300px]"
+      />
+    </div>
+    <Btn text="送信" @click="submit" />
   </div>
   <span
     v-if="showBackButton"
