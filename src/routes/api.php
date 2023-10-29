@@ -35,6 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/prefecture', [PrefectureController::class, 'fetchPrefectures']);
     Route::get('/cities', [CityController::class, 'fetchCitiesByPrefectureId']);
+
+    Route::post('/dropoff', [DropoffController::class, 'store']);
     Route::get('/dropoff', [DropoffController::class, 'getDropoffPlace']);
 
     Route::get('/customer', [CustomerController::class, 'index']);
