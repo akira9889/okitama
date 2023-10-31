@@ -81,7 +81,7 @@ async function submit() {
 </script>
 
 <template>
-  <Modal type="hideFooter" @click="closeModal">
+  <Modal @click="closeModal">
     <div
       class="bg-white w-[90%] max-w-xl fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
     >
