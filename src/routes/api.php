@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DeliveryAreaController;
 use App\Http\Controllers\Api\DropoffController;
+use App\Http\Controllers\DropoffImageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,7 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/prefecture', [PrefectureController::class, 'fetchPrefectures']);
     Route::get('/cities', [CityController::class, 'fetchCitiesByPrefectureId']);
 
-    Route::post('/dropoff', [DropoffController::class, 'store']);
+    Route::get('/dropoff-image', [DropoffImageController::class, 'index']);
+    Route::post('/dropoff-image', [DropoffImageController::class, 'store']);
     Route::get('/dropoff', [DropoffController::class, 'getDropoffPlace']);
 
     Route::get('/customer', [CustomerController::class, 'index']);

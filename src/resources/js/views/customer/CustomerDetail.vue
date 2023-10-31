@@ -1,8 +1,8 @@
 <script setup>
-import { apiClient } from '@/services/API.js'
-import Btn from '@/components/Btn.vue'
 import CustomInput from '@/components/CustomInput.vue'
-import { computed,  onUnmounted, ref } from 'vue'
+import CustomerDetailModal from './CustomerDetailModal.vue'
+import Btn from '@/components/Btn.vue'
+import { computed, onUnmounted, ref } from 'vue'
 import { useStore } from 'vuex'
 
 defineProps({ customer: Object })
@@ -19,27 +19,47 @@ const goBack = () => {
   store.commit('searchCustomer/SET_PREV_FORM', {})
 }
 
-const fileUrl = ref('')
-const form = ref({})
+const dropoffImage = ref(null)
+const reset = ref(false)
 
-function previewImage(file) {
-  if (file) {
-    form.value.file = file
-    fileUrl.value = URL.createObjectURL(file)
-  }
+function changeImage(image) {
+  reset.value = false
+  dropoffImage.value = image
 }
 
-function submit() {
-  const formData = new FormData()
-  if (form.value.file instanceof File) {
-    formData.append('file', form.value.file)
-  }
-  apiClient.post('/dropoff', formData)
+function resetFile() {
+  dropoffImage.value = null
+  reset.value = true
 }
 </script>
 
 <template>
-  <div class="w-full">
+  <div class="w-full relative">
+    <div
+      class="absolute w-12 h-12 bg-customGray rounded-full text-center leading-[48px] right-0"
+    >
+      <CustomInput
+        type="file"
+        class="w-full h-full absolute top-0 left-0 cursor-pointer"
+        :reset="reset"
+        @change="changeImage"
+      />
+      <font-awesome-icon
+        :icon="['fas', 'camera']"
+        class="text-white text-2xl"
+      />
+      <span
+        class="inline-block text-xs absolute top-full whitespace-nowrap left-1/2 -translate-x-1/2 translate-y-1"
+        >置き配写真</span
+      >
+    </div>
+
+    <CustomerDetailModal
+      v-model="dropoffImage"
+      :customer-id="customer.id"
+      @reset-file="resetFile"
+    />
+
     <div class="text-center">
       <h2 class="text-xl">顧客情報</h2>
       <p class="text-xl mt-6 inline-block">
@@ -96,19 +116,8 @@ function submit() {
         <Btn text="編集" />
       </router-link>
     </div>
-
-    <CustomInput model-value="" type="file" @change="previewImage" />
-
-    <div class="max-h-[300px]">
-      <img
-        v-if="fileUrl"
-        :src="fileUrl"
-        alt="プレビュー画像"
-        class="inline-block max-h-[300px]"
-      />
-    </div>
-    <Btn text="送信" @click="submit" />
   </div>
+
   <span
     v-if="showBackButton"
     class="fixed bottom-20 right-3 block bg-customGray rounded-3xl py-3 px-1 text-white shadow-md shadow-gray-500"

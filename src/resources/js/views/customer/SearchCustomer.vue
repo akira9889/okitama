@@ -33,7 +33,6 @@ onMounted(async () => {
 onUnmounted(clearState)
 
 function clearState() {
-  store.commit('searchCustomer/CLEAR_PREV_FORM')
   store.commit('searchCustomer/SET_CUSTOMER_DETAIL', {})
   store.commit('searchCustomer/SET_PREV_FORM', {})
 }

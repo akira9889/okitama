@@ -34,7 +34,11 @@ const toasts = computed(() => store.state.toast.toasts)
 
 <template>
   <Transition name="modal">
-    <Modal v-if="modalOpened" @click-modal="toggleSidebar" />
+    <Modal
+      v-if="modalOpened"
+      type="uncoverHeader"
+      @click-modal="toggleSidebar"
+    />
   </Transition>
 
   <!-- Header -->
