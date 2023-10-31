@@ -22,6 +22,7 @@ const props = defineProps({
   selectOptions: [Array, Object],
   focus: Boolean,
   radioValue: String,
+  reset: Boolean,
 })
 
 const emit = defineEmits(['update:modelValue', 'change'])
@@ -54,10 +55,14 @@ const inputClasses = computed(() => {
 })
 
 const searchInputRef = ref(null)
+const fileInputRef = ref(null)
 
 watchEffect(() => {
   inputValue.value = props.modelValue
   isChecked.value = props.checked
+  if (props.reset) {
+    fileInputRef.value.value = null
+  }
 })
 
 function onChange(event) {
@@ -101,21 +106,17 @@ function changeRadio(e) {
       />
     </template>
     <template v-else-if="type === 'file'">
-      <label
-        class="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer"
-      >
-        <input
-          :id="id"
-          :type="type"
-          :name="name"
-          :required="required"
-          :value="inputValue"
-          class="hidden"
-          :placeholder="label"
-          @input="emit('change', $event.target.files[0])"
-        />
-        画像を選択
-      </label>
+      <input
+        :id="id"
+        ref="fileInputRef"
+        :type="type"
+        :name="name"
+        :required="required"
+        class="opacity-0 w-full h-full"
+        :placeholder="label"
+        accept="image/*"
+        @input="emit('change', $event.target.files[0])"
+      />
     </template>
     <template v-else-if="type === 'select'">
       <select
