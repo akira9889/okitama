@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDropoffHistoryRequest;
+use App\Http\Resources\DropoffHistoryListResource;
 use App\Models\DropoffHistory;
 use App\Models\DropoffImage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class DropoffHistoryController extends Controller
@@ -12,9 +14,13 @@ class DropoffHistoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $dropoffHistories = DropoffHistory::with('customer', 'customer.town')
+                                ->where('user_id', $request->user()->id)
+                                ->get();
 
+        return DropoffHistoryListResource::collection($dropoffHistories);
     }
 
     /**

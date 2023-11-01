@@ -11,6 +11,7 @@ import Users from '@/views/setting/admin/user/Users.vue'
 import AwaitingUsers from '@/views/setting/admin/user/AwaitingUsers.vue'
 import Area from '@/views/setting/user/Area/Area.vue'
 import DeliveryArea from '@/views/setting/user/DeliveryArea.vue'
+import DropoffHistory from '@/views/dropoff/DropoffHistory.vue'
 import store from '@/store'
 import AuthService from '@/services/AuthService'
 
@@ -58,6 +59,11 @@ const routes = [
         path: 'delivery-area',
         name: 'delivery-area',
         component: DeliveryArea,
+      },
+      {
+        path: 'dropoff-history',
+        name: 'dropoff-history',
+        component: DropoffHistory,
       },
     ],
   },

@@ -6,7 +6,7 @@ const emit = defineEmits(['onClickMenuItem'])
 
 const menuItems = ref([
   {
-    title: 'トップ',
+    title: '顧客検索',
     icon: ['fas', 'chevron-right'],
     iconType: 'font-awesome',
     route: '/',
@@ -16,6 +16,12 @@ const menuItems = ref([
     icon: ['fas', 'chevron-right'],
     iconType: 'font-awesome',
     route: '/register-customer',
+  },
+  {
+    title: '置き配履歴',
+    icon: ['fas', 'chevron-right'],
+    iconType: 'font-awesome',
+    route: '/dropoff-history',
   },
   {
     title: '設定',
