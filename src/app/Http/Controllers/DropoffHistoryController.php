@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDropoffHistoryRequest;
 use App\Http\Resources\DropoffHistoryListResource;
+use App\Http\Resources\DropoffHistoryResource;
 use App\Models\DropoffHistory;
-use App\Models\DropoffImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -48,8 +48,8 @@ class DropoffHistoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DropoffImage $dropoffImage)
+    public function show(DropoffHistory $dropoffHistory)
     {
-        //
+        return new DropoffHistoryResource($dropoffHistory);
     }
 }

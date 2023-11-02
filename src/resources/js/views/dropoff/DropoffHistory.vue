@@ -3,8 +3,11 @@ import TableHeaderCell from '@/components/Table/TableHeaderCell.vue'
 import TableDetailCell from '@/components/Table/TableDetailCell.vue'
 import { apiClient } from '@/services/API.js'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const dropoffHistories = ref([])
+
+const router = useRouter()
 
 onMounted(async () => {
   getDropoffHistories()
@@ -13,6 +16,10 @@ onMounted(async () => {
 async function getDropoffHistories() {
   const { data } = await apiClient.get('/dropoff-history')
   dropoffHistories.value = data
+}
+
+function redirect(param) {
+  router.push({ name: 'dropoff-history.show', params: { id: param } })
 }
 </script>
 
@@ -25,7 +32,7 @@ async function getDropoffHistories() {
         <tr>
           <TableHeaderCell> 氏名 </TableHeaderCell>
           <TableHeaderCell> 住所 </TableHeaderCell>
-          <TableHeaderCell class="w-[100px]"> 詳細 </TableHeaderCell>
+          <TableHeaderCell>日時</TableHeaderCell>
         </tr>
       </thead>
       <tbody>
@@ -33,9 +40,10 @@ async function getDropoffHistories() {
           v-for="(history, id) in dropoffHistories"
           :key="history.id"
           :class="{ 'bg-gray-100': id % 2 !== 0 }"
+          @click="redirect(history.id)"
         >
-          <TableDetailCell>
-            {{ history.lastName }} {{ history.firstName }}
+          <TableDetailCell class="text-customBlue underline">
+            {{ history.last_name }} {{ history.first_name }}
           </TableDetailCell>
           <TableDetailCell>
             <div class="flex w-full">
@@ -43,7 +51,7 @@ async function getDropoffHistories() {
             </div>
           </TableDetailCell>
           <TableDetailCell>
-            {{ history.id }}
+            {{ history.created_at }}
           </TableDetailCell>
         </tr>
       </tbody>

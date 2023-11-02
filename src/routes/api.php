@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/dropoff-history', [DropoffHistoryController::class, 'index']);
     Route::post('/dropoff-history', [DropoffHistoryController::class, 'store']);
+    Route::get('dropoff-history/{dropoffHistory}', [DropoffHistoryController::class, 'show']);
     Route::get('/dropoff', [DropoffController::class, 'getDropoffPlace']);
 
     Route::get('/customer', [CustomerController::class, 'index']);
