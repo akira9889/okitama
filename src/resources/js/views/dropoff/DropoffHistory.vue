@@ -27,7 +27,7 @@ function redirect(param) {
   <h1 class="text-xl text-center">置き配履歴</h1>
 
   <div class="mt-4">
-    <table class="w-full">
+    <table v-if="dropoffHistories.length" class="w-full">
       <thead>
         <tr>
           <TableHeaderCell> 氏名 </TableHeaderCell>
@@ -56,5 +56,6 @@ function redirect(param) {
         </tr>
       </tbody>
     </table>
+    <p v-else class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">履歴登録はありません</p>
   </div>
 </template>

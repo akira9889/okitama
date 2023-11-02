@@ -48,7 +48,7 @@ async function getDropoffHistory() {
         <img
           :src="DropoffHistory.image_url"
           alt="置き配写真"
-          class="inline-block min-h-[300px] max-h-[400px] object-cover"
+          class="inline-block max-h-[400px]"
         />
       </div>
     </div>
