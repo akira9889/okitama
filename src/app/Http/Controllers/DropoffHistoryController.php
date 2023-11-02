@@ -8,6 +8,7 @@ use App\Http\Resources\DropoffHistoryResource;
 use App\Models\DropoffHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class DropoffHistoryController extends Controller
 {
@@ -28,20 +29,30 @@ class DropoffHistoryController extends Controller
      */
     public function store(StoreDropoffHistoryRequest $request)
     {
-        $validated = $request->validated();
+        try {
+            $validated = $request->validated();
 
-        $file = $request->file('file');
-        $userId = $request->user()->id;
-        $imagePath = 'images/' . $userId;
+            $file = $request->file('file');
+            $userId = $request->user()->id;
+            $imagePath = 'images/' . $userId;
 
-        $path = Storage::disk('s3')->putFile($imagePath, $file);
+            $path = Storage::disk('s3')->putFile($imagePath, $file);
 
-        if ($path) {
+            if (!$path) {
+                throw new \Exception('ファイルのアップロードに失敗しました');
+            }
+
             DropoffHistory::create([
                 'user_id' => $userId,
                 'customer_id' => $validated['customer_id'],
                 'image_path' => $path
             ]);
+
+        } catch (Throwable $e) {
+            if (isset($path)) {
+                Storage::disk('s3')->delete($path);
+            }
+            throw $e;
         }
     }
 
