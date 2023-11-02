@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained();
             $table->string('image_path');
             $table->timestamps();
+            $table->dropColumn('updated_at');
         });
     }
 
