@@ -22,22 +22,21 @@ class DropoffHistoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // $cacheKey = 'image_url_' . $this->id;
+        $cacheKey = 'image_url_' . $this->id;
+        $imageUrl = Cache::get($cacheKey);
 
-        // $imageUrl = Cache::get($cacheKey);
+        $disk = config('app.env') === 'local' ? 's3_local_read' : 's3';
 
-        // // キャッシュがない場合は新しいURLを生成
-        // if (!$imageUrl) {
-        //     $imageUrl = Storage::disk('s3')->temporaryUrl(
-        //         $this->image_path,
-        //         now()->addMinutes(1)
-        //     );
+        // キャッシュがない場合は新しい署名付きURLを生成
+        if (!$imageUrl) {
+            $imageUrl = Storage::disk($disk)->temporaryUrl(
+                $this->image_path,
+                now()->addMinutes(1)
+            );
 
-        //     // URLをキャッシュに保存（1分間）
-        //     Cache::put($cacheKey, $imageUrl, now()->addMinutes(1));
-        // }
-
-        $imageUrl = '/storage/sample.jpg';
+            // URLをキャッシュに保存（1分間）
+            Cache::put($cacheKey, $imageUrl, now()->addMinutes(1));
+        }
 
         return [
             'first_name' => $this->customer->first_name,
