@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dropoff_images', function (Blueprint $table) {
+        Schema::create('dropoff_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('customer_id')->constrained();
             $table->string('image_path');
             $table->timestamps();
+            $table->dropColumn('updated_at');
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dropoff_images');
+        Schema::dropIfExists('dropoff_histories');
     }
 };

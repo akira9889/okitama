@@ -47,7 +47,7 @@ const toasts = computed(() => store.state.toast.toasts)
 
   <!-- Sidebar -->
   <Sidebar
-    :class="{ '-ml-[180px]': !sidebarOpened }"
+    :class="{ '-translate-x-full': sidebarOpened }"
     @on-click-menu-item="toggleSidebar"
   />
   <!-- Sidebar -->

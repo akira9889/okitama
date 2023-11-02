@@ -20,7 +20,6 @@ const fileUrl = ref('')
 const loading = ref(false)
 
 watch(image, (newImage) => {
-  // console.log("Image changed:", newImage);
   if (newImage) {
     previewImage(newImage)
   }
@@ -53,7 +52,7 @@ async function submit() {
       formData.append('customer_id', props.customerId)
       formData.append('file', image.value)
     }
-    await apiClient.post('/dropoff-image', formData)
+    await apiClient.post('/dropoff-history', formData)
     store.dispatch('toast/showToast', {
       message: '置き配写真を履歴に追加しました',
       delay: 5000,

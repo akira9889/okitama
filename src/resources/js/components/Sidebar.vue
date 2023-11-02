@@ -6,7 +6,7 @@ const emit = defineEmits(['onClickMenuItem'])
 
 const menuItems = ref([
   {
-    title: 'トップ',
+    title: '顧客検索',
     icon: ['fas', 'chevron-right'],
     iconType: 'font-awesome',
     route: '/',
@@ -16,6 +16,12 @@ const menuItems = ref([
     icon: ['fas', 'chevron-right'],
     iconType: 'font-awesome',
     route: '/register-customer',
+  },
+  {
+    title: '置き配履歴',
+    icon: ['fas', 'chevron-right'],
+    iconType: 'font-awesome',
+    route: '/dropoff-history',
   },
   {
     title: '設定',
@@ -40,7 +46,9 @@ function forwardMenuItemClick() {
 </script>
 
 <template>
-  <nav class="w-[180px] transition-all bg-white fixed top-0 bottom-0 z-20">
+  <nav
+    class="w-[180px] transition-all bg-white fixed top-0 bottom-0 left-full z-20"
+  >
     <div class="sidebar-inner">
       <MenuItem
         v-for="(item, index) in menuItems"

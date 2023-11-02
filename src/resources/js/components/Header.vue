@@ -1,5 +1,7 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 const emit = defineEmits(['toggle-sidebar'])
 
 const props = defineProps({
@@ -7,6 +9,12 @@ const props = defineProps({
 })
 
 const openMenuBtn = ref(props.sidebarOpened)
+
+const store = useStore()
+const router = useRouter()
+
+const showReturnButton = computed(() => store.state.returnButton.show)
+const returnRoute = computed(() => store.state.returnButton.returnRoute)
 
 watch(
   () => props.sidebarOpened,
@@ -18,6 +26,13 @@ watch(
 function clickMenuBtn() {
   openMenuBtn.value = !openMenuBtn.value
   emit('toggle-sidebar')
+}
+
+function clickReturnBtn() {
+  router.push({
+    name: returnRoute.value.name,
+    params: returnRoute.value.params,
+  })
 }
 </script>
 
@@ -32,6 +47,9 @@ function clickMenuBtn() {
       <span />
       <span />
     </button>
+    <div v-if="showReturnButton" class="text-white" @click="clickReturnBtn">
+      ←戻る
+    </div>
   </div>
 </template>
 
@@ -45,6 +63,10 @@ function clickMenuBtn() {
   height: $header-height;
   padding: 0.75rem 0.5rem;
   z-index: 30;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .menu-btn {
