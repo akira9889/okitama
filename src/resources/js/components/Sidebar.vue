@@ -46,7 +46,9 @@ function forwardMenuItemClick() {
 </script>
 
 <template>
-  <nav class="w-[180px] transition-all bg-white fixed top-0 bottom-0 z-20">
+  <nav
+    class="w-[180px] transition-all bg-white fixed top-0 bottom-0 left-full z-20"
+  >
     <div class="sidebar-inner">
       <MenuItem
         v-for="(item, index) in menuItems"
