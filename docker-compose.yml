@@ -91,3 +91,16 @@ services:
     ports:
       - 1080:1080
       - 1025:1025
+
+  minio:
+      image: 'minio/minio'
+      container_name: minio
+      environment:
+          MINIO_ROOT_USER: minioadminuser
+          MINIO_ROOT_PASSWORD: minioadminpassword
+      command: server /data --address :9999 --console-address :9001
+      volumes:
+          - ./docker/minio/data:/data
+      ports:
+          - '9000:9999'
+          - '9001:9001'
