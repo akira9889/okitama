@@ -142,7 +142,7 @@ function changeTown({ value }) {
     </form>
   </footer>
 
-  <div class="relative" :class="{ 'customers': isCustomerDetailEmpty }">
+  <div class="relative" :class="{ customers: isCustomerDetailEmpty }">
     <div
       class="customers-wrap"
       :class="{
