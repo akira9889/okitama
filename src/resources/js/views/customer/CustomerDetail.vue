@@ -125,12 +125,3 @@ function resetFile() {
     >←戻る</span
   >
 </template>
-<style scoped>
-input[type=file]::file-selector-button {
-  border: none;
-  margin: 0;
-  padding: 0;
-  appearance: none;
-  width: 0;
-}
-</style>
