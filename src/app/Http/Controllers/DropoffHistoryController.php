@@ -7,8 +7,10 @@ use App\Http\Resources\DropoffHistoryListResource;
 use App\Http\Resources\DropoffHistoryResource;
 use App\Models\DropoffHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
+use Image;
 
 class DropoffHistoryController extends Controller
 {
@@ -45,7 +47,21 @@ class DropoffHistoryController extends Controller
             $userId = $request->user()->id;
             $imagePath = 'images/' . $userId;
 
-            $path = Storage::disk('s3')->putFile($imagePath, $file);
+            $image = Image::make($file);
+            //スマホからアップロードした際に画像の向きが変化しないようにする
+            $image->orientate();
+            $image->resize(null, 400, function ($constraint) {
+                // 縦横比を保持したままにする
+                $constraint->aspectRatio();
+                // 小さい画像は大きくしない
+                $constraint->upsize();
+            })->encode('jpg', 75);
+            $imageStream = $image->stream();
+
+            $filename = 'image_' . time() . '.jpg';
+            $path = $imagePath . '/' . $filename;
+
+            Storage::disk('s3')->put($path, $imageStream->__toString());
 
             if (!$path) {
                 throw new \Exception('ファイルのアップロードに失敗しました');
