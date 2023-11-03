@@ -6,9 +6,10 @@ RUN apt update && \
     # MariaDBデータベースのクライアントアプリケーションである「mysql」を使えるように「mariadb-client」をインストール
     # libzip-devはzip圧縮時に必要となるライブラリ(libzip は、zlib を使用する)
     apt install -y mariadb-client zlib1g-dev libzip-dev libpng-dev libjpeg62-turbo-dev unzip && \
+    docker-php-ext-configure gd --with-jpeg &&  \
     # docker-php-ext-installはPHPに標準で備わっている拡張パッケージのインストール＆有効化ができるコマンド
     # PDO_MYSQL は、PHP から MySQL データベースへのアクセスを可能にするための PHP Data Objects (PDO) インターフェイス を実装したドライバ。
-    docker-php-ext-install zip pdo_mysql opcache
+    docker-php-ext-install -j$(nproc) gd exif zip pdo_mysql opcache
 
 # Composerのインストール
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
