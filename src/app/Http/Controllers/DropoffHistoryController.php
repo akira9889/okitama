@@ -17,8 +17,17 @@ class DropoffHistoryController extends Controller
      */
     public function index(Request $request)
     {
+        $validated = $request->validate([
+            'month' => 'required|date_format:Y-m',
+        ]);
+
+        list($year, $month) = explode('-', $validated['month']);
+
         $dropoffHistories = DropoffHistory::with('customer', 'customer.town')
                                 ->where('user_id', $request->user()->id)
+                                ->whereYear('created_at', $year)
+                                ->whereMonth('created_at', $month)
+                                ->orderBy('created_at', 'desc')
                                 ->get();
 
         return DropoffHistoryListResource::collection($dropoffHistories);
@@ -47,7 +56,6 @@ class DropoffHistoryController extends Controller
                 'customer_id' => $validated['customer_id'],
                 'image_path' => $path
             ]);
-
         } catch (Throwable $e) {
             if (isset($path)) {
                 Storage::disk('s3')->delete($path);
