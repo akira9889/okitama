@@ -5,6 +5,13 @@ import Modal from '@/components/Modal.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import Header from '@/components/Header.vue'
 import Toast from '@/components/Toast.vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const wrapperClass = computed(() => {
+  return route.path !== '/search-customer' ? 'my-6' : ''
+})
 
 onMounted(() => {
   store.dispatch('auth/getCurrentUser')
@@ -55,7 +62,7 @@ const toasts = computed(() => store.state.toast.toasts)
   <div class="main-wrap bg-white">
     <!-- Content -->
     <main class="main">
-      <div class="max-w-4xl mx-auto w-full">
+      <div class="max-w-4xl mx-auto w-full" :class="wrapperClass">
         <router-view />
       </div>
     </main>
