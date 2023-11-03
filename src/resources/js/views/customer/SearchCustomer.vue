@@ -25,6 +25,20 @@ const customersTableRef = ref(null)
 
 const deliveryAreas = ref([])
 
+const isCustomerDetailEmpty = computed(
+  () => Object.keys(customerDetail.value).length === 0,
+)
+const isCustomersListEmptyOrMultiple = computed(
+  () => customers.value.length === 0 || customers.value.length > 1,
+)
+const shouldCenterCustomersWrap = computed(
+  () => isCustomerDetailEmpty.value && isCustomersListEmptyOrMultiple.value,
+)
+
+const shouldShowTable = computed(
+  () => isCustomerDetailEmpty.value && customers.value.length > 1,
+)
+
 onMounted(async () => {
   await setSelectedTowns()
   form.town_id = deliveryAreas.value[0]?.key
@@ -128,23 +142,19 @@ function changeTown({ value }) {
     </form>
   </footer>
 
-  <div class="customers">
+  <div class="relative" :class="{ customers: isCustomerDetailEmpty }">
     <div
       class="customers-wrap"
       :class="{
-        'absolute top-1/2 -translate-y-1/2':
-          (Object.keys(customerDetail).length === 0 && customers.length > 1) ||
-          (Object.keys(customerDetail).length === 0 && customers.length === 0),
+        'absolute top-1/2 -translate-y-1/2': shouldCenterCustomersWrap,
       }"
     >
       <CustomerDetail
-        v-if="Object.keys(customerDetail).length > 0"
+        v-if="!isCustomerDetailEmpty"
         :customer="customerDetail"
       />
       <CustomersTable
-        v-else-if="
-          Object.keys(customerDetail).length === 0 && customers.length > 1
-        "
+        v-else-if="shouldShowTable"
         ref="customersTableRef"
         :customers="customers"
       />
@@ -156,7 +166,6 @@ function changeTown({ value }) {
 <style lang="scss" scoped>
 .customers {
   min-height: calc(100dvh - $header-height - $footer-height);
-  position: relative;
 }
 
 .customers-wrap {

@@ -106,17 +106,19 @@ function changeRadio(e) {
       />
     </template>
     <template v-else-if="type === 'file'">
-      <input
-        :id="id"
-        ref="fileInputRef"
-        :type="type"
-        :name="name"
-        :required="required"
-        class="opacity-0 w-full h-full"
-        :placeholder="label"
-        accept="image/*"
-        @input="emit('change', $event.target.files[0])"
-      />
+      <label class="w-full h-full cursor-pointer inline-block">
+        <input
+          :id="id"
+          ref="fileInputRef"
+          :type="type"
+          :name="name"
+          :required="required"
+          class="hidden"
+          :placeholder="label"
+          accept="image/*"
+          @input="emit('change', $event.target.files[0])"
+        />
+      </label>
     </template>
     <template v-else-if="type === 'select'">
       <select

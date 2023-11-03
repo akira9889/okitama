@@ -34,13 +34,13 @@ function resetFile() {
 </script>
 
 <template>
-  <div class="w-full relative">
+  <div class="w-full relative my-6">
     <div
       class="absolute w-12 h-12 bg-customGray rounded-full text-center leading-[48px] right-0"
     >
       <CustomInput
         type="file"
-        class="w-full h-full absolute top-0 left-0 cursor-pointer"
+        class="absolute top-0 left-0 cursor-pointer w-full h-full"
         :reset="reset"
         @change="changeImage"
       />

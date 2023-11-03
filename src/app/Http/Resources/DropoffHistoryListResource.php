@@ -26,7 +26,7 @@ class DropoffHistoryListResource extends JsonResource
             'first_name' => $this->customer->first_name,
             'last_name' => $this->customer->last_name,
             'address' => $this->customer->town->name . $this->customer->address_number . ' ' . $this->customer->room_number,
-            'created_at' => (new \DateTime($this->created_at))->format('Y年m月d日'),
+            'created_at' => (new \DateTime($this->created_at))->format('m月d日'),
         ];
     }
 }
