@@ -88,12 +88,13 @@ async function deleteTowns() {
       <div class="town-container">
         <div v-for="(town, key) in towns" :key="key" class="flex">
           <div v-if="isEditingArea" class="flex items-center mr-3">
-            <CustomInput
-              :id="key"
-              type="checkbox"
-              @change="updateSelectedTowns"
-            />
-            <labe :for="key" class="ml-1 text-sm">{{ town }}</labe>
+              <CustomInput
+                :id="key"
+                type="checkbox"
+                class="w-3 h-3"
+                @change="updateSelectedTowns"
+              />
+            <label :for="key" class="ml-1 text-sm">{{ town }}</label>
           </div>
           <p v-if="!isEditingArea" class="ml-6 text-sm">
             {{ town }}
