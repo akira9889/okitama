@@ -25,6 +25,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/loggedin-user', [AuthController::class, 'getAuthUser']);
 
+
+    Route::get('/user', [UserController::class, 'index']);
+    Route::put('/user/{user}', [UserController::class, 'update']);
+    Route::delete('/user/{user}', [UserController::class, 'delete']);
     Route::get('/check-auth', function () {
         return response()->json(true, 200);
     });
