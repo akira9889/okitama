@@ -40,8 +40,8 @@ export default {
   checkAuthStatus() {
     return authClient.get('api/check-auth')
   },
-  getCurrentUser() {
-    return authClient.get('api/user')
+  getLoggedInUser() {
+    return authClient.get('api/loggedin-user')
   },
   async resetPassword(payload) {
     await authClient.get('/sanctum/csrf-cookie')

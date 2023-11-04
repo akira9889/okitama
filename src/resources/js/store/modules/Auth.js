@@ -12,9 +12,9 @@ export const state = {
 }
 
 export const actions = {
-  async getCurrentUser({ commit, dispatch }) {
+  async getLoggedInUser({ commit, dispatch }) {
     try {
-      const { data } = await AuthService.getCurrentUser()
+      const { data } = await AuthService.getLoggedInUser()
       commit('setUser', data)
     } catch (error) {
       dispatch('logout')

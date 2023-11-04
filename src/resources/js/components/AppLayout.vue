@@ -14,7 +14,7 @@ const wrapperClass = computed(() => {
 })
 
 onMounted(() => {
-  store.dispatch('auth/getCurrentUser')
+  store.dispatch('auth/getLoggedInUser')
 
   setFillHeight()
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DeliveryAreaController;
 use App\Http\Controllers\Api\DropoffController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\DropoffHistoryController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [AuthController::class, 'getAuthUser']);
+    Route::get('/loggedin-user', [AuthController::class, 'getAuthUser']);
 
     Route::get('/check-auth', function () {
         return response()->json(true, 200);
