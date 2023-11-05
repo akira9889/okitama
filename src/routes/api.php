@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/loggedin-user', [AuthController::class, 'getAuthUser']);
+    Route::get('/auth-user', [AuthController::class, 'getAuthUser']);
 
 
     Route::get('/user', [UserController::class, 'index']);
