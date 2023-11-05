@@ -14,17 +14,17 @@ import DeliveryArea from '@/views/setting/user/DeliveryArea.vue'
 import DropoffHistory from '@/views/dropoff/DropoffHistory.vue'
 import ShowDropoffHistory from '@/views/dropoff/ShowDropoffHistory.vue'
 import store from '@/store'
-import AuthService from '@/services/AuthService'
+import auth from '../middleware/auth'
+import guest from '../middleware/guest'
+import middlewarePipeline from '@/router/middlewarePipeline'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    redirect: '/search-customer',
+    redirect: '/login',
     component: AppLayout,
-    meta: {
-      requiresAuth: true,
-    },
+    meta: { middleware: [auth] },
     children: [
       {
         path: 'search-customer',
@@ -77,29 +77,25 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
-    meta: {
-      requiresGuest: true,
-    },
+    meta: { middleware: [guest] },
   },
   {
     path: '/signup',
     name: 'signup',
     component: Signup,
-    meta: {
-      requiresGuest: true,
-    },
+    meta: { middleware: [guest] },
   },
   {
     path: '/request-password',
     name: 'requestPassword',
     component: RequestPassword,
-    meta: { requiresGuest: true },
+    meta: { middleware: [guest] },
   },
   {
     path: '/reset-password',
     name: 'resetPassword',
     component: ResetPassword,
-    meta: { requiresGuest: true },
+    meta: { middleware: [guest] },
   },
 ]
 
@@ -108,25 +104,18 @@ const router = createRouter({
   routes,
 })
 
-async function checkAuthStatus() {
-  return await AuthService.checkAuthStatus()
-}
+router.beforeEach((to, from, next) => {
+  const middleware = to.meta.middleware
+  const context = { to, from, next, store }
 
-router.beforeEach(async (to, from, next) => {
-  if (to.meta.requiresAuth && !store.state.auth.isLoggedIn) {
-    next({ name: 'login' })
-  } else if (to.meta.requiresGuest && store.state.auth.isLoggedIn) {
-    const isLoggedIn = await checkAuthStatus()
-
-    if (isLoggedIn) {
-      next({ name: 'search-customer' })
-    } else {
-      store.commit('auth/setLoggedIn', false)
-      next({ name: 'login' })
-    }
-  } else {
-    next()
+  if (!middleware) {
+    return next()
   }
+
+  middleware[0]({
+    ...context,
+    next: middlewarePipeline(context, middleware, 1),
+  })
 })
 
 export default router
