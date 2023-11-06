@@ -36,11 +36,13 @@ onMounted(async () => {
 })
 
 async function getDropoffHistories() {
-  const { data } = await apiClient.get('/dropoff-history', { params: form.value })
+  const { data } = await apiClient.get('/dropoff-history', {
+    params: form.value,
+  })
   dropoffHistories.value = data
 }
 
-function changeMonth({value}) {
+function changeMonth({ value }) {
   form.value.month = value
   getDropoffHistories()
 }

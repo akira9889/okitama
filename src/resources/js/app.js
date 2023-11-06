@@ -16,7 +16,7 @@ import {
   faChevronRight,
   faXmark,
   faCamera,
-  faUser
+  faUser,
 } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
 library.add(faEye, faEyeSlash, faChevronRight, faXmark, faCamera, faUser)

@@ -24,7 +24,11 @@ async function updateUser() {
 }
 
 async function deleteUser() {
-  if (!confirm(`${props.user.last_name} ${props.user.first_name}を削除してもいいですか？`)) {
+  if (
+    !confirm(
+      `${props.user.last_name} ${props.user.first_name}を削除してもいいですか？`,
+    )
+  ) {
     return
   }
   await apiClient.delete(`/user/${props.user.id}`)
@@ -66,5 +70,3 @@ async function deleteUser() {
     </div>
   </Modal>
 </template>
-
-<style scoped></style>
