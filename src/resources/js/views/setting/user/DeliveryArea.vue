@@ -87,7 +87,7 @@ async function submit() {
             <CustomInput
               :id="key"
               type="checkbox"
-              class="text-xs"
+              class="text-xs w-3 h-3"
               :checked="form.selectedTowns.includes(Number(key))"
               @change="updateSelectedTowns"
             />

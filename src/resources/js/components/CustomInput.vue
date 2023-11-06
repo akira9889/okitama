@@ -141,14 +141,14 @@ function changeRadio(e) {
       </select>
     </template>
     <template v-else-if="type === 'checkbox'">
-      <div class="flex items-center">
+      <div class="h-full w-full relative">
         <input
           :id="id"
           :type="type"
           :name="name"
           :required="required"
           :checked="isChecked"
-          class="h-3 w-3 text-customBlue focus:ring-indigo-500 border-gray-300 rounded"
+          class="text-customBlue focus:ring-indigo-500 border-gray-300 rounded absolute w-full h-full top-0 left-0"
           @change="onChangeCheck"
         />
       </div>

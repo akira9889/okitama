@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DeliveryAreaController;
 use App\Http\Controllers\Api\DropoffController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\DropoffHistoryController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,8 +23,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [AuthController::class, 'getAuthUser']);
 
+    // 管理者ユーザー用ルート
+    // 以下のルートは管理者（is_adminが1のユーザー）のみがアクセス可能
+    Route::middleware('admin')->group(function () {
+        Route::get('/user', [UserController::class, 'index']);
+        Route::put('/user/{user}', [UserController::class, 'update']);
+        Route::delete('/user/{user}', [UserController::class, 'delete']);
+    });
+
+    // 一般ユーザー用ルート
+    Route::get('/auth-user', [AuthController::class, 'getAuthUser']);
     Route::get('/check-auth', function () {
         return response()->json(true, 200);
     });

@@ -6,15 +6,14 @@ export const namespaced = true
 
 export const state = {
   user: null,
-  isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
   loading: false,
   error: null,
 }
 
 export const actions = {
-  async getCurrentUser({ commit, dispatch }) {
+  async getAuthUser({ commit, dispatch }) {
     try {
-      const { data } = await AuthService.getCurrentUser()
+      const { data } = await AuthService.getAuthUser()
       commit('setUser', data)
     } catch (error) {
       dispatch('logout')
@@ -24,32 +23,35 @@ export const actions = {
     try {
       const { data } = await AuthService.registerUser(form)
       commit('setUser', data)
-      commit('setLoggedIn', true)
       router.push('/search-customer')
     } catch (error) {
       commit('setError', getError(error))
     }
   },
-  async login({ commit }, form) {
+  async login({ commit, dispatch }, form) {
     try {
       const { data } = await AuthService.login(form)
       commit('setUser', data)
-      commit('setLoggedIn', true)
+      dispatch('setIsGuest', { value: false })
     } catch (error) {
       commit('setUser', null)
-      commit('setLoggedIn', false)
       commit('setError', getError(error))
+      dispatch('setIsGuest', { value: true })
     }
   },
-  async logout({ commit }) {
+  async logout({ commit, dispatch }) {
     try {
       await AuthService.logout()
       commit('setUser', null)
-      commit('setLoggedIn', false)
+      dispatch('setIsGuest', { value: true })
       router.push('/login')
     } catch (error) {
+      dispatch('setIsGuest', { value: true })
       commit('setError', error)
     }
+  },
+  setIsGuest(context, { value }) {
+    window.localStorage.setItem('isGuest', value)
   },
 }
 
@@ -63,23 +65,19 @@ export const mutations = {
   setError(state, error) {
     state.error = error
   },
-  setLoggedIn(state, value) {
-    state.isLoggedIn = value
-    localStorage.setItem('isLoggedIn', value)
-  },
 }
 
 export const getters = {
   authUser: (state) => {
     return state.user
   },
+  isAdmin: (state) => {
+    return state.user ? state.user.is_admin : false
+  },
   error: (state) => {
     return state.error
   },
   loading: (state) => {
     return state.loading
-  },
-  loggedIn: (state) => {
-    return state.isLoggedIn
   },
 }
