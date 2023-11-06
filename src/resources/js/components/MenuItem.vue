@@ -44,7 +44,6 @@ watch(isOpen, () => {
 
 <template>
   <div
-    v-if="item"
     ref="menuItemRef"
     class="sub-items flex justify-between items-center px-2 py-6 transition-colors hover:bg-black/20 border-b w-full relative cursor-pointer"
     @click="handleClick"

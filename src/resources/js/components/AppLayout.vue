@@ -14,8 +14,6 @@ const wrapperClass = computed(() => {
 })
 
 onMounted(() => {
-  store.dispatch('auth/getLoggedInUser')
-
   setFillHeight()
 
   // ウィンドウサイズが変更されたときに、再度高さを計算
