@@ -1,44 +1,67 @@
 <script setup>
 import MenuItem from '@/components/MenuItem.vue'
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
 const emit = defineEmits(['onClickMenuItem'])
+const store = useStore()
+const isAdmin = computed(() => store.getters['auth/isAdmin'])
 
-const menuItems = ref([
-  {
-    title: '顧客検索',
-    icon: ['fas', 'chevron-right'],
-    iconType: 'font-awesome',
-    route: '/',
-  },
-  {
-    title: '顧客追加',
-    icon: ['fas', 'chevron-right'],
-    iconType: 'font-awesome',
-    route: '/register-customer',
-  },
-  {
-    title: '置き配履歴',
-    icon: ['fas', 'chevron-right'],
-    iconType: 'font-awesome',
-    route: '/dropoff-history',
-  },
-  {
-    title: '設定',
-    subItems: [
-      { title: 'ユーザー', route: '/users', icon: ['fas', 'chevron-right'] },
-      {
-        title: 'エリア選択',
-        route: '/delivery-area',
-        icon: ['fas', 'chevron-right'],
-      },
-      { title: 'エリア登録', route: '/area', icon: ['fas', 'chevron-right'] },
-    ],
-    icon: '<div class="plus"></div>',
-    iconType: 'custom-html',
-    route: null,
-  },
-])
+const menuItems = computed(() => {
+  let items = [
+    {
+      title: '顧客検索',
+      icon: ['fas', 'chevron-right'],
+      iconType: 'font-awesome',
+      route: '/search-customer',
+    },
+    {
+      title: '顧客追加',
+      icon: ['fas', 'chevron-right'],
+      iconType: 'font-awesome',
+      route: '/register-customer',
+    },
+    {
+      title: '置き配履歴',
+      icon: ['fas', 'chevron-right'],
+      iconType: 'font-awesome',
+      route: '/dropoff-history',
+    },
+    {
+      title: '設定',
+      icon: '<div class="plus"></div>',
+      iconType: 'custom-html',
+      route: null,
+
+      subItems: [
+        {
+          title: 'ユーザー',
+          route: '/users',
+          icon: ['fas', 'chevron-right'],
+          admin: true,
+        },
+        {
+          title: 'エリア選択',
+          route: '/delivery-area',
+          icon: ['fas', 'chevron-right'],
+        },
+        { title: 'エリア登録', route: '/area', icon: ['fas', 'chevron-right'] },
+      ],
+    },
+  ]
+
+  // 管理者でない場合はadminプロパティがtrueのアイテム以外をフィルタリング
+  items = items.filter((item) => !item.admin || isAdmin.value)
+  items.forEach((item) => {
+    if (item.subItems) {
+      item.subItems = item.subItems.filter(
+        (subItem) => !subItem.admin || isAdmin.value,
+      )
+    }
+  })
+
+  return items
+})
 
 function forwardMenuItemClick() {
   emit('onClickMenuItem')
