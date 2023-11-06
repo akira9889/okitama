@@ -3,7 +3,9 @@ import Modal from '@/components/Modal.vue'
 import CustomInput from '@/components/CustomInput.vue'
 import Btn from '@/components/Btn.vue'
 import { apiClient } from '@/services/API.js'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   user: Object,
@@ -11,16 +13,47 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'editedUser'])
 
+const store = useStore()
+const router = useRouter()
+
 const form = ref({})
+const authUser = computed(() => store.getters['auth/authUser'])
 
 onMounted(() => {
   form.value.is_admin = props.user.is_admin ? true : false
 })
 
 async function updateUser() {
-  await apiClient.put(`/user/${props.user.id}`, form.value)
-  emit('update:modelValue', false)
-  emit('editedUser')
+  try {
+    //自分自身の管理者権限を剥奪する時
+    if (authUser.value.id === props.user.id && !form.value.is_admin) {
+      if (
+        !confirm(
+          '以後ユーザーに関する操作やアクセスができなくなりますが、よろしいですか？',
+        )
+      ) {
+        return
+      } else {
+        await apiClient.put(`/user/${props.user.id}`, form.value)
+        store.dispatch('auth/getAuthUser')
+        router.push({ name: 'search-customer'})
+      }
+    } else {
+      await apiClient.put(`/user/${props.user.id}`, form.value)
+      emit('editedUser')
+    }
+    store.dispatch('toast/showToast', {
+      message: 'ユーザー情報を更新しました',
+      delay: 5000,
+    })
+  } catch {
+    store.dispatch('toast/showToast', {
+      message: 'ユーザー情報の更新失敗しました',
+      type: 'error'
+    })
+  } finally {
+      emit('update:modelValue', false)
+  }
 }
 
 async function deleteUser() {
@@ -31,9 +64,15 @@ async function deleteUser() {
   ) {
     return
   }
+
   await apiClient.delete(`/user/${props.user.id}`)
-  emit('update:modelValue', false)
-  emit('editedUser')
+
+  if (authUser.value.id === props.user.id) {
+    router.push({ name: 'login'})
+  } else {
+    emit('update:modelValue', false)
+    emit('editedUser')
+  }
 }
 </script>
 
