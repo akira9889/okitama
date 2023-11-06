@@ -13,9 +13,11 @@ import Area from '@/views/setting/user/Area/Area.vue'
 import DeliveryArea from '@/views/setting/user/DeliveryArea.vue'
 import DropoffHistory from '@/views/dropoff/DropoffHistory.vue'
 import ShowDropoffHistory from '@/views/dropoff/ShowDropoffHistory.vue'
+import NotFound from '@/views/NotFound.vue'
 import store from '@/store'
 import auth from '../middleware/auth'
 import guest from '../middleware/guest'
+import admin from '../middleware/admin'
 import middlewarePipeline from '@/router/middlewarePipeline'
 
 const routes = [
@@ -45,6 +47,7 @@ const routes = [
         path: 'users',
         name: 'users',
         component: Users,
+        meta: { middleware: [admin] },
       },
       {
         path: 'awaiting-users',
@@ -96,6 +99,15 @@ const routes = [
     name: 'resetPassword',
     component: ResetPassword,
     meta: { middleware: [guest] },
+  },
+  {
+    path: '/:pathMatch(.*)',
+    redirect: '/notfound',
+  },
+  {
+    path: '/notfound',
+    name: 'notfound',
+    component: NotFound,
   },
 ]
 
