@@ -7,7 +7,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
-    public static $wrap = false;
+    public function __construct($resource)
+    {
+        parent::__construct($resource);
+        self::withoutWrapping();
+    }
 
     /**
      * Transform the resource into an array.
@@ -20,7 +24,6 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'last_name' => $this->last_name,
             'first_name' => $this->first_name,
-            'email' => $this->email,
             'is_admin' => $this->is_admin,
             'is_approved' => $this->is_approved
         ];
