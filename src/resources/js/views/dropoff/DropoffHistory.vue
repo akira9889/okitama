@@ -69,7 +69,10 @@ function redirect(param) {
   <h1 class="text-xl text-center">置き配履歴</h1>
 
   <div class="mt-4">
-    <div class="flex items-center" :class="isAdmin ? 'justify-between' : 'justify-end'">
+    <div
+      class="flex items-center"
+      :class="isAdmin ? 'justify-between' : 'justify-end'"
+    >
       <div v-if="isAdmin" class="flex">
         <div class="flex items-center mr-3">
           <CustomInput
