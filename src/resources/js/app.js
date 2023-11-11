@@ -18,6 +18,7 @@ import {
   faCamera,
   faUser,
   faRightFromBracket,
+  faExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
 library.add(
@@ -28,6 +29,7 @@ library.add(
   faCamera,
   faUser,
   faRightFromBracket,
+  faExclamation,
 )
 
 const app = createApp(App)

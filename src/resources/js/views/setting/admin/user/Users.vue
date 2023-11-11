@@ -37,7 +37,24 @@ function clickUser(user) {
       />
     </Transition>
 
-    <div class="admin-user">
+    <div class="mt-4 text-center">
+      <div class="p-2 bg-yellow-200 rounded inline-block">
+        <p>
+          <span
+            class="inline-block rounded-full bg-yellow-500 w-6 h-6 text-center leading-6"
+            ><font-awesome-icon :icon="['fas', 'exclamation']"
+          /></span>
+          ユーザー承認リクエストがあります。
+          <router-link
+            :to="{ name: 'awaiting-users' }"
+            class="text-sm text-blue-600"
+            >進む→</router-link
+          >
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-4">
       <h2 class="font-semibold">管理者</h2>
       <ul class="flex flex-wrap">
         <li
