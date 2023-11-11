@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class AwaitingUserController extends Controller
 {
     public function index()
     {
-        $users = User::orderBy('updated_at', 'desc')
+        $users = User::where('is_approved', false)
+            ->orderBy('updated_at', 'desc')
             ->get();
 
         return UserResource::collection($users);
@@ -25,20 +25,12 @@ class UserController extends Controller
         ]);
 
         $user->is_admin = $validated['is_admin'];
+        $user->is_approved = true;
         $user->save();
     }
 
     public function delete(User $user)
     {
-        DB::beginTransaction();
-
-        try {
-            $user->towns()->detach();
-            $user->delete();
-
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-        }
+        $user->delete();
     }
 }

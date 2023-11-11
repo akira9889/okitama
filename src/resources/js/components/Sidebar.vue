@@ -5,6 +5,7 @@ import { useStore } from 'vuex'
 
 const emit = defineEmits(['onClickMenuItem'])
 const store = useStore()
+const isApproved = computed(() => store.getters['auth/isApproved'])
 const isAdmin = computed(() => store.getters['auth/isAdmin'])
 
 const menuItems = computed(() => {
@@ -63,6 +64,10 @@ const menuItems = computed(() => {
       )
     }
   })
+
+  if (!isApproved.value) {
+    items = items.filter((item) => item.type == 'logout')
+  }
 
   return items
 })

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AreaController;
+use App\Http\Controllers\Api\AwaitingUserController;
 use App\Http\Controllers\Api\PrefectureController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CustomerController;
@@ -30,6 +31,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user', [UserController::class, 'index']);
         Route::put('/user/{user}', [UserController::class, 'update']);
         Route::delete('/user/{user}', [UserController::class, 'delete']);
+
+        Route::get('/awaiting-user', [AwaitingUserController::class, 'index']);
+        Route::put('/awaiting-user/{user}', [AwaitingUserController::class, 'update']);
+        Route::delete('/awaiting-user/{user}', [AwaitingUserController::class, 'delete']);
     });
 
     // 一般ユーザー用ルート

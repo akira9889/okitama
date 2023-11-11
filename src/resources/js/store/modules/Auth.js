@@ -74,6 +74,9 @@ export const getters = {
   isAdmin: (state) => {
     return state.user ? state.user.is_admin : false
   },
+  isApproved: (state) => {
+    return state.user ? state.user.is_approved : false
+  },
   error: (state) => {
     return state.error
   },
