@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -29,6 +30,15 @@ class UserController extends Controller
 
     public function delete(User $user)
     {
-        $user->delete();
+        DB::beginTransaction();
+
+        try {
+            $user->towns()->detach();
+            $user->delete();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
     }
 }

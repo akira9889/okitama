@@ -5,6 +5,12 @@ export const DROPOFF_PLACE_ID = {
   OTHER: 4,
 }
 
+export const DROPOFF_HISTORY_SEARCH_TYPE = {
+  ALL: 'all',
+  MYSELF: 'myself'
+
+}
+
 export function scrollToTop(element = window) {
   element.scrollTo(0, 0)
 }

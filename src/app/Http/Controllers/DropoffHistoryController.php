@@ -7,13 +7,15 @@ use App\Http\Resources\DropoffHistoryListResource;
 use App\Http\Resources\DropoffHistoryResource;
 use App\Models\DropoffHistory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Throwable;
 use Image;
 
 class DropoffHistoryController extends Controller
 {
+    const ALL = 'all';
+    const MYSELF = 'myself';
     /**
      * Display a listing of the resource.
      */
@@ -21,16 +23,39 @@ class DropoffHistoryController extends Controller
     {
         $validated = $request->validate([
             'month' => 'required|date_format:Y-m',
+            'type' => [
+                'nullable',
+                'string',
+                Rule::in([self::ALL, self::MYSELF])
+            ],
         ]);
+
+        $searchType = $validated['type'];
+
+        if ($searchType === self::ALL && !$request->user()->is_admin) {
+            return response()->json(['message' => 'You don\'t have the permission'], 403);
+        }
 
         list($year, $month) = explode('-', $validated['month']);
 
-        $dropoffHistories = DropoffHistory::with('customer', 'customer.town')
-                                ->where('user_id', $request->user()->id)
-                                ->whereYear('created_at', $year)
-                                ->whereMonth('created_at', $month)
-                                ->orderBy('created_at', 'desc')
-                                ->get();
+        $relations = ['customer', 'customer.town'];
+
+        if ($searchType === self::ALL) {
+            $relations['user'] = function ($query) {
+                $query->withTrashed();
+            };
+        }
+
+        $query = DropoffHistory::with($relations)
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->orderBy('created_at', 'desc');
+
+        if ($searchType === self::MYSELF) {
+            $query = $query->where('user_id', $request->user()->id);
+        }
+
+        $dropoffHistories = $query->get();
 
         return DropoffHistoryListResource::collection($dropoffHistories);
     }

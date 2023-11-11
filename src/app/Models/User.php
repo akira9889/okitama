@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\MassPrunable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes, MassPrunable;
 
     /**
      * The attributes that are mass assignable.
@@ -44,6 +48,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function prunable(): Builder
+    {
+        return static::onlyTrashed()->doesntHave('dropoffHistories');
+    }
+
     public function towns(): BelongsToMany
     {
         return $this->belongsToMany(Town::class, 'delivery_areas', 'user_id', 'town_id')->withPivot('default');
@@ -52,5 +61,10 @@ class User extends Authenticatable
     public function defaultTown()
     {
         return $this->towns()->wherePivot('default', true)->first();
+    }
+
+    public function dropoffHistories(): HasMany
+    {
+        return $this->HasMany(DropoffHistory::class);
     }
 }
