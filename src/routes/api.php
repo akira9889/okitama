@@ -24,6 +24,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/auth-user', [AuthController::class, 'getAuthUser']);
+    Route::get('/check-auth', function () {
+        return response()->json(true, 200);
+    });
+});
+
+Route::middleware('auth:sanctum', 'approved')->group(function () {
 
     // 管理者ユーザー用ルート
     // 以下のルートは管理者（is_adminが1のユーザー）のみがアクセス可能
@@ -38,11 +45,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // 一般ユーザー用ルート
-    Route::get('/auth-user', [AuthController::class, 'getAuthUser']);
-    Route::get('/check-auth', function () {
-        return response()->json(true, 200);
-    });
-
     Route::apiResource('/area', AreaController::class)->only(['index', 'store']);
     Route::delete('/area', [AreaController::class, 'delete']);
 
