@@ -36,7 +36,7 @@ async function updateUser() {
       } else {
         await apiClient.put(`/user/${props.user.id}`, form.value)
         store.dispatch('auth/getAuthUser')
-        router.push({ name: 'search-customer'})
+        router.push({ name: 'search-customer' })
       }
     } else {
       await apiClient.put(`/user/${props.user.id}`, form.value)
@@ -49,10 +49,10 @@ async function updateUser() {
   } catch {
     store.dispatch('toast/showToast', {
       message: 'ユーザー情報の更新失敗しました',
-      type: 'error'
+      type: 'error',
     })
   } finally {
-      emit('update:modelValue', false)
+    emit('update:modelValue', false)
   }
 }
 
@@ -68,7 +68,7 @@ async function deleteUser() {
   await apiClient.delete(`/user/${props.user.id}`)
 
   if (authUser.value.id === props.user.id) {
-    router.push({ name: 'login'})
+    router.push({ name: 'login' })
   } else {
     emit('update:modelValue', false)
     emit('editedUser')

@@ -1,21 +1,38 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-const { item } = defineProps({
+const props = defineProps({
   item: Object,
 })
 
 const emit = defineEmits(['clickMenuItem'])
 
+const store = useStore()
+
+const item = computed(() => {
+  let item = {
+    ...props.item,
+  }
+
+  if (!item.iconColor) {
+    item.iconColor = 'text-customBlue'
+  }
+
+  return item
+})
+
 const isOpen = ref(false)
 const router = useRouter()
 
 const handleClick = () => {
-  if (item.subItems) {
+  if (item.value.subItems) {
     isOpen.value = !isOpen.value
+  } else if (item.value.type === 'logout') {
+    store.dispatch('auth/logout')
   } else {
-    goToRoute(item.route)
+    goToRoute(item.value.route)
   }
 }
 
@@ -52,9 +69,9 @@ watch(isOpen, () => {
       {{ item.title }}
     </div>
     <template v-if="item.iconType === 'font-awesome'">
-      <font-awesome-icon :icon="item.icon" class="sub-item-icon" />
+      <font-awesome-icon :icon="item.icon" :class="item.iconColor" />
     </template>
-    <template v-else-if="item.iconType === 'custom-html'">
+    <template v-else-if="item.subItems">
       <div :class="[{ active: isOpen }, 'plus']" />
     </template>
     <ul
@@ -68,7 +85,7 @@ watch(isOpen, () => {
         @click.stop="goToRoute(subItem.route)"
       >
         <div>{{ subItem.title }}</div>
-        <font-awesome-icon :icon="subItem.icon" class="sub-item-icon" />
+        <font-awesome-icon :icon="subItem.icon" :class="item.iconColor" />
       </li>
     </ul>
   </div>
@@ -83,10 +100,6 @@ watch(isOpen, () => {
   height: 0;
   overflow: hidden;
   transition: 0.3s;
-}
-
-.sub-item-icon {
-  color: $base-color;
 }
 
 .plus {

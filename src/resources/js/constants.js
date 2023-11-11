@@ -7,8 +7,7 @@ export const DROPOFF_PLACE_ID = {
 
 export const DROPOFF_HISTORY_SEARCH_TYPE = {
   ALL: 'all',
-  MYSELF: 'myself'
-
+  MYSELF: 'myself',
 }
 
 export function scrollToTop(element = window) {

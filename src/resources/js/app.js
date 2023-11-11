@@ -17,9 +17,18 @@ import {
   faXmark,
   faCamera,
   faUser,
+  faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
-library.add(faEye, faEyeSlash, faChevronRight, faXmark, faCamera, faUser)
+library.add(
+  faEye,
+  faEyeSlash,
+  faChevronRight,
+  faXmark,
+  faCamera,
+  faUser,
+  faRightFromBracket,
+)
 
 const app = createApp(App)
 
