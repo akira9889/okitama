@@ -57,7 +57,7 @@ const routes = [
         path: 'awaiting-users',
         name: 'awaiting-users',
         component: AwaitingUsers,
-        meta: { middleware: [auth, approved] },
+        meta: { middleware: [auth, approved, admin] },
       },
       {
         path: 'area',
