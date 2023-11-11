@@ -8,6 +8,8 @@ const commonUsers = ref([])
 
 const modalOpened = ref(false)
 
+const existsAwaitingUsers = ref(false)
+
 async function getUser() {
   const { data } = await apiClient.get('/user')
   adminUsers.value = data.filter((user) => user.is_admin && user.is_approved)
@@ -18,11 +20,17 @@ const selectUser = ref({})
 
 onMounted(() => {
   getUser()
+  checkAwaitingUser()
 })
 
 function clickUser(user) {
   selectUser.value = user
   modalOpened.value = true
+}
+
+async function checkAwaitingUser() {
+  const { data } = await apiClient.get('/awaiting-user/exists')
+  existsAwaitingUsers.value = !!data
 }
 </script>
 <template>
@@ -37,7 +45,7 @@ function clickUser(user) {
       />
     </Transition>
 
-    <div class="mt-4 text-center">
+    <div v-if="existsAwaitingUsers" class="mt-4 text-center">
       <div class="p-2 bg-yellow-200 rounded inline-block">
         <p>
           <span

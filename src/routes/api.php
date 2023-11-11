@@ -42,6 +42,8 @@ Route::middleware('auth:sanctum', 'approved')->group(function () {
         Route::get('/awaiting-user', [AwaitingUserController::class, 'index']);
         Route::put('/awaiting-user/{user}', [AwaitingUserController::class, 'update']);
         Route::delete('/awaiting-user/{user}', [AwaitingUserController::class, 'delete']);
+
+        Route::get('/awaiting-user/exists', [AwaitingUserController::class, 'isExistsAwaitingUser']);
     });
 
     // 一般ユーザー用ルート
