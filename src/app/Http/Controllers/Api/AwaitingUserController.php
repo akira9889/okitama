@@ -33,4 +33,9 @@ class AwaitingUserController extends Controller
     {
         $user->delete();
     }
+
+    public function isExistsAwaitingUser()
+    {
+        return User::where('is_approved', false)->exists();
+    }
 }
