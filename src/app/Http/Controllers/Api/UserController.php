@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,11 +12,10 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::select('id', 'last_name', 'first_name', 'is_admin', 'is_approved')
-                    ->orderBy('updated_at', 'desc')
-                    ->get();
+        $users = User::orderBy('updated_at', 'desc')
+            ->get();
 
-        return $users;
+        return UserResource::collection($users);
     }
 
     public function update(User $user, Request $request)
