@@ -11,8 +11,6 @@ class AuthController extends Controller
 {
     public function getAuthUser(Request $request): UserResource
     {
-        return Cache::remember('user-' . $request->user()->id, 60, function () use ($request) {
-            return new UserResource($request->user());
-        });
+        return new UserResource($request->user());
     }
 }
