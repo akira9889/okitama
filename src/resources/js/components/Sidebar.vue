@@ -29,9 +29,6 @@ const menuItems = computed(() => {
     },
     {
       title: '設定',
-      icon: '<div class="plus"></div>',
-      iconType: 'custom-html',
-      route: null,
 
       subItems: [
         {
@@ -47,6 +44,13 @@ const menuItems = computed(() => {
         },
         { title: 'エリア登録', route: '/area', icon: ['fas', 'chevron-right'] },
       ],
+    },
+    {
+      title: 'ログアウト',
+      icon: ['fas', 'right-from-bracket'],
+      iconType: 'font-awesome',
+      iconColor: 'text-black',
+      type: 'logout',
     },
   ]
 
