@@ -1,7 +1,11 @@
-export default function approved({ next, store}) {
+export default function approved({ next, store }) {
   if (store.getters['auth/isApproved']) {
     next()
   } else {
-    next({ name: 'not-approved' })
+    if (!store.getters['auth/authUser']) {
+      next({ name: 'login' })
+    } else {
+      next({ name: 'not-approved' })
+    }
   }
 }
