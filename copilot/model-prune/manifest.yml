@@ -1,0 +1,50 @@
+name: model-prune
+type: Scheduled Job
+
+#laravelのスケジュールタスク時間と合わせる
+on:
+  #一時的にジョブを停止
+  schedule: "none"
+  # schedule: "@weekly"
+
+image:
+  build:
+    dockerfile: ./docker/schedule/Dockerfile
+    context: .
+
+cpu: 256
+memory: 512
+network:
+  vpc:
+    # RDSに紐づいているセキュリティグループ
+    security_groups: [sg-0d90a489feee9f5bc]
+
+variables:
+  RUN_SCHEDULE_TASK: "true"
+
+secrets:
+  APP_URL: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/APP_URL
+  APP_KEY: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/APP_KEY
+  ASSET_URL: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/ASSET_URL
+  DB_HOST: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/DB_HOST
+  DB_DATABASE: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/DB_DATABASE
+  DB_USERNAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/DB_USERNAME
+  DB_PASSWORD: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/DB_PASSWORD
+  SESSION_DRIVER: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SESSION_DRIVER
+  SANCTUM_STATEFUL_DOMAINS: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SANCTUM_STATEFUL_DOMAINS
+  SESSION_DOMAIN: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SESSION_DOMAIN
+  OKITAMABUCKET_NAME: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/OKITAMABUCKET_NAME
+
+environments:
+  prod:
+    variables:
+      APP_ENV: production
+    image:
+      build:
+        target: production
+  test:
+    variables:
+      APP_ENV: test
+    image:
+      build:
+        target: test

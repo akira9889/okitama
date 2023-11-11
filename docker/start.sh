@@ -34,10 +34,23 @@ run_migrations() {
   fi
 }
 
-if [ "$APP_ENV" = "production" ] || [ "$APP_ENV" = "test" ]; then
+schedule_run() {
+  echo "Running schedule task"
+  php artisan schedule:run
+  echo "Task completed, shutting down the container"
+}
+
+# スケジュールされたタスクの実行
+if [ "$RUN_SCHEDULE_TASK" = "true" ] && ([ "$APP_ENV" = "production" ] || [ "$APP_ENV" = "test" ]); then
   set_env_variables $APP_ENV
   cache_config $APP_ENV
-  run_migrations $APP_ENV
+  schedule_run
+else
+  if [ "$APP_ENV" = "production" ] || [ "$APP_ENV" = "test" ]; then
+    set_env_variables $APP_ENV
+    cache_config $APP_ENV
+    run_migrations $APP_ENV
+  fi
+  echo "Starting php-fpm."
+  php-fpm
 fi
-
-php-fpm
