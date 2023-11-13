@@ -30,6 +30,9 @@ RUN  npm run build
 # 開発環境
 FROM node_php_base as dev
 
+RUN pecl install xdebug && \
+    docker-php-ext-enable xdebug
+
 COPY ./src/ .
 RUN  composer install
 RUN  npm install
