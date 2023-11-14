@@ -1,9 +1,13 @@
 <script setup>
-import store from '@/store'
+import CustomInput from '@/components/CustomInput.vue'
+import InputError from '@/components/InputError.vue'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 const router = useRouter()
+const store = useStore()
+
 const form = ref({
   email: '',
   password: '',
@@ -30,61 +34,39 @@ const login = async () => {
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" @submit.prevent="login">
-        <template v-if="errors?.email">
-          <div
-            v-for="(error, index) in errors.email"
-            :key="index"
-            class="text-sm text-red-700 m-1"
-            role="alert"
-          >
-            {{ error }}
-          </div>
-        </template>
         <div>
+          <InputError :error-msg="errors?.email" class="mb-2" />
           <label
             for="email"
             class="block text-sm font-medium leading-6 text-gray-900"
             >メールアドレス</label
           >
           <div class="mt-2">
-            <input
+            <CustomInput
               id="email"
               v-model="form.email"
+              type="text"
               name="email"
               autocomplete="email"
-              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
         </div>
 
         <div>
-          <div class="flex items-center justify-between">
-            <label
-              for="password"
-              class="block text-sm font-medium leading-6 text-gray-900"
-              >パスワード</label
-            >
-          </div>
+          <InputError :error-msg="errors?.password" class="mb-2" />
+          <label
+            for="password"
+            class="block text-sm font-medium leading-6 text-gray-900"
+            >パスワード</label
+          >
           <div class="mt-2">
-            <input
+            <CustomInput
               id="password"
               v-model="form.password"
-              name="password"
               type="password"
+              name="password"
               autocomplete="current-password"
-              required
-              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
-            <template v-if="errors?.password">
-              <div
-                v-for="(error, index) in errors.password"
-                :key="index"
-                class="text-sm text-red-700 m-1"
-                role="alert"
-              >
-                {{ error }}
-              </div>
-            </template>
           </div>
           <div>
             <div class="mt-4 flex items-center">

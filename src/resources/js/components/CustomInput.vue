@@ -11,6 +11,7 @@ const props = defineProps({
   },
   name: String,
   required: Boolean,
+  autocomplete: String,
   min: {
     type: Number,
     default: 1,
@@ -56,6 +57,18 @@ const inputClasses = computed(() => {
 
 const searchInputRef = ref(null)
 const fileInputRef = ref(null)
+
+const passwordInputRef = ref(null)
+const showPassword = ref(false)
+
+function clickPasswordEyeIcon() {
+  if (passwordInputRef.value.type === 'text') {
+    passwordInputRef.value.type = 'password'
+  } else {
+    passwordInputRef.value.type = 'text'
+  }
+  showPassword.value = !showPassword.value
+}
 
 watchEffect(() => {
   inputValue.value = props.modelValue
@@ -154,7 +167,7 @@ function changeRadio(e) {
       </div>
     </template>
     <template v-else-if="type === 'text'">
-      <div c>
+      <div>
         <input
           :id="id"
           :type="type"
@@ -163,9 +176,34 @@ function changeRadio(e) {
           :value="inputValue"
           :class="inputClasses"
           :placeholder="label"
-          autocomplete
+          :autocomplete="autocomplete"
           @input="emit('update:modelValue', $event.target.value)"
         />
+      </div>
+    </template>
+    <template v-else-if="type === 'password'">
+      <div class="relative">
+        <input
+          :id="id"
+          ref="passwordInputRef"
+          :type="type"
+          :name="name"
+          :required="required"
+          :value="inputValue"
+          :class="inputClasses"
+          :placeholder="label"
+          :autocomplete="autocomplete"
+          @input="emit('update:modelValue', $event.target.value)"
+        />
+        <button
+          v-show="inputValue"
+          type="button"
+          class="absolute inset-y-0 right-0 px-3 flex items-center text-sm leading-5"
+          @click="clickPasswordEyeIcon"
+        >
+          <font-awesome-icon v-if="showPassword" :icon="['far', 'eye-slash']" />
+          <font-awesome-icon v-else-if="!showPassword" :icon="['far', 'eye']" />
+        </button>
       </div>
     </template>
     <template v-else-if="type === 'search'">

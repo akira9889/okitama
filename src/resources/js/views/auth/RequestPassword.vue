@@ -1,4 +1,6 @@
 <script setup>
+import CustomInput from '@/components/CustomInput.vue'
+import InputError from '@/components/InputError.vue'
 import GuestLayout from '@/components/GuestLayout.vue'
 import AuthService from '@/services/AuthService'
 import { ref } from 'vue'
@@ -26,6 +28,7 @@ function forgotPassword() {
   <GuestLayout title="新しいパスワードのリクエスト">
     <form class="space-y-6" @submit.prevent="forgotPassword">
       <div>
+        <InputError :error-msg="errors?.email" class="mb-2" />
         <div class="mt-2">
           <label
             for="email"
@@ -33,24 +36,11 @@ function forgotPassword() {
             >メールアドレス</label
           >
           <div class="mt-2">
-            <template v-if="errors?.email">
-              <div
-                v-for="(error, index) in errors.email"
-                :key="index"
-                class="text-sm text-red-700 m-1"
-                role="alert"
-              >
-                {{ error }}
-              </div>
-            </template>
-            <input
+            <CustomInput
               id="email"
               v-model="form.email"
               name="email"
-              type="email"
               autocomplete="email"
-              required
-              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
         </div>
