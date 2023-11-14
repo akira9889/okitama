@@ -20,6 +20,7 @@ import auth from '../middleware/auth'
 import guest from '../middleware/guest'
 import admin from '../middleware/admin'
 import approved from '../middleware/approved'
+import resetPassword from '../middleware/resetPassword'
 import middlewarePipeline from '@/router/middlewarePipeline'
 
 const routes = [
@@ -111,6 +112,7 @@ const routes = [
     path: '/reset-password',
     name: 'resetPassword',
     component: ResetPassword,
+    meta: { middleware: [resetPassword]},
   },
   {
     path: '/:pathMatch(.*)',

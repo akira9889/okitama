@@ -55,12 +55,19 @@ secrets:
   SANCTUM_STATEFUL_DOMAINS: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SANCTUM_STATEFUL_DOMAINS
   SESSION_DOMAIN: /copilot/${COPILOT_APPLICATION_NAME}/${COPILOT_ENVIRONMENT_NAME}/secrets/SESSION_DOMAIN
 
+variables:
+  APP_NAME: 置き配顧客管理
+  FILESYSTEM_DISK: s3
+  MAIL_MAILER: ses
+
+
 environments:
   prod:
     http:
       alias: 'okitama.sawascle.com'
     variables:
       APP_ENV: production
+      MAIL_FROM_ADDRESS: support@okitama.sawascle.com
     image:
       build:
         target: production
@@ -69,6 +76,7 @@ environments:
       alias: 'test.sawascle.com'
     variables:
       APP_ENV: test
+      MAIL_FROM_ADDRESS: support@test.sawascle.com
     image:
       build:
         target: test

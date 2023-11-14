@@ -57,7 +57,7 @@ function forgotPassword() {
         <div class="my-8">
           <router-link
             :to="{ name: 'login' }"
-            class="text-sm text-indigo-600 hover:text-indigo-500"
+            class="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
           >
             ログイン画面へ戻る
           </router-link>
