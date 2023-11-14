@@ -1,7 +1,7 @@
 <script setup>
 import CustomInput from '@/components/CustomInput.vue'
 import InputError from '@/components/InputError.vue'
-import { computed, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import store from '@/store'
 
 const form = ref({
@@ -17,6 +17,10 @@ const errors = computed(() => store.getters['auth/error'])
 const signup = async () => {
   store.dispatch('auth/registerUser', form.value)
 }
+
+onUnmounted(() => {
+  store.commit('auth/setError', null)
+})
 </script>
 
 <template>

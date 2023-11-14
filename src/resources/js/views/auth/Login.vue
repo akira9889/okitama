@@ -1,7 +1,7 @@
 <script setup>
 import CustomInput from '@/components/CustomInput.vue'
 import InputError from '@/components/InputError.vue'
-import { computed, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -20,6 +20,10 @@ const login = async () => {
   errors.value = null
   router.push({ name: 'search-customer' })
 }
+
+onUnmounted(() => {
+  store.commit('auth/setError', null)
+})
 </script>
 
 <template>
