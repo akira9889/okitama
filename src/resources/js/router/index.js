@@ -112,7 +112,7 @@ const routes = [
     path: '/reset-password',
     name: 'resetPassword',
     component: ResetPassword,
-    meta: { middleware: [resetPassword]},
+    meta: { middleware: [resetPassword] },
   },
   {
     path: '/:pathMatch(.*)',
