@@ -132,5 +132,14 @@
   "You may accept this invitation by clicking the button below:": "下記のボタンをクリックしてチームへの招待を承認できます",
   "Accept Invitation": "この招待を承認",
   "If you did not expect to receive an invitation to this team, you may discard this email.": "このチームへの招待を受けていない場合には、本メールは破棄してください",
-  "Regards": "よろしくお願い申し上げます"
+  "Regards": "よろしくお願い申し上げます",
+
+  "The :attribute must be at least :length characters and contain at least one uppercase character.": ":attributeは少なくとも:length文字で、少なくとも1つの大文字を含む必要があります。",
+  "The :attribute must be at least :length characters and contain at least one number.": ":attributeは少なくとも:length文字で、少なくとも1つの数字を含む必要があります。",
+  "The :attribute must be at least :length characters and contain at least one special character.": ":attributeは少なくとも:length文字で、少なくとも1つの特殊文字を含む必要があります。",
+  "The :attribute must be at least :length characters and contain at least one uppercase character and one number.": ":attributeは少なくとも:length文字で、少なくとも1つの大文字と1つの数字を含む必要があります。",
+  "The :attribute must be at least :length characters and contain at least one uppercase character and one special character.": ":attributeは少なくとも:length文字で、少なくとも1つの大文字と1つの特殊文字を含む必要があります。",
+  "The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.": ":attributeは少なくとも:length文字で、少なくとも1つの大文字、1つの数字、および1つの特殊文字を含む必要があります。",
+  "The :attribute must be at least :length characters and contain at least one special character and one number.": ":attributeは少なくとも:length文字で、少なくとも1つの特殊文字と1つの数字を含む必要があります。",
+  "The :attribute must be at least :length characters.": ":attributeは少なくとも:length文字である必要があります。"
 }
