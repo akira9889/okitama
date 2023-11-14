@@ -13,9 +13,12 @@ set_env_variables() {
   echo SESSION_DRIVER=$SESSION_DRIVER >> $env_file
   echo SANCTUM_STATEFUL_DOMAINS=$SANCTUM_STATEFUL_DOMAINS >> $env_file
   echo SESSION_DOMAIN=$SESSION_DOMAIN >> $env_file
-  echo FILESYSTEM_DISK=s3 >> $env_file
+  echo FILESYSTEM_DISK=$FILESYSTEM_DISK >> $env_file
   echo AWS_DEFAULT_REGION=$AWS_REGION >> $env_file
   echo AWS_BUCKET=$OKITAMABUCKET_NAME >> $env_file
+  echo MAIL_MAILER=$MAIL_MAILER >> $env_file
+  echo MAIL_FROM_ADDRESS=$MAIL_FROM_ADDRESS >> $env_file
+  echo MAIL_FROM_NAME=$APP_NAME >> $env_file
   echo 'Laravel env variables configured'
 }
 
