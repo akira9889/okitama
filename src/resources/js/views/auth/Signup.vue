@@ -47,6 +47,7 @@ onUnmounted(() => {
               id="email"
               v-model="form.email"
               name="email"
+              required
               autocomplete="email"
             />
           </div>
@@ -66,6 +67,7 @@ onUnmounted(() => {
                 id="last_name"
                 v-model="form.last_name"
                 name="last_name"
+                required
                 autocomplete="family-name"
               />
             </div>
@@ -79,6 +81,7 @@ onUnmounted(() => {
                 id="first_name"
                 v-model="form.first_name"
                 name="first_name"
+                required
                 autocomplete="given-name"
               />
             </div>
@@ -100,6 +103,7 @@ onUnmounted(() => {
               v-model="form.password"
               type="password"
               name="password"
+              required
             />
           </div>
         </div>
@@ -118,6 +122,7 @@ onUnmounted(() => {
               v-model="form.password_confirmation"
               type="password"
               name="password_confirmation"
+              required
             />
           </div>
         </div>

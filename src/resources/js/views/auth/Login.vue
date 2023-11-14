@@ -51,6 +51,7 @@ onUnmounted(() => {
               v-model="form.email"
               type="text"
               name="email"
+              required
               autocomplete="email"
             />
           </div>
@@ -69,6 +70,7 @@ onUnmounted(() => {
               v-model="form.password"
               type="password"
               name="password"
+              required
               autocomplete="current-password"
             />
           </div>
