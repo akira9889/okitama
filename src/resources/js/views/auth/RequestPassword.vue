@@ -45,12 +45,15 @@ function forgotPassword() {
           </div>
         </div>
         <div class="my-8">
-          <router-link
-            :to="{ name: 'login' }"
-            class="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
-          >
-            ログイン画面へ戻る
-          </router-link>
+          <p class="text-sm text-gray-500">
+            ログイン画面は
+            <router-link
+              :to="{ name: 'login' }"
+              class="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+            >
+              こちら
+            </router-link>
+          </p>
         </div>
       </div>
 
