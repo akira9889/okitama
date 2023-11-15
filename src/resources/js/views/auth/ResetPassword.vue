@@ -1,6 +1,8 @@
 <script setup>
 import GuestLayout from '@/components/GuestLayout.vue'
 import AuthService from '@/services/AuthService'
+import CustomInput from '@/components/CustomInput.vue'
+import InputError from '@/components/InputError.vue'
 import { ref } from 'vue'
 import { getError } from '@/utils/helpers.js'
 import { useRoute } from 'vue-router'
@@ -16,8 +18,6 @@ const form = ref({
 })
 
 const errors = ref({})
-
-const showPassword = ref(false)
 
 const router = useRouter()
 
@@ -37,86 +37,51 @@ function resetPassword() {
     <form class="space-y-6" @submit.prevent="resetPassword">
       <div>
         <div>
-          <div class="flex items-center justify-between">
-            <template v-if="errors?.email">
-              <div
-                v-for="(error, index) in errors.email"
-                :key="index"
-                class="text-sm text-red-700 m-1"
-                role="alert"
-              >
-                {{ error }}
-              </div>
-            </template>
-          </div>
+          <InputError :error-msg="errors?.email" class="mb-2" />
           <label
             for="password"
             class="block text-sm font-medium leading-6 text-gray-900"
             >パスワード</label
           >
-          <div class="mt-2 relative">
-            <input
+          <div class="mt-2">
+            <CustomInput
               id="password"
               v-model="form.password"
+              type="password"
               name="password"
-              :type="showPassword ? 'text' : 'password'"
               required
-              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
-            <button
-              v-show="form.password"
-              type="button"
-              class="absolute inset-y-0 right-0 px-3 flex items-center text-sm leading-5"
-              @click="showPassword = !showPassword"
-            >
-              <font-awesome-icon
-                v-if="showPassword"
-                :icon="['far', 'eye-slash']"
-              />
-              <font-awesome-icon
-                v-else-if="!showPassword"
-                :icon="['far', 'eye']"
-              />
-            </button>
-            <template v-if="errors?.password">
-              <div
-                v-for="(error, index) in errors.password"
-                :key="index"
-                class="text-sm text-red-700 m-1"
-                role="alert"
-              >
-                {{ error }}
-              </div>
-            </template>
           </div>
         </div>
 
         <div>
           <div class="flex items-center justify-between">
             <label
-              for="password"
+              for="password_confirmation"
               class="block text-sm font-medium leading-6 text-gray-900"
               >パスワード確認</label
             >
           </div>
           <div class="mt-2">
-            <input
+            <CustomInput
               id="password_confirmation"
               v-model="form.password_confirmation"
-              name="password_confirmation"
               type="password"
+              name="password_confirmation"
               required
-              class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
         </div>
         <div class="my-8">
-          <router-link
-            :to="{ name: 'login' }"
-            class="text-sm text-indigo-600 hover:text-indigo-500"
-          >
-            ログイン画面へ戻る
-          </router-link>
+          <p class="text-sm text-gray-500">
+            ログイン画面は
+            <router-link
+              :to="{ name: 'login' }"
+              class="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+            >
+              こちら
+            </router-link>
+          </p>
         </div>
       </div>
 
