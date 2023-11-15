@@ -57,7 +57,7 @@ onUnmounted(() => {
           <InputError :error-msg="errors?.last_name" class="mb-2" />
           <InputError :error-msg="errors?.first_name" class="mb-2" />
           <div class="mt-2 flex justify-between">
-            <div class="form_name">
+            <div class="form-name">
               <label
                 for="last_name"
                 class="block text-sm font-medium leading-6 text-gray-900"
@@ -71,7 +71,7 @@ onUnmounted(() => {
                 autocomplete="family-name"
               />
             </div>
-            <div class="form_name">
+            <div class="form-name">
               <label
                 for="first_name"
                 class="block text-sm font-medium leading-6 text-gray-900"
@@ -150,7 +150,7 @@ onUnmounted(() => {
   </div>
 </template>
 <style scoped>
-.form_name {
+.form-name {
   width: calc(50% - 15px);
 }
 </style>
