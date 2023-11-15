@@ -57,7 +57,7 @@ onUnmounted(() => {
           <InputError :error-msg="errors?.last_name" class="mb-2" />
           <InputError :error-msg="errors?.first_name" class="mb-2" />
           <div class="mt-2 flex justify-between">
-            <div>
+            <div class="form-name">
               <label
                 for="last_name"
                 class="block text-sm font-medium leading-6 text-gray-900"
@@ -71,7 +71,7 @@ onUnmounted(() => {
                 autocomplete="family-name"
               />
             </div>
-            <div>
+            <div class="form-name">
               <label
                 for="first_name"
                 class="block text-sm font-medium leading-6 text-gray-900"
@@ -111,7 +111,7 @@ onUnmounted(() => {
         <div>
           <div class="flex items-center justify-between">
             <label
-              for="password"
+              for="password_confirmation"
               class="block text-sm font-medium leading-6 text-gray-900"
               >パスワード確認</label
             >
@@ -149,3 +149,8 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
+<style scoped>
+.form-name {
+  width: calc(50% - 15px);
+}
+</style>
