@@ -5,6 +5,9 @@ import GuestLayout from '@/components/GuestLayout.vue'
 import AuthService from '@/services/AuthService'
 import { ref } from 'vue'
 import { getError } from '@/utils/helpers.js'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const form = ref({
   email: '',
@@ -14,9 +17,11 @@ const errors = ref({})
 
 function forgotPassword() {
   AuthService.forgotPassword(form.value)
-    .then(() => {
-      //TODO メール送信通知
-      console.log('成功')
+    .then(({ data }) => {
+      store.dispatch('toast/showToast', {
+        message: data.message,
+        delay: 5000,
+      })
     })
     .catch((error) => {
       errors.value = getError(error)
@@ -25,11 +30,17 @@ function forgotPassword() {
 </script>
 
 <template>
-  <GuestLayout title="新しいパスワードのリクエスト">
-    <form class="space-y-6" @submit.prevent="forgotPassword">
+  <GuestLayout title="パスワードリセット">
+    <p class="text-sm">
+      ご登録のメールアドレスを入力し、リセットボタンを押してください。
+    </p>
+    <p class="text-sm mt-1">
+      送信先メールにてパスワードリセット用のURLをお送りします。
+    </p>
+    <form class="space-y-6 mt-4" @submit.prevent="forgotPassword">
       <div>
         <InputError :error-msg="errors?.email" class="mb-2" />
-        <div class="mt-2">
+        <div>
           <label
             for="email"
             class="block text-sm font-medium leading-6 text-gray-900 dark:text-black"

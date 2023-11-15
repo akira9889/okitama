@@ -1,7 +1,14 @@
 <script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import Toast from '@/components/Toast.vue'
+
 defineProps({
   title: String,
 })
+
+const store = useStore()
+const toasts = computed(() => store.state.toast.toasts)
 </script>
 
 <template>
@@ -19,5 +26,24 @@ defineProps({
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <slot />
     </div>
+
+    <div class="fixed right-[10px] bottom-20">
+      <TransitionGroup name="toast" tag="ul">
+        <Toast v-for="toast in toasts" :key="toast" :toast="toast" />
+      </TransitionGroup>
+    </div>
   </div>
 </template>
+<style scoped>
+.toast-move,
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.5s ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+</style>
