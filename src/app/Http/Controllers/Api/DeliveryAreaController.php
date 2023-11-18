@@ -15,6 +15,23 @@ class DeliveryAreaController extends Controller
         return response()->json($selectedTowns);
     }
 
+    public function getSelectedTownsGroupByCity()
+    {
+        $user = auth()->user();
+        $towns = $user->towns()->with('city')->orderBy('city_id')->get();
+
+        $groupedTowns = $towns->groupBy('city_id')->map(function ($group) {
+            return [
+                'cityName' => $group->first()->city->name,
+                'towns' => $group->map(function ($town) {
+                    return ['townId' => $town->id, 'townName' => $town->name];
+                }),
+            ];
+        });
+
+        return response()->json(array_values($groupedTowns->toArray()));
+    }
+
     public function update(Request $request)
     {
         $request->validate([

@@ -56,6 +56,13 @@ const inputClasses = computed(() => {
   return cls.join(' ')
 })
 
+const isGroupedOptions = computed(() => {
+  return (
+    props.selectOptions.length > 0 &&
+    props.selectOptions[0].hasOwnProperty('label')
+  )
+})
+
 const searchInputRef = ref(null)
 const fileInputRef = ref(null)
 
@@ -141,17 +148,33 @@ function changeRadio(e) {
         :required="required"
         :value="inputValue"
         :class="inputClasses"
-        :placeholder="label"
         @change="onChange($event)"
       >
         <option v-if="label" value="">{{ label }}</option>
-        <option
-          v-for="option of selectOptions"
-          :key="option.key"
-          :value="option.key"
-        >
-          {{ option.text }}
-        </option>
+        <template v-if="isGroupedOptions">
+          <optgroup
+            v-for="(group, index) in selectOptions"
+            :key="index"
+            :label="group.label"
+          >
+            <option
+              v-for="option in group.options"
+              :key="option.key"
+              :value="option.key"
+            >
+              {{ option.text }}
+            </option>
+          </optgroup>
+        </template>
+        <template v-else>
+          <option
+            v-for="option in selectOptions"
+            :key="option.key"
+            :value="option.key"
+          >
+            {{ option.text }}
+          </option>
+        </template>
       </select>
     </template>
     <template v-else-if="type === 'checkbox'">

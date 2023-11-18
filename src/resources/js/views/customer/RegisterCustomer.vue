@@ -39,17 +39,22 @@ async function initializeForm() {
   const defaultTownId = await getDefaultTown()
 
   await townsAndDropoffsPromise
-  form.value.town_id = defaultTownId || deliveryAreas.value[0]?.key
+  form.value.town_id = defaultTownId || deliveryAreas.value[0].options[0].key
   form.value.dropoff_ids.push(DROPOFF_PLACE_ID.ENTRANCE)
   scrollToTop()
 }
 
 async function setSelectedTowns() {
-  const { data } = await apiClient.get('/selected-towns')
-  const transformedData = data.map((item) => {
+  const { data } = await apiClient.get('/grouped-selected-towns')
+  const transformedData = data.map(city => {
     return {
-      key: item.id,
-      text: item.name,
+      label: city.cityName,
+      options: city.towns.map(town => {
+        return {
+          key: town.townId,
+          text: town.townName,
+        }
+      }),
     }
   })
 
