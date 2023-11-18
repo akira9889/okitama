@@ -46,10 +46,10 @@ async function initializeForm() {
 
 async function setSelectedTowns() {
   const { data } = await apiClient.get('/grouped-selected-towns')
-  const transformedData = data.map(city => {
+  const transformedData = data.map((city) => {
     return {
       label: city.cityName,
-      options: city.towns.map(town => {
+      options: city.towns.map((town) => {
         return {
           key: town.townId,
           text: town.townName,
@@ -121,24 +121,26 @@ async function getDropoffPlace() {
       <label class="text-lg">住所</label>
       <div class="mt-2">
         <label for="town">エリア</label>
-        <div class="flex items-baseline">
+        <div class="flex items-baseline mt-1">
           <CustomInput
             id="town"
             v-model="form.town_id"
-            class="mt-1 w-1/2"
+            class="w-1/3"
             type="select"
             :select-options="deliveryAreas"
             @change="changeTown"
           />
-          <div class="flex items-center ml-3">
-            <CustomInput
-              id="default_town"
-              v-model="form.is_checked_default"
-              type="checkbox"
-              class="w-4 h-4"
-            />
-            <label for="default_town" class="ml-2 text-sm"
-              >デフォルト（追加時にこの町域が最初に選択されます。）</label
+          <div class="flex items-baseline ml-2 w-2/3">
+            <div>
+              <CustomInput
+                id="default_town"
+                v-model="form.is_checked_default"
+                type="checkbox"
+                class="w-3 h-3"
+              />
+            </div>
+            <label for="default_town" class="text-sm ml-2"
+              >デフォルト（次回以降、この町域が最初の選択されているようになります。）</label
             >
           </div>
         </div>
@@ -177,7 +179,7 @@ async function getDropoffPlace() {
           :id="dropoff.id"
           type="checkbox"
           :checked="form.dropoff_ids.includes(dropoff.id)"
-          class="w-4 h-4"
+          class="w-3 h-3"
           @change="checkDropoffPlace"
         />
         <label :for="dropoff.id" class="ml-1 text-sm">{{ dropoff.name }}</label>
