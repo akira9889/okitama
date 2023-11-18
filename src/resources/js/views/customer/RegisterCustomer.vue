@@ -125,11 +125,12 @@ async function getDropoffPlace() {
             :select-options="deliveryAreas"
             @change="changeTown"
           />
-          <div class="flex items-baseline ml-3">
+          <div class="flex items-center ml-3">
             <CustomInput
               id="default_town"
               v-model="form.is_checked_default"
               type="checkbox"
+              class="w-4 h-4"
             />
             <label for="default_town" class="ml-2 text-sm"
               >デフォルト（追加時にこの町域が最初に選択されます。）</label
@@ -171,6 +172,7 @@ async function getDropoffPlace() {
           :id="dropoff.id"
           type="checkbox"
           :checked="form.dropoff_ids.includes(dropoff.id)"
+          class="w-4 h-4"
           @change="checkDropoffPlace"
         />
         <label :for="dropoff.id" class="ml-1 text-sm">{{ dropoff.name }}</label>
