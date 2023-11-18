@@ -5,3 +5,4 @@ docker/minio
 .dockerignore
 .DS_Store
 doc
+src/customers.csv
