@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum', 'approved')->group(function () {
     Route::delete('/area', [AreaController::class, 'delete']);
 
     Route::get('/selected-towns', [DeliveryAreaController::class, 'getSelectedTowns']);
+    Route::get('/grouped-selected-towns', [DeliveryAreaController::class, 'getSelectedTownsGroupByCity']);
     Route::put('/delivery-area', [DeliveryAreaController::class, 'update']);
 
     Route::get('/prefecture', [PrefectureController::class, 'fetchPrefectures']);

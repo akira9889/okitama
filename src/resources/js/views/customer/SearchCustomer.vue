@@ -1,7 +1,7 @@
 <script setup>
 import { apiClient } from '@/services/API.js'
 import { scrollToTop } from '@/constants.js'
-import { ref, reactive, onMounted, computed, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, computed, onUnmounted, watch } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import CustomersTable from './CustomersTable.vue'
 import CustomerDetail from './CustomerDetail.vue'
@@ -39,9 +39,16 @@ const shouldShowTable = computed(
   () => isCustomerDetailEmpty.value && customers.value.length > 1,
 )
 
+watch(
+  () => form.town_id,
+  () => {
+    submit()
+  },
+)
+
 onMounted(async () => {
   await setSelectedTowns()
-  form.town_id = deliveryAreas.value[0]?.key
+  form.town_id = deliveryAreas.value[0].options[0].key
 })
 
 onUnmounted(clearState)
@@ -68,11 +75,16 @@ async function submit() {
 }
 
 async function setSelectedTowns() {
-  const { data } = await apiClient.get('/selected-towns')
-  const transformedData = data.map((item) => {
+  const { data } = await apiClient.get('/grouped-selected-towns')
+  const transformedData = data.map((city) => {
     return {
-      key: item.id,
-      text: item.name,
+      label: city.cityName,
+      options: city.towns.map((town) => {
+        return {
+          key: town.townId,
+          text: town.townName,
+        }
+      }),
     }
   })
 
@@ -141,7 +153,6 @@ function changeTown({ value }) {
       </div>
     </form>
   </footer>
-
   <div class="relative" :class="{ customers: isCustomerDetailEmpty }">
     <div
       class="customers-wrap"

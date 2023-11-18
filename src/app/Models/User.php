@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function towns(): BelongsToMany
     {
-        return $this->belongsToMany(Town::class, 'delivery_areas', 'user_id', 'town_id')->withPivot('default');
+        return $this->belongsToMany(Town::class, 'delivery_areas', 'user_id', 'town_id');
     }
 
     public function defaultTown()
