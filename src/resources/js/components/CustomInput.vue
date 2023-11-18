@@ -59,7 +59,7 @@ const inputClasses = computed(() => {
 const isGroupedOptions = computed(() => {
   return (
     props.selectOptions.length > 0 &&
-    props.selectOptions[0].hasOwnProperty('label')
+    Object.prototype.hasOwnProperty.call(props.selectOptions[0], 'label')
   )
 })
 
