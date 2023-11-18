@@ -10,6 +10,7 @@ import RegisterCustomer from '@/views/customer/RegisterCustomer.vue'
 import EditCustomer from '@/views/customer/EditCustomer.vue'
 import Users from '@/views/setting/admin/user/Users.vue'
 import AwaitingUsers from '@/views/setting/admin/user/AwaitingUsers.vue'
+import ImportCustomer from '@/views/setting/admin/ImportCustomer.vue'
 import Area from '@/views/setting/user/Area/Area.vue'
 import DeliveryArea from '@/views/setting/user/DeliveryArea.vue'
 import DropoffHistory from '@/views/dropoff/DropoffHistory.vue'
@@ -58,6 +59,12 @@ const routes = [
         path: 'awaiting-users',
         name: 'awaiting-users',
         component: AwaitingUsers,
+        meta: { middleware: [auth, approved, admin] },
+      },
+      {
+        path: 'import-customer',
+        name: 'import-customer',
+        component: ImportCustomer,
         meta: { middleware: [auth, approved, admin] },
       },
       {

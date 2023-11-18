@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class City extends Model
 {
     use HasFactory;
+
+    public $incrementing = false;
     public $timestamps = false;
 
     protected $fillable = [
@@ -15,4 +17,9 @@ class City extends Model
         'name',
         'prefecture_id'
     ];
+
+    public function prefecture()
+    {
+        return $this->belongsTo(Prefecture::class);
+    }
 }
