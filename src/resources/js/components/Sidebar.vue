@@ -44,6 +44,12 @@ const menuItems = computed(() => {
           icon: ['fas', 'chevron-right'],
         },
         { title: 'エリア登録', route: '/area', icon: ['fas', 'chevron-right'] },
+        {
+          title: 'インポート',
+          route: '/import-customer',
+          icon: ['fas', 'chevron-right'],
+          admin: true,
+        },
       ],
     },
     {

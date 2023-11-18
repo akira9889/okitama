@@ -26,8 +26,8 @@ class CustomerFactory extends Factory
             'full_name' => $full_name,
             'town_id' => \App\Models\Town::inRandomOrder()->first()->id,
             'address_number' => implode('-', str_split(fake()->randomNumber(3, true))),
-            'room_number' => fake()->buildingNumber(),
-            'description' => fake()->realText,
+            'room_number' => fake()->optional(0.5)->buildingNumber(),
+            'description' => fake()->optional(0.5)->realText,
         ];
     }
 }

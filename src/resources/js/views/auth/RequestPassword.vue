@@ -72,8 +72,10 @@ function forgotPassword() {
         <button
           type="submit"
           :disabled="!form.email"
-          class="flex w-full justify-center rounded-md  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all duration-300"
-          :class="form.email ? 'bg-indigo-600 hover:bg-indigo-500' : 'bg-indigo-200'"
+          class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all duration-300"
+          :class="
+            form.email ? 'bg-indigo-600 hover:bg-indigo-500' : 'bg-indigo-200'
+          "
         >
           リセット
         </button>

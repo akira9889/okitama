@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\DropoffPlace;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
+use App\Models\City;
 use App\Models\Customer;
+use App\Models\Prefecture;
+use App\Models\Town;
+use App\Services\CityService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CustomerController extends Controller
 {
@@ -102,5 +110,152 @@ class CustomerController extends Controller
     {
         $user = auth()->user();
         return $user->defaultTown();
+    }
+
+    public function importCustomer(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,txt',
+        ]);
+
+        $file = $request->file('file');
+        $path = $file->getRealPath();
+
+        try {
+            $lines = file($path, FILE_IGNORE_NEW_LINES);
+
+            // データをprefecture, city, townでグループ分け
+            $groupedData = [];
+            $prefectureNames = [];
+
+            foreach ($lines as $line) {
+                $data = str_getcsv($line);
+                [$prefectureName, $city, $town, $addressNumber, $roomNumber, $lastName, $firstName, $dropoffPlace, $description] = $data;
+
+                if (!in_array($prefectureName, $prefectureNames)) {
+                    $prefectureNames[] = $prefectureName;
+                }
+
+
+                $groupedData[$prefectureName][$city][$town][] = [
+                    'address_number' => $addressNumber,
+                    'room_number' => $roomNumber,
+                    'last_name' => $lastName,
+                    'first_name' => $firstName,
+                    'dropoff_place' => $dropoffPlace,
+                    'description' => $description
+                ];
+            }
+
+            $prefectures = Prefecture::whereIn('name', $prefectureNames)->get();
+            $prefectureMap = $prefectures->pluck('id', 'name')->toArray();
+
+            // 都道府県名をIDに変換
+            foreach ($groupedData as $prefectureName => $data) {
+                $prefectureId = $prefectureMap[$prefectureName] ?? null;
+                if ($prefectureId) {
+                    $groupedData[$prefectureId] = $data;
+                    unset($groupedData[$prefectureName]);
+                }
+            }
+
+            $this->processData($groupedData);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+    }
+
+    private function processData($groupedData)
+    {
+        DB::beginTransaction();
+
+        try {
+            foreach ($groupedData as $prefectureId => $cities) {
+                $citiesMap = CityService::fetchCitiesByPrefectureId($prefectureId)['data'];
+                foreach ($cities as $cityName => $towns) {
+                    $key = array_search($cityName, array_column($citiesMap, 'name'));
+
+                    if (!$key) {
+                        throw new \Exception('一致する市区町村名がありませんでした。', '500');
+                    }
+
+                    $matchedCity = $key !== false ? $citiesMap[$key] : null;
+
+                    $city = City::firstOrCreate([
+                        'id' => $matchedCity['id'],
+                        'name' => $cityName,
+                        'prefecture_id' => $prefectureId
+                    ]);
+
+                    foreach ($towns as $townName => $customers) {
+                        $town = Town::firstOrCreate(['name' => $townName, 'city_id' => $city->id]);
+
+                        //1000件ずつ分割してインサート処理
+                        $customerBatches = array_chunk($customers, 1000);
+                        foreach ($customerBatches as $batch) {
+                            $this->processBatch($batch, $town->id);
+                            unset($batch);
+                        }
+                    }
+                }
+            }
+
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollback();
+            throw $e;
+        }
+    }
+
+    private function processBatch($batch, $townId)
+    {
+        $dropoffPlaceMap = DropoffPlace::getPlaceId();
+
+        $customerData = [];
+        $dropoffData = [];
+
+        foreach ($batch as $customer) {
+            $customerData[] = [
+                'first_name' => $customer['first_name'] ?? null,
+                'last_name' => $customer['last_name'],
+                'full_name' => $customer['last_name'] . $customer['first_name'] ?? null,
+                'town_id' => $townId,
+                'address_number' => $customer['address_number'],
+                'room_number' => $customer['room_number'],
+                'description' => $customer['description']
+            ];
+
+            $dropoffPlaceNames = explode('、', $customer['dropoff_place']);
+
+            $dropoffIds = [];
+
+            foreach ($dropoffPlaceNames as $dropoffName) {
+                $dropoffIds[] = $dropoffPlaceMap[$dropoffName] ?? DropoffPlace::OTHER->value;
+            }
+
+            $dropoffData[] = $dropoffIds;
+        }
+
+        DB::table('customers')->insert($customerData);
+
+        // 最新のCustomer IDを取得
+        $latestCustomerId = Customer::orderByDesc('id')->first()->id;
+        $customerIds = range($latestCustomerId - count($customerData) + 1, $latestCustomerId);
+
+
+        $dropoffCustomerData = array_combine($customerIds, $dropoffData);
+
+        $insertDropoffCustomerData = [];
+
+        foreach ($dropoffCustomerData as $customerId => $dropoffIds) {
+            foreach ($dropoffIds as $dropoffId) {
+                $insertDropoffCustomerData[] = [
+                    'customer_id' => $customerId,
+                    'dropoff_id' => $dropoffId
+                ];
+            }
+        }
+
+        DB::table('customer_dropoff')->insert($insertDropoffCustomerData);
     }
 }

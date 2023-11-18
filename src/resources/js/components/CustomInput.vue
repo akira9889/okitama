@@ -12,6 +12,7 @@ const props = defineProps({
   name: String,
   required: Boolean,
   autocomplete: String,
+  accept: String,
   min: {
     type: Number,
     default: 1,
@@ -128,7 +129,7 @@ function changeRadio(e) {
           :required="required"
           class="hidden"
           :placeholder="label"
-          accept="image/*"
+          :accept="accept"
           @input="emit('change', $event.target.files[0])"
         />
       </label>

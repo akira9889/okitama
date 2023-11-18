@@ -32,5 +32,7 @@ const btnClasses = computed(() => {
 </script>
 
 <template>
-  <button :class="btnClasses" :disabled="disabled">{{ text }}</button>
+  <button :type="type" :class="btnClasses" :disabled="disabled">
+    {{ text }}
+  </button>
 </template>

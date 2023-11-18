@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum', 'approved')->group(function () {
         Route::delete('/awaiting-user/{user}', [AwaitingUserController::class, 'delete']);
 
         Route::get('/awaiting-user/exists', [AwaitingUserController::class, 'isExistsAwaitingUser']);
+
+        Route::post('/import-customer', [CustomerController::class, 'importCustomer']);
     });
 
     // 一般ユーザー用ルート

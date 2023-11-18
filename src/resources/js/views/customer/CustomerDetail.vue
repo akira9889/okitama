@@ -41,6 +41,7 @@ function resetFile() {
       <CustomInput
         type="file"
         class="absolute top-0 left-0 cursor-pointer w-full h-full"
+        accept="image/*"
         :reset="reset"
         @change="changeImage"
       />

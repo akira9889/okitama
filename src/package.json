@@ -7,7 +7,7 @@
     "lint": "npm run lint:style && npm run lint:es && npm run format",
     "lint:es": "eslint resources/js/**/*.{vue,js} --fix",
     "lint:style": "stylelint resources/**/*.{css,scss,vue}",
-    "format": "prettier .  --write"
+    "format": "prettier \"resources/**/*.{css,scss,js,vue}\" --write"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.6",
