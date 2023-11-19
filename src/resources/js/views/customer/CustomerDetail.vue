@@ -63,6 +63,9 @@ function resetFile() {
 
     <div class="text-center">
       <h2 class="text-xl">顧客情報</h2>
+      <p class="text-xl mt-6">
+        {{ customer.company }}
+      </p>
       <p class="text-xl mt-6 inline-block">
         {{ customer.last_name }} {{ customer.first_name }}
       </p>

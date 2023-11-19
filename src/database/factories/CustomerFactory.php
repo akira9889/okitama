@@ -36,6 +36,7 @@ class CustomerFactory extends Factory
             'first_kana' => $first_kana,
             'last_kana' => $last_kana,
             'full_kana' => $full_kana,
+            'company' => str_replace([' ', '　'], '', fake()->optional(0.5)->company()),
             'town_id' => \App\Models\Town::inRandomOrder()->first()->id,
             'address_number' => implode('-', str_split(fake()->randomNumber(3, true))),
             'building_name' => $buildingName,
