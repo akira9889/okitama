@@ -85,7 +85,7 @@ function forwardMenuItemClick() {
 
 <template>
   <nav
-    class="w-[180px] transition-all bg-white fixed top-0 bottom-0 left-full z-20"
+    class="w-[180px] transition-all bg-white fixed top-0 bottom-0 left-full z-20 overflow-y-auto"
   >
     <div class="sidebar-inner">
       <MenuItem
