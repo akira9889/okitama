@@ -63,23 +63,30 @@ function resetFile() {
 
     <div class="text-center">
       <h2 class="text-xl">顧客情報</h2>
-      <p class="text-xl mt-6">
-        {{ customer.company }}
-      </p>
-      <p class="text-xl mt-6 inline-block">
-        {{ customer.last_name }} {{ customer.first_name }}
-      </p>
-      <p class="mt-4">住所</p>
-      <div class="flex w-full justify-center">
-        <div>
+      <div v-show="customer.company" class="mt-6">
+        <p class="font-semibold">会社名</p>
+        <p>{{ customer.company }}</p>
+      </div>
+      <div v-show="customer.last_name || customer.first_name" class="mt-6">
+        <p class="font-semibold">氏名</p>
+        <p class="text-xs">
+          {{ customer.last_kana }} {{ customer.first_kana }}
+        </p>
+        <p>{{ customer.last_name }} {{ customer.first_name }}</p>
+      </div>
+
+      <div class="mt-4">
+        <p class="font-semibold">住所</p>
+        <p>
           {{ customer.town_name + customer.address_number }}
-        </div>
-        &emsp;
-        <div>{{ customer.room_number }}</div>
+          <span v-show="customer.room_number"
+            >&emsp;{{ customer.room_number }}</span
+          >
+        </p>
       </div>
     </div>
 
-    <div v-if="customer.dropoffs.length" class="flex items-center">
+    <div v-if="customer.dropoffs.length" class="flex items-center mt-4">
       <div class="w-1/2 text-center">
         <p class="text-xl">置き配</p>
         <div class="bg-customGreen mt-4">
