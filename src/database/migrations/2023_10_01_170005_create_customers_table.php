@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('company')->nullable();
             $table->foreignId('town_id')->constrained();
             $table->string('address_number')->nullable();
+            $table->string('building_name')->nullable();
             $table->string('room_number')->nullable();
             $table->text('description')->nullable();
-            $table->string('building_name')->nullable();
 
             $table->index(['full_name', 'town_id']);
             $table->index(['full_kana', 'town_id']);
