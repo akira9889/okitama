@@ -32,18 +32,21 @@ class CustomerController extends Controller
 
         $query = Customer::with(['dropoffs', 'town']);
 
+        $searchQuery = str_replace([' ', '　'], '', $data['searchQuery']);
+        $searchQuery = mb_convert_kana($searchQuery, 'H');
+
         if ($data['searchType'] === 'name') {
-            $query->where('full_name', 'LIKE', $data['searchQuery'] . '%')
-                ->whereIn('town_id', $deliveryAreas)
-                ->orderBy('town_id')
-                ->orderBy('address_number');
+            $query = $query->where('full_name', 'LIKE', $searchQuery . '%')
+                ->orWhere('full_kana', 'LIKE', $searchQuery . '%')
+                ->whereIn('town_id', $deliveryAreas);
         } elseif ($data['searchType'] === 'address') {
-            $query->where('town_id', $data['town_id'])
-                ->where('address_number', $data['searchAddress'])
-                ->orderBy('town_id')
-                ->orderBy('address_number');
+            $query = $query->where('town_id', $data['town_id'])
+                ->where('address_number', $data['searchAddress']);
         }
 
+        $query = $query->orderBy('town_id')
+            ->orderBy('address_number')
+            ->orderBy('room_number');
 
         $customers = $query->get();
 
