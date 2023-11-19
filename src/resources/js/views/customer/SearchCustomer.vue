@@ -176,6 +176,7 @@ function changeTown({ value }) {
 
 <style lang="scss" scoped>
 .customers {
+  min-height: calc(100vh - $header-height - $footer-height);
   min-height: calc(100dvh - $header-height - $footer-height);
 }
 
