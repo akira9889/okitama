@@ -12,6 +12,8 @@ const store = useStore()
 const DEFAULT_FORM = {
   last_name: '',
   first_name: '',
+  last_kana: '',
+  first_kana: '',
   dropoff_ids: [],
   is_checked_default: false,
   town_id: '',
@@ -104,17 +106,58 @@ async function getDropoffPlace() {
 <template>
   <h1 class="text-xl text-center">顧客登録</h1>
   <form class="mt-6" @submit.prevent="submit">
-    <InputError :error-msg="errorMsg?.last_name" class="mb-2" />
-    <InputError :error-msg="errorMsg?.first_name" class="mb-2" />
-    <label for="last_name">ふりがな</label>
-    <div class="flex">
+    <div>
+      <InputError :error-msg="errorMsg?.last_name" class="mb-2" />
+      <InputError :error-msg="errorMsg?.first_name" class="mb-2" />
+      <label for="last_name">氏名</label>
+      <div class="flex">
+        <CustomInput
+          id="last_name"
+          v-model="form.last_name"
+          label="姓"
+          autocomplete="off"
+          class="name"
+        />
+        <CustomInput
+          v-model="form.first_name"
+          label="名"
+          autocomplete="off"
+          class="name"
+        />
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <InputError :error-msg="errorMsg?.last_kana" class="mb-2" />
+      <InputError :error-msg="errorMsg?.first_kana" class="mb-2" />
+      <label for="last_kana">ふりがな</label>
+      <div class="flex">
+        <CustomInput
+          id="last_kana"
+          v-model="form.last_kana"
+          label="せい"
+          autocomplete="off"
+          class="name"
+        />
+        <CustomInput
+          v-model="form.first_kana"
+          label="めい"
+          autocomplete="off"
+          class="name"
+        />
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <InputError :error-msg="errorMsg?.company" class="mb-2" />
+      <label for="company">会社名</label>
       <CustomInput
-        id="last_name"
-        v-model="form.last_name"
-        label="せい"
-        class="name"
+        id="company"
+        v-model="form.company"
+        label="会社名"
+        class="mt-1"
+        autocomplete="off"
       />
-      <CustomInput v-model="form.first_name" label="めい" class="name" />
     </div>
 
     <div class="mt-6">
@@ -128,6 +171,7 @@ async function getDropoffPlace() {
             class="w-1/3"
             type="select"
             :select-options="deliveryAreas"
+            autocomplete="off"
             @change="changeTown"
           />
           <div class="flex items-baseline ml-2 w-2/3">
@@ -146,6 +190,7 @@ async function getDropoffPlace() {
         </div>
       </div>
     </div>
+
     <div class="mt-6">
       <InputError :error-msg="errorMsg?.address_number" class="mb-2" />
       <label for="address_number">番地（ハイフンあり）</label>
@@ -153,6 +198,19 @@ async function getDropoffPlace() {
         id="address_number"
         v-model="form.address_number"
         label="1-2-3"
+        autocomplete="off"
+        class="mt-1"
+      />
+    </div>
+
+    <div class="mt-6">
+      <InputError :error-msg="errorMsg?.building_name" class="mb-2" />
+      <label for="building_name">建物名</label>
+      <CustomInput
+        id="building_name"
+        v-model="form.building_name"
+        label="コーポ村山"
+        autocomplete="off"
         class="mt-1"
       />
     </div>
