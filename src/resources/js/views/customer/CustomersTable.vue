@@ -100,8 +100,10 @@ function tableScrollToTop() {
               <div>
                 {{ customer.town_name + customer.address_number }}
               </div>
-              &emsp;
-              <div>{{ customer.room_number }}</div>
+
+              <div v-show="customer.building_name" class="ml-2">{{ customer.building_name }}</div>
+
+              <div v-show="customer.room_number" class="ml-2">{{ customer.room_number }}</div>
             </div>
           </TableDetailCell>
           <TableDetailCell
