@@ -64,10 +64,8 @@ class CustomerController extends Controller
             return in_array($key, $customer->getFillable());
         }, ARRAY_FILTER_USE_KEY);
 
-        $customerData['full_name'] = $data['last_name'];
-        if (isset($data['first_name'])) {
-            $customerData['full_name'] = $data['last_name'] . $data['first_name'];
-        }
+        $customerData['full_name'] = $data['last_name'] ?? null . $data['first_name'] ?? null;
+        $customerData['full_kana'] = $data['last_kana'] ?? null . $data['first_kana'] ?? null;
 
         $customer->fill($customerData)->save();
 
@@ -102,7 +100,9 @@ class CustomerController extends Controller
         $customerData = array_filter($data, function ($key) use ($customer) {
             return in_array($key, $customer->getFillable());
         }, ARRAY_FILTER_USE_KEY);
-        $customerData['full_name'] = $data['last_name'] . $data['first_name'];
+
+        $customerData['full_name'] = $data['last_name'] ?? null . $data['first_name'] ?? null;
+        $customerData['full_kana'] = $data['last_kana'] ?? null . $data['first_kana'] ?? null;
 
         $customer->fill($customerData)->save();
 

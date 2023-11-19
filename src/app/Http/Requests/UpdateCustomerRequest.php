@@ -23,10 +23,14 @@ class UpdateCustomerRequest extends FormRequest
     {
         return [
             'first_name' => ['string', 'max:15', 'nullable'],
-            'last_name' => ['required', 'string', 'max:15'],
+            'last_name' => ['string', 'max:15', 'nullable'],
+            'first_kana' => ['string', 'max:15', 'nullable'],
+            'last_kana' => ['string', 'max:15', 'nullable'],
+            'company' => ['string', 'max:30', 'nullable'],
             'town_id' => ['integer', 'exists:delivery_areas,town_id'],
-            'address_number' => ['string', 'nullable'],
-            'room_number' => ['string', 'nullable'],
+            'address_number' => ['required', 'string', 'max:15'],
+            'building_name' => ['string', 'max:20', 'nullable'],
+            'room_number' => ['string', 'max:10', 'nullable'],
             'dropoff_ids' => ['nullable'],
             'dropoff_ids.*' => ['integer', 'exists:dropoffs,id'],
             'description' => ['string', 'nullable']
