@@ -1,7 +1,8 @@
 <script setup>
+import axios from 'axios'
 import { apiClient } from '@/services/API.js'
 import { DROPOFF_PLACE_ID, scrollToTop } from '@/constants.js'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import InputError from '@/components/InputError.vue'
 import Btn from '@/components/Btn.vue'
@@ -26,6 +27,32 @@ const errorMsg = ref({})
 const deliveryAreas = ref([])
 const dropoffs = ref([])
 
+watch(
+  () => form.value.last_name,
+  (newLastName) => {
+    if (!newLastName) {
+      form.value.last_kana = ''
+      return
+    }
+
+    debouncedFetchKana(newLastName, true)
+  },
+)
+
+watch(
+  () => form.value.first_name,
+  (newFirstName) => {
+    if (!newFirstName) {
+      form.value.first_kana = ''
+      return
+    }
+
+    debouncedFetchKana(newFirstName, false)
+  },
+)
+
+
+
 onMounted(async () => {
   await initializeForm()
 })
@@ -46,6 +73,29 @@ async function initializeForm() {
   scrollToTop()
 }
 
+async function fetchKana(name) {
+  try {
+    const { data } = await axios.post('https://labs.goo.ne.jp/api/hiragana', {
+      app_id: import.meta.env.VITE_GOO_APP_ID,
+      sentence: name,
+      output_type: 'hiragana',
+    })
+    return data.converted
+  } catch (error) {
+    console.error('Error fetching Kana:', error)
+    return ''
+  }
+}
+
+const debouncedFetchKana = debounce(async (name, isLastName) => {
+  const kana = await fetchKana(name)
+  if (isLastName) {
+    form.value.last_kana = kana
+  } else {
+    form.value.first_kana = kana
+  }
+})
+
 async function setSelectedTowns() {
   const { data } = await apiClient.get('/grouped-selected-towns')
   const transformedData = data.map((city) => {
@@ -61,6 +111,15 @@ async function setSelectedTowns() {
   })
 
   deliveryAreas.value = transformedData
+}
+
+let debounceTimer
+
+function debounce(callback, delay = 1000) {
+  return (...args) => {
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(() => callback(...args), delay)
+  }
 }
 
 async function getDefaultTown() {
