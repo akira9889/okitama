@@ -25,7 +25,11 @@ WORKDIR /var/www/html
 FROM node_php_base AS build
 COPY ./src/ .
 RUN  npm install
-RUN  npm run build
+
+COPY ./docker/env.sh /env.sh
+RUN chmod +x /env.sh
+
+RUN /env.sh
 
 # 開発環境
 FROM node_php_base as dev
@@ -52,6 +56,7 @@ RUN apt update && \
     apt install -y vim
 
 COPY ./src/ .
+COPY --from=build /var/www/html/.env.test /var/www/html/.env.test
 COPY --from=build /var/www/html/public/build /var/www/html/public/build
 
 COPY ./docker/start.sh /start.sh
@@ -74,6 +79,7 @@ FROM base AS production
 
 COPY ./src/ .
 COPY --from=build /var/www/html/public/build /var/www/html/public/build
+COPY --from=build /var/www/html/.env.production /var/www/html/.env.production
 
 COPY ./docker/start.sh /start.sh
 RUN chmod +x /start.sh
