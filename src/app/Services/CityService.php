@@ -14,7 +14,7 @@ class CityService
         $prefecture_id = str_pad($prefecture_id, 2, 0, STR_PAD_LEFT);
         $url = 'https://www.land.mlit.go.jp/webland/api/CitySearch?area=' . $prefecture_id;
 
-        $method = "GET";
+        $method = "POST";
         $client = new Client();
 
         $response = $client->request($method, $url);

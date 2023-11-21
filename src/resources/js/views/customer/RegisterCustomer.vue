@@ -1,7 +1,7 @@
 <script setup>
 import { apiClient } from '@/services/API.js'
 import { DROPOFF_PLACE_ID, scrollToTop } from '@/constants.js'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import InputError from '@/components/InputError.vue'
 import Btn from '@/components/Btn.vue'
@@ -26,6 +26,28 @@ const errorMsg = ref({})
 const deliveryAreas = ref([])
 const dropoffs = ref([])
 
+watch(
+  () => form.value.last_name,
+  (newLastName) => {
+    if (!newLastName) {
+      form.value.last_kana = ''
+      return
+    }
+    console.log('変更')
+    debouncedFetchKana(newLastName, true)
+  },
+)
+watch(
+  () => form.value.first_name,
+  (newFirstName) => {
+    if (!newFirstName) {
+      form.value.first_kana = ''
+      return
+    }
+    debouncedFetchKana(newFirstName, false)
+  },
+)
+
 onMounted(async () => {
   await initializeForm()
 })
@@ -44,6 +66,34 @@ async function initializeForm() {
   form.value.town_id = defaultTownId || deliveryAreas.value[0].options[0].key
   form.value.dropoff_ids.push(DROPOFF_PLACE_ID.ENTRANCE)
   scrollToTop()
+}
+
+const debouncedFetchKana = debounce(async (name, isLastName) => {
+  const kana = await fetchKana(name)
+  if (isLastName) {
+    form.value.last_kana = kana
+  } else {
+    form.value.first_kana = kana
+  }
+})
+
+let debounceTimer
+function debounce(callback, delay = 1000) {
+  return (...args) => {
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(() => callback(...args), delay)
+  }
+}
+
+async function fetchKana(name) {
+  try {
+    const { data } = await apiClient.get('/hurigana', {
+      params: { text: name },
+    })
+    return data.hurigana
+  } catch (error) {
+    console.error('Error fetching Kana:', error)
+  }
 }
 
 async function setSelectedTowns() {

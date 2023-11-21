@@ -70,4 +70,6 @@ Route::middleware('auth:sanctum', 'approved')->group(function () {
     Route::put('/customer/{customer}', [CustomerController::class, 'update']);
 
     Route::get('/default-town', [CustomerController::class, 'getDefaultTown']);
+
+    Route::get('/hurigana', [CustomerController::class, 'changeStringToHiragana']);
 });
