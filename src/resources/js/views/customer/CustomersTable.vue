@@ -85,9 +85,13 @@ const handleScroll = (e) => {
           :class="{ 'bg-gray-100': id % 2 !== 0 }"
           @click="selectCustomer(customer)"
         >
-          <TableDetailCell class="text-customBlue ">
-            <p class="text-[10px]">{{ customer.last_kana }} {{ customer.first_kana }}</p>
-            <p class="underline">{{ customer.last_name }} {{ customer.first_name }}</p>
+          <TableDetailCell class="text-customBlue">
+            <p class="text-[10px]">
+              {{ customer.last_kana }} {{ customer.first_kana }}
+            </p>
+            <p class="underline">
+              {{ customer.last_name }} {{ customer.first_name }}
+            </p>
           </TableDetailCell>
           <TableDetailCell>
             <div class="flex w-full">

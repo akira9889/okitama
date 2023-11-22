@@ -57,7 +57,7 @@ const bgColor = computed(() => {
       {{ toast.message }}
     </p>
     <button
-      class="w-[30px] h-[30px] rounded-full hover:bg-black/10 transition-colors  absolute right-3 top-1/2 -translate-y-1/2"
+      class="w-[30px] h-[30px] rounded-full hover:bg-black/10 transition-colors absolute right-3 top-1/2 -translate-y-1/2"
       @click="close(toast.id)"
     >
       <svg

@@ -172,16 +172,13 @@ function changeTown({ value }) {
         'absolute top-1/2 -translate-y-1/2': shouldCenterCustomersWrap,
       }"
     >
-      <Spinner v-if="loading"/>
+      <Spinner v-if="loading" />
 
       <CustomerDetail
         v-else-if="!isCustomerDetailEmpty"
         :customer="customerDetail"
       />
-      <CustomersTable
-        v-else-if="shouldShowTable"
-        :customers="customers"
-      />
+      <CustomersTable v-else-if="shouldShowTable" :customers="customers" />
       <div v-else class="text-center">顧客が見つかりません</div>
     </div>
   </div>
