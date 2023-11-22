@@ -285,21 +285,23 @@ async function getDropoffPlace() {
       />
     </div>
     <hr class="mt-6" />
-    <div class="flex mt-4">
-      <label class="mr-2">置き配場所</label>
-      <div
-        v-for="(dropoff, key) in dropoffs"
-        :key="key"
-        class="flex items-center mr-4"
-      >
-        <CustomInput
-          :id="dropoff.id"
-          type="checkbox"
-          :checked="form.dropoff_ids.includes(dropoff.id)"
-          class="w-3 h-3"
-          @change="checkDropoffPlace"
-        />
-        <label :for="dropoff.id" class="ml-1 text-sm">{{ dropoff.name }}</label>
+    <div class="mt-4 flex items-center">
+      <label class="mr-2 whitespace-nowrap">置き配場所</label>
+      <div class="dropoff-list">
+        <div
+          v-for="(dropoff, key) in dropoffs"
+          :key="key"
+          class="dropoff-item"
+        >
+          <CustomInput
+            :id="dropoff.id"
+            type="checkbox"
+            :checked="form.dropoff_ids.includes(dropoff.id)"
+            class="w-3 h-3"
+            @change="checkDropoffPlace"
+          />
+          <label :for="dropoff.id" class="ml-1 text-sm">{{ dropoff.name }}</label>
+        </div>
       </div>
     </div>
 
@@ -325,6 +327,25 @@ async function getDropoffPlace() {
 
   & + & {
     margin-left: 30px;
+  }
+}
+
+.dropoff-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.dropoff-item {
+  display: flex;
+  align-items: center;
+  width:calc((100% - (5px * 2) )/ 3);
+
+  &:not(:nth-child(3n + 1)) {
+    margin-left: 5px;
+  }
+
+  &:nth-child(n + 4) {
+    margin-top: 10px;
   }
 }
 </style>
