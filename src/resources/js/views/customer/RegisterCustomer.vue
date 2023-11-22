@@ -75,11 +75,7 @@ async function initializeForm() {
 
 async function fetchKana(name) {
   try {
-    const { data } = await axios.post('https://labs.goo.ne.jp/api/hiragana', {
-      app_id: import.meta.env.VITE_GOO_APP_ID,
-      sentence: name,
-      output_type: 'hiragana',
-    })
+    const { data } = await apiClient.get('/hiragana', { params: { text: name }})
     return data.converted
   } catch (error) {
     console.error('Error fetching Kana:', error)

@@ -12,6 +12,7 @@ use App\Models\Customer;
 use App\Models\Prefecture;
 use App\Models\Town;
 use App\Services\CityService;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -113,6 +114,35 @@ class CustomerController extends Controller
     {
         $user = auth()->user();
         return $user->defaultTown();
+    }
+
+    public function changeStringToHiragana(Request $request)
+    {
+        Log::debug($request);
+        try {
+            $url = 'https://labs.goo.ne.jp/api/hiragana';
+
+            $param = [
+                'app_id' => config('services.goo.key'), // app_id
+                'sentence' => $request->text, // 変換したい文章
+                'output_type' => 'hiragana' // 出力タイプ
+            ];
+
+            $method = "POST";
+            $client = new Client();
+
+            $response = $client->request($method, $url, ['json' => $param]);
+            $res = json_decode($response->getBody()->getContents(), true);
+
+            if (!isset($res['converted'])) {
+                throw new \Exception('変換に失敗しました。');
+            }
+
+            return response()->json(['converted' => $res['converted']]);
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => '内部サーバーエラーが発生しました。'], 500);
+        }
     }
 
     public function importCustomer(Request $request)
