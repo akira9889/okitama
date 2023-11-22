@@ -220,6 +220,7 @@ async function getDropoffPlace() {
           :id="dropoff.id"
           type="checkbox"
           :checked="form.dropoff_ids.includes(dropoff.id)"
+          class="w-3 h-3"
           @change="checkDropoffPlace"
         />
         <label :for="dropoff.id" class="ml-1 text-sm">{{ dropoff.name }}</label>
@@ -229,6 +230,7 @@ async function getDropoffPlace() {
           id="dropoff_impossible"
           type="checkbox"
           :checked="is_dropoff_possible"
+          class="w-3 h-3"
           @change="checkDropoffImpossible"
         />
         <label for="dropoff_impossible" class="ml-1 text-sm">不可</label>
