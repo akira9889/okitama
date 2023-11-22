@@ -25,7 +25,6 @@ async function approvedUser() {
 
     store.dispatch('toast/showToast', {
       message: 'ユーザーを承認しました',
-      delay: 5000,
     })
   } catch {
     store.dispatch('toast/showToast', {

@@ -44,7 +44,6 @@ async function updateUser() {
     }
     store.dispatch('toast/showToast', {
       message: 'ユーザー情報を更新しました',
-      delay: 5000,
     })
   } catch {
     store.dispatch('toast/showToast', {

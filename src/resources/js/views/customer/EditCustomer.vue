@@ -90,7 +90,6 @@ async function submit() {
     errorMsg.value = {}
     store.dispatch('toast/showToast', {
       message: '顧客を更新しました',
-      delay: 5000,
     })
   } catch ({ response }) {
     errorMsg.value = response.data.errors

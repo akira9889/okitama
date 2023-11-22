@@ -8,9 +8,14 @@ const props = defineProps({
 
 const { toast } = toRefs(props)
 
+const DEFAULT_DELAY = 5000
+
 const percent = ref(0)
 
 onMounted(() => {
+  if (!toast.value.delay && type.value === 'info') {
+    toast.value.delay = DEFAULT_DELAY
+  }
   // タイマーと進捗バーの設定
   if (toast.value.delay) {
     const startDate = Date.now()

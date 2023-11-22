@@ -47,7 +47,6 @@ async function deleteTowns() {
     form.value.delete_towns = []
     store.dispatch('toast/showToast', {
       message: 'エリアが削除されました。',
-      delay: 5000,
     })
   } catch {
     store.dispatch('toast/showToast', {

@@ -20,7 +20,6 @@ function forgotPassword() {
     .then(({ data }) => {
       store.dispatch('toast/showToast', {
         message: data.message,
-        delay: 5000,
       })
     })
     .catch((error) => {

@@ -28,7 +28,6 @@ async function submit() {
 
     store.dispatch('toast/showToast', {
       message: 'インポートしました',
-      delay: 5000,
     })
   } catch {
     store.dispatch('toast/showToast', {
