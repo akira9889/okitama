@@ -50,19 +50,19 @@ const bgColor = computed(() => {
 <template>
   <li
     v-if="toast"
-    class="mt-2 py-2 pl-4 pr-8 pb-4 text-white relative"
+    class="mt-2 py-3 pl-3 pr-10 text-white items-center relative inline-block"
     :class="bgColor"
   >
-    <div class="font-semibold whitespace-nowrap text-sm">
+    <p class="font-semibold text-sm">
       {{ toast.message }}
-    </div>
+    </p>
     <button
-      class="absolute flex items-center justify-center right-2 top-2 w-[30px] h-[30px] rounded-full hover:bg-black/10 transition-colors"
+      class="w-[30px] h-[30px] rounded-full hover:bg-black/10 transition-colors  absolute right-3 top-1/2 -translate-y-1/2"
       @click="close(toast.id)"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
+        class="inline-block h-6 w-6 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -76,12 +76,10 @@ const bgColor = computed(() => {
       </svg>
     </button>
 
-    <div>
-      <div
-        class="absolute left-0 bottom-0 right-0 h-[6px] bg-black/10"
-        :style="{ width: `${percent}%` }"
-      />
-    </div>
+    <div
+      class="absolute left-0 bottom-0 right-0 h-[6px] bg-black/10"
+      :style="{ width: `${percent}%` }"
+    />
   </li>
 </template>
 

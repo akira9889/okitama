@@ -68,8 +68,8 @@ const toasts = computed(() => store.state.toast.toasts)
   </div>
 
   <div class="fixed right-[10px] bottom-20">
-    <TransitionGroup name="toast" tag="ul">
-      <Toast v-for="toast in toasts" :key="toast" :toast="toast" />
+    <TransitionGroup name="toast" tag="ul" class="flex flex-col items-end">
+      <Toast v-for="toast in toasts" :key="toast.id" :toast="toast" />
     </TransitionGroup>
   </div>
 </template>
