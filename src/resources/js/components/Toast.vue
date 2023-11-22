@@ -35,8 +35,8 @@ onMounted(() => {
   }
 })
 
-function close(id) {
-  store.dispatch('toast/hideToast', id)
+function close() {
+  store.dispatch('toast/hideToast', toast.value.id)
 }
 
 const type = computed(() => {
@@ -55,15 +55,22 @@ const bgColor = computed(() => {
 <template>
   <li
     v-if="toast"
-    class="mt-2 py-3 pl-3 pr-10 text-white items-center relative inline-block"
+    class="mt-2 py-3 pl-3 pr-12 text-white items-center relative inline-block"
     :class="bgColor"
   >
     <p class="font-semibold text-sm">
       {{ toast.message }}
     </p>
+    <router-link
+      v-if="toast.route"
+      :to="toast.route"
+      class="underline text-sm block text-right mt-1"
+      @click="close"
+      >{{ toast.linkText }}</router-link
+    >
     <button
       class="w-[30px] h-[30px] rounded-full hover:bg-black/10 transition-colors absolute right-3 top-1/2 -translate-y-1/2"
-      @click="close(toast.id)"
+      @click="close"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

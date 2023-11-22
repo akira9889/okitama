@@ -93,6 +93,16 @@ const debouncedFetchKana = debounce(async (name, isLastName) => {
 
 async function setSelectedTowns() {
   const { data } = await apiClient.get('/grouped-selected-towns')
+
+  if (!data.length) {
+    store.dispatch('toast/showToast', {
+      message: '配達エリアを設定していないです。',
+      type: 'error',
+      route: { name: 'delivery-area' },
+      linkText: 'エリア選択に進む'
+    })
+  }
+
   const transformedData = data.map((city) => {
     return {
       label: city.cityName,

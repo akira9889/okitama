@@ -52,7 +52,7 @@ watch(
 
 onMounted(async () => {
   await setSelectedTowns()
-  form.town_id = deliveryAreas.value[0].options[0].key
+  form.town_id = deliveryAreas.value[0]?.options[0].key
 })
 
 onUnmounted(clearState)
@@ -85,8 +85,23 @@ async function submit() {
   }
 }
 
-async function setSelectedTowns() {
+async function getSelectedTowns() {
   const { data } = await apiClient.get('/grouped-selected-towns')
+
+  if (!data.length) {
+    store.dispatch('toast/showToast', {
+      message: '配達エリアを設定していないです',
+      type: 'error',
+      route: { name: 'delivery-area' },
+      linkText: 'エリア選択に進む'
+    })
+  }
+
+  return data
+}
+
+async function setSelectedTowns() {
+  const data = await getSelectedTowns()
   const transformedData = data.map((city) => {
     return {
       label: city.cityName,
