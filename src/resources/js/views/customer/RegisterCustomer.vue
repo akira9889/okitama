@@ -1,5 +1,4 @@
 <script setup>
-import axios from 'axios'
 import { apiClient } from '@/services/API.js'
 import { DROPOFF_PLACE_ID, scrollToTop } from '@/constants.js'
 import { ref, onMounted, watch } from 'vue'
@@ -51,8 +50,6 @@ watch(
   },
 )
 
-
-
 onMounted(async () => {
   await initializeForm()
 })
@@ -75,7 +72,9 @@ async function initializeForm() {
 
 async function fetchKana(name) {
   try {
-    const { data } = await apiClient.get('/hiragana', { params: { text: name }})
+    const { data } = await apiClient.get('/hiragana', {
+      params: { text: name },
+    })
     return data.converted
   } catch (error) {
     console.error('Error fetching Kana:', error)
@@ -94,6 +93,16 @@ const debouncedFetchKana = debounce(async (name, isLastName) => {
 
 async function setSelectedTowns() {
   const { data } = await apiClient.get('/grouped-selected-towns')
+
+  if (!data.length) {
+    store.dispatch('toast/showToast', {
+      message: '配達エリアを設定していないです。',
+      type: 'error',
+      route: { name: 'delivery-area' },
+      linkText: 'エリア選択に進む'
+    })
+  }
+
   const transformedData = data.map((city) => {
     return {
       label: city.cityName,
@@ -144,7 +153,6 @@ async function submit() {
     await apiClient.post('/customer', form.value)
     store.dispatch('toast/showToast', {
       message: '顧客を追加しました',
-      delay: 5000,
     })
     initializeForm()
   } catch ({ response }) {
@@ -284,11 +292,7 @@ async function getDropoffPlace() {
     <div class="mt-4 flex items-center">
       <label class="mr-2 whitespace-nowrap">置き配場所</label>
       <div class="dropoff-list">
-        <div
-          v-for="(dropoff, key) in dropoffs"
-          :key="key"
-          class="dropoff-item"
-        >
+        <div v-for="(dropoff, key) in dropoffs" :key="key" class="dropoff-item">
           <CustomInput
             :id="dropoff.id"
             type="checkbox"
@@ -296,7 +300,9 @@ async function getDropoffPlace() {
             class="w-3 h-3"
             @change="checkDropoffPlace"
           />
-          <label :for="dropoff.id" class="ml-1 text-sm">{{ dropoff.name }}</label>
+          <label :for="dropoff.id" class="ml-1 text-sm">{{
+            dropoff.name
+          }}</label>
         </div>
       </div>
     </div>
@@ -334,7 +340,7 @@ async function getDropoffPlace() {
 .dropoff-item {
   display: flex;
   align-items: center;
-  width:calc((100% - (5px * 2) )/ 3);
+  width: calc((100% - (5px * 2)) / 3);
 
   &:not(:nth-child(3n + 1)) {
     margin-left: 5px;

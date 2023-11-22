@@ -2,6 +2,7 @@
 import { apiClient } from '@/services/API.js'
 import { scrollToTop } from '@/constants.js'
 import { ref, reactive, onMounted, computed, onUnmounted, watch } from 'vue'
+import Spinner from '@/components/Spinner.vue'
 import CustomInput from '@/components/CustomInput.vue'
 import CustomersTable from './CustomersTable.vue'
 import CustomerDetail from './CustomerDetail.vue'
@@ -21,9 +22,10 @@ const customerDetail = computed(() => store.state.searchCustomer.customerDetail)
 
 const nameInputRef = ref(null)
 const addressInputRef = ref(null)
-const customersTableRef = ref(null)
 
 const deliveryAreas = ref([])
+
+const loading = ref(false)
 
 const isCustomerDetailEmpty = computed(
   () => Object.keys(customerDetail.value).length === 0,
@@ -42,13 +44,15 @@ const shouldShowTable = computed(
 watch(
   () => form.town_id,
   () => {
-    submit()
+    if (form.searchType === 'address') {
+      submit()
+    }
   },
 )
 
 onMounted(async () => {
   await setSelectedTowns()
-  form.town_id = deliveryAreas.value[0].options[0].key
+  form.town_id = deliveryAreas.value[0]?.options[0].key
 })
 
 onUnmounted(clearState)
@@ -59,23 +63,45 @@ function clearState() {
 }
 
 async function submit() {
-  await store.dispatch('searchCustomer/getCustomers', form)
-  scrollToTop()
-  if (
-    Object.keys(customerDetail.value).length === 0 &&
-    customers.value.length > 1
-  ) {
-    customersTableRef.value.tableScrollToTop()
-  }
-  if (form.searchType === 'name') {
-    nameInputRef.value.blurInput()
-  } else {
-    addressInputRef.value.blurInput()
+  loading.value = true
+
+  try {
+    await store.dispatch('searchCustomer/getCustomers', form)
+
+    scrollToTop()
+
+    if (form.searchType === 'name') {
+      nameInputRef.value.blurInput()
+    } else {
+      addressInputRef.value.blurInput()
+    }
+  } catch {
+    store.dispatch('toast/showToast', {
+      message: '検索に失敗しました',
+      type: 'error',
+    })
+  } finally {
+    loading.value = false
   }
 }
 
-async function setSelectedTowns() {
+async function getSelectedTowns() {
   const { data } = await apiClient.get('/grouped-selected-towns')
+
+  if (!data.length) {
+    store.dispatch('toast/showToast', {
+      message: '配達エリアを設定していないです',
+      type: 'error',
+      route: { name: 'delivery-area' },
+      linkText: 'エリア選択に進む'
+    })
+  }
+
+  return data
+}
+
+async function setSelectedTowns() {
+  const data = await getSelectedTowns()
   const transformedData = data.map((city) => {
     return {
       label: city.cityName,
@@ -153,6 +179,7 @@ function changeTown({ value }) {
       </div>
     </form>
   </footer>
+
   <div class="relative" :class="{ customers: isCustomerDetailEmpty }">
     <div
       class="customers-wrap"
@@ -160,15 +187,13 @@ function changeTown({ value }) {
         'absolute top-1/2 -translate-y-1/2': shouldCenterCustomersWrap,
       }"
     >
+      <Spinner v-if="loading" />
+
       <CustomerDetail
-        v-if="!isCustomerDetailEmpty"
+        v-else-if="!isCustomerDetailEmpty"
         :customer="customerDetail"
       />
-      <CustomersTable
-        v-else-if="shouldShowTable"
-        ref="customersTableRef"
-        :customers="customers"
-      />
+      <CustomersTable v-else-if="shouldShowTable" :customers="customers" />
       <div v-else class="text-center">顧客が見つかりません</div>
     </div>
   </div>

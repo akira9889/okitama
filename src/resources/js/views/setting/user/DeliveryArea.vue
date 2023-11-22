@@ -54,7 +54,6 @@ async function submit() {
     await apiClient.put('/delivery-area', form.value)
     store.dispatch('toast/showToast', {
       message: '配達エリアを更新しました。',
-      delay: 5000,
     })
     getSelectedTown()
   } catch {

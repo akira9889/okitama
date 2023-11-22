@@ -72,7 +72,6 @@ async function submit() {
     emit('onSubmit')
     store.dispatch('toast/showToast', {
       message: 'エリアが登録されました。',
-      delay: 5000,
     })
   } catch ({ response }) {
     errorMsg.value = response.data.errors

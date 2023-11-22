@@ -1,11 +1,8 @@
 <script setup>
-import { scrollToTop } from '@/constants.js'
 import TableHeaderCell from '@/components/Table/TableHeaderCell.vue'
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import TableDetailCell from '@/components/Table/TableDetailCell.vue'
 import { useStore } from 'vuex'
-
-defineExpose({ tableScrollToTop })
 
 const props = defineProps({
   customers: Array,
@@ -69,10 +66,6 @@ const handleScroll = (e) => {
   const maxScroll = scrollHeight.value - clientHeight.value
   scrollProgress.value = Math.min(MAX_SCROLL_PROGRESS, scrollTop / maxScroll)
 }
-
-function tableScrollToTop() {
-  scrollToTop(tableRef.value)
-}
 </script>
 
 <template>
@@ -92,9 +85,13 @@ function tableScrollToTop() {
           :class="{ 'bg-gray-100': id % 2 !== 0 }"
           @click="selectCustomer(customer)"
         >
-          <TableDetailCell class="text-customBlue ">
-            <p class="text-[10px]">{{ customer.last_kana }} {{ customer.first_kana }}</p>
-            <p class="underline">{{ customer.last_name }} {{ customer.first_name }}</p>
+          <TableDetailCell class="text-customBlue">
+            <p class="text-[10px]">
+              {{ customer.last_kana }} {{ customer.first_kana }}
+            </p>
+            <p class="underline">
+              {{ customer.last_name }} {{ customer.first_name }}
+            </p>
           </TableDetailCell>
           <TableDetailCell>
             <div class="flex w-full">

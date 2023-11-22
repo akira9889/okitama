@@ -55,7 +55,6 @@ async function submit() {
     await apiClient.post('/dropoff-history', formData)
     store.dispatch('toast/showToast', {
       message: '置き配写真を履歴に追加しました',
-      delay: 5000,
     })
   } catch {
     store.dispatch('toast/showToast', {
