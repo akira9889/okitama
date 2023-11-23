@@ -159,7 +159,14 @@ async function getDropoffPlace() {
     <div class="mt-6">
       <label class="text-lg">住所</label>
       <div class="mt-2">
-        <label for="town">エリア</label>
+        <div class="flex items-center">
+          <label for="town">エリア</label>
+          <div
+            class="ml-2 p-1 text-xs inline-block rounded-md bg-customBlue text-white"
+          >
+            必須
+          </div>
+        </div>
         <div class="flex items-baseline">
           <CustomInput
             id="town"
@@ -175,7 +182,14 @@ async function getDropoffPlace() {
 
     <div class="mt-6">
       <InputError :error-msg="errorMsg?.address_number" class="mb-2" />
-      <label for="address_number">番地（ハイフンあり）</label>
+      <div class="flex items-center">
+        <label for="address_number">番地（ハイフンあり）</label>
+        <div
+          class="ml-2 p-1 text-xs inline-block rounded-md bg-customBlue text-white"
+        >
+          必須
+        </div>
+      </div>
       <CustomInput
         id="address_number"
         v-model="form.address_number"
