@@ -90,10 +90,10 @@ async function getSelectedTowns() {
 
   if (!data.length) {
     store.dispatch('toast/showToast', {
-      message: '配達エリアを設定していないです',
+      message: '配達エリアが設定されていないです',
       type: 'error',
       route: { name: 'delivery-area' },
-      linkText: 'エリア選択に進む'
+      linkText: 'エリア選択に進む',
     })
   }
 

@@ -65,7 +65,7 @@ async function initializeForm() {
   const defaultTownId = await getDefaultTown()
 
   await townsAndDropoffsPromise
-  form.value.town_id = defaultTownId || deliveryAreas.value[0].options[0].key
+  form.value.town_id = defaultTownId || deliveryAreas.value[0]?.options[0].key
   form.value.dropoff_ids.push(DROPOFF_PLACE_ID.ENTRANCE)
   scrollToTop()
 }
@@ -96,7 +96,7 @@ async function setSelectedTowns() {
 
   if (!data.length) {
     store.dispatch('toast/showToast', {
-      message: '配達エリアを設定していないです。',
+      message: '配達エリアが設定されていないです',
       type: 'error',
       route: { name: 'delivery-area' },
       linkText: 'エリア選択に進む',
