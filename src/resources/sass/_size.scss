@@ -1,4 +1,8 @@
 $header-height: 60px;
 $footer-height: 60px;
+$customer-table-margin-top: 80px;
+$customer-table-margin-bottom: 8px;
 $customer-main-height: calc(100dvh - #{$header-height} - #{$footer-height});
-$customer-table-height: calc(#{$customer-main-height} - 16px);
+$customer-table-height: calc(
+  #{$customer-main-height} - #{$customer-table-margin-top} - #{$customer-table-margin-bottom}
+);

@@ -1,4 +1,5 @@
 <script setup>
+import { DROPOFF_PLACE_ID } from '@/constants.js'
 import TableHeaderCell from '@/components/Table/TableHeaderCell.vue'
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import TableDetailCell from '@/components/Table/TableDetailCell.vue'
@@ -66,6 +67,20 @@ const handleScroll = (e) => {
   const maxScroll = scrollHeight.value - clientHeight.value
   scrollProgress.value = Math.min(MAX_SCROLL_PROGRESS, scrollTop / maxScroll)
 }
+
+function changeDropoffIcon(id) {
+  if (id === DROPOFF_PLACE_ID.ENTRANCE) {
+    return '<span class="mr-1 inline-block w-[30px] h-[30px] leading-[30px] rounded-full border border-black text-center">玄</span>'
+  } else if (id === DROPOFF_PLACE_ID.ENTRANCE_WHEN_ABSENT) {
+    return "<span class=\"relative px-[8px] pt-[3px] pb-[2px] border-b-[1px] border-black before:content-[''] before:block before:w-[1px] before:h-[29px] before:bg-black before:absolute before:top-full before:right-full before:origin-top-right before:rotate-[210deg] after:content-[''] after:block after:w-[1px] after:h-[29px] after:bg-black after:absolute after:top-full after:left-full after:origin-top-left after:rotate-[150deg]\">玄</span>"
+  } else if (id === DROPOFF_PLACE_ID.GARAGE) {
+    return '<span class="mr-1 inline-block">車</span>'
+  } else if (id === DROPOFF_PLACE_ID.BICYCLE) {
+    return '<span class="mr-1 inline-block">自</span>'
+  } else if (id === DROPOFF_PLACE_ID.OTHER) {
+    return '<span class="mr-1 inline-block">他</span>'
+  }
+}
 </script>
 
 <template>
@@ -115,10 +130,11 @@ const handleScroll = (e) => {
           <TableDetailCell
             :class="customer.dropoffs.length ? 'bg-customGreen' : 'bg-red-300'"
           >
-            <span v-for="(dropoff, index) in customer.dropoffs" :key="index">
-              {{ dropoff.name
-              }}<span v-if="index < customer.dropoffs.length - 1">, </span>
-            </span>
+            <span
+              v-for="(dropoff, index) in customer.dropoffs"
+              :key="index"
+              v-html="changeDropoffIcon(dropoff.id)"
+            />
             <span v-if="!customer.dropoffs.length"
               ><font-awesome-icon :icon="['fas', 'xmark']"
             /></span>

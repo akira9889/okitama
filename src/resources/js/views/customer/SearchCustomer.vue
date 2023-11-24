@@ -33,7 +33,7 @@ const isCustomerDetailEmpty = computed(
 const isCustomersListEmptyOrMultiple = computed(
   () => customers.value.length === 0 || customers.value.length > 1,
 )
-const shouldCenterCustomersWrap = computed(
+const shouldSetPositionCustomersWrap = computed(
   () => isCustomerDetailEmpty.value && isCustomersListEmptyOrMultiple.value,
 )
 
@@ -181,10 +181,43 @@ function changeTown({ value }) {
   </footer>
 
   <div class="relative" :class="{ customers: isCustomerDetailEmpty }">
+    <template v-if="shouldShowTable">
+      <div class="absolute top-2 left-0 w-full">
+        <div class="flex items-center text-xs justify-between w-full">
+          <div>
+            <span
+              class="inline-block w-[25px] h-[25px] leading-[25px] rounded-full border border-black text-center"
+              >玄</span
+            >
+            <span>→玄関</span>
+          </div>
+          <div class="flex items-center">
+            <span
+              class="relative px-[8px] pt-[3px] border-b-[1px] border-black before:content-[''] before:block before:w-[1px] before:h-[28px] before:bg-black before:absolute before:top-full before:right-full before:origin-top-right before:rotate-[210deg] after:content-[''] after:block after:w-[1px] after:h-[28px] after:bg-black after:absolute after:top-full after:left-full after:origin-top-left after:rotate-[150deg]"
+              >玄</span
+            >
+            <span>→不在時玄関</span>
+          </div>
+          <div>
+            <span>車</span>
+            <span>→車庫</span>
+          </div>
+          <div>
+            <span>自</span>
+            <span>→自転車</span>
+          </div>
+          <div>
+            <span>他</span>
+            <span>→その他</span>
+          </div>
+        </div>
+      </div>
+    </template>
+
     <div
       class="customers-wrap"
       :class="{
-        'absolute top-1/2 -translate-y-1/2': shouldCenterCustomersWrap,
+        'customers-wrap-position': shouldSetPositionCustomersWrap,
       }"
     >
       <Spinner v-if="loading" />
@@ -207,5 +240,15 @@ function changeTown({ value }) {
 
 .customers-wrap {
   width: 100%;
+}
+
+.customers-wrap-position {
+  position: absolute;
+  top: 50%;
+  transform: translateY(
+    calc(
+      -50% + ($customer-table-margin-top - $customer-table-margin-bottom) / 2
+    )
+  );
 }
 </style>
