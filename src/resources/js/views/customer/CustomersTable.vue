@@ -131,12 +131,12 @@ function changeDropoffIcon(id) {
                 {{ customer.building_name }}
               </div>
 
-              <div v-show="customer.company" class="ml-2">
-                {{ customer.company }}
-              </div>
-
               <div v-show="customer.room_number" class="ml-2">
                 {{ customer.room_number }}
+              </div>
+
+              <div v-show="customer.company" class="ml-2">
+                {{ customer.company }}
               </div>
             </div>
           </TableDetailCell>
@@ -147,7 +147,7 @@ function changeDropoffIcon(id) {
               v-html="changeDropoffIcon(dropoff.id)"
             />
             <span v-if="!customer.dropoffs.length"
-              ><font-awesome-icon :icon="['fas', 'xmark']"
+              ><font-awesome-icon :icon="['fas', 'xmark']" class="text-white"
             /></span>
           </TableDetailCell>
           <TableDetailCell>
