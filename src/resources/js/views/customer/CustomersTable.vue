@@ -102,7 +102,8 @@ function changeDropoffIcon(id) {
         <tr>
           <TableHeaderCell> 氏名 </TableHeaderCell>
           <TableHeaderCell> 住所 </TableHeaderCell>
-          <TableHeaderCell class="w-[100px]"> 置き配 </TableHeaderCell>
+          <TableHeaderCell> 置き配 </TableHeaderCell>
+          <TableHeaderCell> 備考 </TableHeaderCell>
         </tr>
       </thead>
       <tbody>
@@ -148,6 +149,15 @@ function changeDropoffIcon(id) {
             <span v-if="!customer.dropoffs.length"
               ><font-awesome-icon :icon="['fas', 'xmark']"
             /></span>
+          </TableDetailCell>
+          <TableDetailCell>
+            {{
+              customer.description
+                ? customer.description.length > 15
+                  ? customer.description.slice(0, 15) + '•••'
+                  : customer.description
+                : ''
+            }}
           </TableDetailCell>
         </tr>
       </tbody>
