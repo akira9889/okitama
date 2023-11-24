@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Dropoff;
 use Illuminate\Database\Seeder;
 
 class CustomerDropoffSeeder extends Seeder
@@ -13,6 +14,8 @@ class CustomerDropoffSeeder extends Seeder
         $batchSize = 1000;
         $batches = ceil($totalRecords / $batchSize);
 
+        $dropoffTotal = Dropoff::count();
+
         for ($batch = 1; $batch <= $batches; $batch++) {
             $records = [];
             $remainingRecords = $totalRecords - (($batch - 1) * $batchSize);
@@ -21,15 +24,20 @@ class CustomerDropoffSeeder extends Seeder
             for ($i = 0; $i < $currentBatchSize; $i++) {
                 $customer = array_shift($customers);
 
-                if (rand(1, 100) <= 1) {
+                $dropoffCount = rand(0, $dropoffTotal);
+
+                if (!$dropoffCount) {
                     continue;
                 }
 
-                $record = [
-                    'customer_id' => $customer->id,
-                    'dropoff_id' => \App\Models\Dropoff::inRandomOrder()->first()->id,
-                ];
-                $records[] = $record;
+                $dropoffIds = Dropoff::inRandomOrder()->take($dropoffCount)->get()->pluck('id')->toArray();
+
+                foreach ($dropoffIds as $dropoffId) {
+                    $records[] = [
+                        'customer_id' => $customer->id,
+                        'dropoff_id' => $dropoffId,
+                    ];
+                }
             }
 
             \DB::table('customer_dropoff')->insert($records);
