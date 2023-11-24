@@ -13,6 +13,18 @@ const store = useStore()
 
 const customers = computed(() => props.customers)
 
+function dropoffBgColor(customer) {
+  if (!customer.dropoffs.length) {
+    return 'bg-customRed'
+  }
+
+  if (customer.only_amazon) {
+    return 'bg-yellow-200'
+  }
+
+  return 'bg-customGreen'
+}
+
 const tableRef = ref(null)
 
 const showScrollBar = ref(false)
@@ -127,9 +139,7 @@ function changeDropoffIcon(id) {
               </div>
             </div>
           </TableDetailCell>
-          <TableDetailCell
-            :class="customer.dropoffs.length ? 'bg-customGreen' : 'bg-red-300'"
-          >
+          <TableDetailCell :class="dropoffBgColor(customer)">
             <span
               v-for="(dropoff, index) in customer.dropoffs"
               :key="index"

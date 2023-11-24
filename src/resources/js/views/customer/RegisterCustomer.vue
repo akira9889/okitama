@@ -17,6 +17,7 @@ const DEFAULT_FORM = {
   dropoff_ids: [],
   is_checked_default: false,
   town_id: '',
+  only_amazon: false,
 }
 
 const form = ref({ ...DEFAULT_FORM })
@@ -321,6 +322,18 @@ async function getDropoffPlace() {
           }}</label>
         </div>
       </div>
+    </div>
+
+    <div class="mt-4 flex items-center">
+      <label for="only_amazon" class="mr-2 whitespace-nowrap"
+        >Amazonの荷物のみ置き配可</label
+      >
+      <CustomInput
+        id="only_amazon"
+        v-model="form.only_amazon"
+        type="checkbox"
+        class="w-3 h-3"
+      />
     </div>
 
     <div class="mt-6">

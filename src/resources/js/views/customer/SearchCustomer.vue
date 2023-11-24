@@ -212,6 +212,24 @@ function changeTown({ value }) {
           </div>
         </div>
       </div>
+
+      <div class="absolute top-11 flex justify-around text-xs w-full">
+        <div class="flex items-center">
+          <div class="w-10 h-6 bg-customGreen" />
+          <span>•••</span>
+          <p>荷物全般</p>
+        </div>
+        <div class="flex items-center">
+          <div class="w-10 h-6 bg-yellow-200" />
+          <span>•••</span>
+          <p>Amazonのみ</p>
+        </div>
+        <div class="flex items-center">
+          <div class="w-10 h-6 bg-customRed" />
+          <span>•••</span>
+          <p>置き配不可</p>
+        </div>
+      </div>
     </template>
 
     <div
