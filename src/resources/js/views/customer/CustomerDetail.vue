@@ -86,23 +86,28 @@ function resetFile() {
       </div>
     </div>
 
-    <div v-if="customer.dropoffs.length" class="flex items-center mt-4">
+    <div v-if="customer.dropoffs.length" class="flex mt-4">
       <div class="w-1/2 text-center">
-        <p class="text-xl">置き配</p>
+        <p class="text-xl p-2">置き配</p>
         <div class="bg-customGreen mt-4">
           <span class="text-[120px] font-thin text-teal-600">○</span>
         </div>
       </div>
 
       <div class="w-1/2 text-center">
-        <p class="text-xl">場所</p>
-        <p
-          v-for="(dropoff, index) in customer.dropoffs"
-          :key="index"
-          class="text-l font-bold"
-        >
-          {{ dropoff.name }}
+        <p v-if="customer.only_amazon" class="bg-yellow-200 inline-block p-2">
+          Amazonのみ
         </p>
+        <div class="mt-4">
+          <p class="text-xl font-bold">場所</p>
+          <p
+            v-for="(dropoff, index) in customer.dropoffs"
+            :key="index"
+            class="text-l"
+          >
+            {{ dropoff.name }}
+          </p>
+        </div>
       </div>
     </div>
 

@@ -18,12 +18,12 @@ class Customer extends Model
         'first_kana', 'last_kana', 'full_kana',
         'company',
         'town_id', 'address_number', 'building_name', 'room_number',
-        'description'
+        'description', 'only_amazon'
     ];
 
     public function dropoffs(): BelongsToMany
     {
-        return $this->belongsToMany(Dropoff::class);
+        return $this->belongsToMany(Dropoff::class)->orderByPivot('dropoff_id');
     }
 
     public function town(): BelongsTo

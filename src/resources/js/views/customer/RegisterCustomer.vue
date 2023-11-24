@@ -17,6 +17,7 @@ const DEFAULT_FORM = {
   dropoff_ids: [],
   is_checked_default: false,
   town_id: '',
+  only_amazon: false,
 }
 
 const form = ref({ ...DEFAULT_FORM })
@@ -65,7 +66,7 @@ async function initializeForm() {
   const defaultTownId = await getDefaultTown()
 
   await townsAndDropoffsPromise
-  form.value.town_id = defaultTownId || deliveryAreas.value[0].options[0].key
+  form.value.town_id = defaultTownId || deliveryAreas.value[0]?.options[0].key
   form.value.dropoff_ids.push(DROPOFF_PLACE_ID.ENTRANCE)
   scrollToTop()
 }
@@ -96,10 +97,10 @@ async function setSelectedTowns() {
 
   if (!data.length) {
     store.dispatch('toast/showToast', {
-      message: '配達エリアを設定していないです。',
+      message: '配達エリアが設定されていないです',
       type: 'error',
       route: { name: 'delivery-area' },
-      linkText: 'エリア選択に進む'
+      linkText: 'エリア選択に進む',
     })
   }
 
@@ -226,13 +227,21 @@ async function getDropoffPlace() {
     <div class="mt-6">
       <label class="text-lg">住所</label>
       <div class="mt-2">
-        <label for="town">エリア</label>
+        <div class="flex items-center">
+          <label for="town">エリア</label>
+          <div
+            class="ml-2 p-1 text-xs inline-block rounded-md bg-customBlue text-white"
+          >
+            必須
+          </div>
+        </div>
         <div class="flex items-baseline mt-1">
           <CustomInput
             id="town"
             v-model="form.town_id"
             class="w-1/3"
             type="select"
+            required
             :select-options="deliveryAreas"
             autocomplete="off"
             @change="changeTown"
@@ -256,11 +265,19 @@ async function getDropoffPlace() {
 
     <div class="mt-6">
       <InputError :error-msg="errorMsg?.address_number" class="mb-2" />
-      <label for="address_number">番地（ハイフンあり）</label>
+      <div class="flex items-center">
+        <label for="address_number">番地（ハイフンあり）</label>
+        <div
+          class="ml-2 p-1 text-xs inline-block rounded-md bg-customBlue text-white"
+        >
+          必須
+        </div>
+      </div>
       <CustomInput
         id="address_number"
         v-model="form.address_number"
         label="1-2-3"
+        required
         autocomplete="off"
         class="mt-1"
       />
@@ -305,6 +322,18 @@ async function getDropoffPlace() {
           }}</label>
         </div>
       </div>
+    </div>
+
+    <div class="mt-4 flex items-center">
+      <label for="only_amazon" class="mr-2 whitespace-nowrap"
+        >Amazonの荷物のみ置き配可</label
+      >
+      <CustomInput
+        id="only_amazon"
+        v-model="form.only_amazon"
+        type="checkbox"
+        class="w-3 h-3"
+      />
     </div>
 
     <div class="mt-6">

@@ -58,6 +58,7 @@ async function getCustomer() {
   form.value.dropoff_ids = data.dropoffs.map((dropoff) => dropoff.id)
   form.value.town_id = data.town_id
   form.value.description = data.description
+  form.value.only_amazon = data.only_amazon
 }
 
 function changeTown({ value }) {
@@ -159,7 +160,14 @@ async function getDropoffPlace() {
     <div class="mt-6">
       <label class="text-lg">住所</label>
       <div class="mt-2">
-        <label for="town">エリア</label>
+        <div class="flex items-center">
+          <label for="town">エリア</label>
+          <div
+            class="ml-2 p-1 text-xs inline-block rounded-md bg-customBlue text-white"
+          >
+            必須
+          </div>
+        </div>
         <div class="flex items-baseline">
           <CustomInput
             id="town"
@@ -175,7 +183,14 @@ async function getDropoffPlace() {
 
     <div class="mt-6">
       <InputError :error-msg="errorMsg?.address_number" class="mb-2" />
-      <label for="address_number">番地（ハイフンあり）</label>
+      <div class="flex items-center">
+        <label for="address_number">番地（ハイフンあり）</label>
+        <div
+          class="ml-2 p-1 text-xs inline-block rounded-md bg-customBlue text-white"
+        >
+          必須
+        </div>
+      </div>
       <CustomInput
         id="address_number"
         v-model="form.address_number"
@@ -234,6 +249,19 @@ async function getDropoffPlace() {
         />
         <label for="dropoff_impossible" class="ml-1 text-sm">不可</label>
       </div>
+    </div>
+
+    <div class="mt-4 flex items-center">
+      <label for="only_amazon" class="mr-2 whitespace-nowrap"
+        >Amazonの荷物のみ置き配可</label
+      >
+      <CustomInput
+        id="only_amazon"
+        v-model="form.only_amazon"
+        type="checkbox"
+        class="w-3 h-3"
+        :checked="form.only_amazon"
+      />
     </div>
 
     <div class="mt-6">

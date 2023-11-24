@@ -42,6 +42,7 @@ class CustomerFactory extends Factory
             'building_name' => $buildingName,
             'room_number' => fake()->optional(0.5)->buildingNumber(),
             'description' => fake()->optional(0.5)->realText,
+            'only_amazon' => fake()->boolean(50),
         ];
     }
 }

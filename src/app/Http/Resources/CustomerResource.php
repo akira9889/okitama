@@ -33,7 +33,8 @@ class CustomerResource extends JsonResource
             'company' => $this->company,
             'room_number' => $this->room_number,
             'dropoffs' => DropoffResource::collection($this->dropoffs),
-            'description' => $this->description
+            'description' => $this->description,
+            'only_amazon' => $this->only_amazon
         ];
 
         return $customerData;

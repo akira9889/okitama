@@ -34,7 +34,8 @@ class StoreCustomerRequest extends FormRequest
             'room_number' => ['string', 'max:10', 'nullable'],
             'dropoff_ids' => ['nullable'],
             'dropoff_ids.*' => ['integer', 'exists:dropoffs,id'],
-            'description' => ['string', 'nullable']
+            'description' => ['string', 'nullable'],
+            'only_amazon' => ['required', 'boolean'],
         ];
     }
 }
