@@ -17,7 +17,6 @@ const errors = computed(() => store.getters['auth/error'])
 
 const login = async () => {
   await store.dispatch('auth/login', form.value)
-  errors.value = null
   router.push({ name: 'search-customer' })
 }
 
@@ -53,6 +52,7 @@ onUnmounted(() => {
               name="email"
               required
               autocomplete="email"
+              enterkeyhint="next"
             />
           </div>
         </div>
@@ -72,6 +72,7 @@ onUnmounted(() => {
               name="password"
               required
               autocomplete="current-password"
+              enterkeyhint="done"
             />
           </div>
           <div>

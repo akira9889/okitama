@@ -49,6 +49,7 @@ onUnmounted(() => {
               name="email"
               required
               autocomplete="email"
+              enterkeyhint="next"
             />
           </div>
         </div>
@@ -69,6 +70,7 @@ onUnmounted(() => {
                 name="last_name"
                 required
                 autocomplete="family-name"
+                enterkeyhint="next"
               />
             </div>
             <div class="form-name">
@@ -83,6 +85,7 @@ onUnmounted(() => {
                 name="first_name"
                 required
                 autocomplete="given-name"
+                enterkeyhint="next"
               />
             </div>
           </div>
@@ -104,6 +107,7 @@ onUnmounted(() => {
               type="password"
               name="password"
               required
+              enterkeyhint="next"
             />
           </div>
         </div>
@@ -123,6 +127,7 @@ onUnmounted(() => {
               type="password"
               name="password_confirmation"
               required
+              enterkeyhint="done"
             />
           </div>
         </div>

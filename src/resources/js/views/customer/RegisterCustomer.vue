@@ -180,12 +180,14 @@ async function getDropoffPlace() {
           v-model="form.last_name"
           label="姓"
           autocomplete="off"
+          enterkeyhint="next"
           class="name"
         />
         <CustomInput
           v-model="form.first_name"
           label="名"
           autocomplete="off"
+          enterkeyhint="next"
           class="name"
         />
       </div>
@@ -201,12 +203,14 @@ async function getDropoffPlace() {
           v-model="form.last_kana"
           label="せい"
           autocomplete="off"
+          enterkeyhint="next"
           class="name"
         />
         <CustomInput
           v-model="form.first_kana"
           label="めい"
           autocomplete="off"
+          enterkeyhint="next"
           class="name"
         />
       </div>
@@ -221,6 +225,7 @@ async function getDropoffPlace() {
         label="会社名"
         class="mt-1"
         autocomplete="off"
+        enterkeyhint="next"
       />
     </div>
 
@@ -279,6 +284,7 @@ async function getDropoffPlace() {
         label="1-2-3"
         required
         autocomplete="off"
+        enterkeyhint="next"
         class="mt-1"
       />
     </div>
@@ -291,6 +297,7 @@ async function getDropoffPlace() {
         v-model="form.building_name"
         label="コーポ村山"
         autocomplete="off"
+        enterkeyhint="next"
         class="mt-1"
       />
     </div>
@@ -302,6 +309,8 @@ async function getDropoffPlace() {
         id="room_number"
         v-model="form.room_number"
         label="101"
+        autocomplete="off"
+        enterkeyhint="done"
         class="mt-1"
       />
     </div>
