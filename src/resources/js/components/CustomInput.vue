@@ -12,6 +12,7 @@ const props = defineProps({
   name: String,
   required: Boolean,
   autocomplete: String,
+  enterkeyhint: String,
   accept: String,
   min: {
     type: Number,
@@ -201,6 +202,7 @@ function changeRadio(e) {
           :class="inputClasses"
           :placeholder="label"
           :autocomplete="autocomplete"
+          :enterkeyhint="enterkeyhint"
           @input="emit('update:modelValue', $event.target.value)"
         />
       </div>
