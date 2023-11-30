@@ -46,20 +46,23 @@ watch(is_dropoff_possible, (isChecked) => {
 })
 
 async function getCustomer() {
-  const { data } = await apiClient.get(`/customer/${route.params.id}`)
-
-  form.value.last_name = data.last_name
-  form.value.first_name = data.first_name
-  form.value.last_kana = data.last_kana
-  form.value.first_kana = data.first_kana
-  form.value.company = data.company
-  form.value.address_number = data.address_number
-  form.value.building_name = data.building_name
-  form.value.room_number = data.room_number
-  form.value.dropoff_ids = data.dropoffs.map((dropoff) => dropoff.id)
-  form.value.town_id = data.town_id
-  form.value.description = data.description
-  form.value.only_amazon = data.only_amazon
+  try {
+    const { data } = await apiClient.get(`/customer/${route.params.id}`)
+    form.value.last_name = data.last_name
+    form.value.first_name = data.first_name
+    form.value.last_kana = data.last_kana
+    form.value.first_kana = data.first_kana
+    form.value.company = data.company
+    form.value.address_number = data.address_number
+    form.value.building_name = data.building_name
+    form.value.room_number = data.room_number
+    form.value.dropoff_ids = data.dropoffs.map((dropoff) => dropoff.id)
+    form.value.town_id = data.town_id
+    form.value.description = data.description
+    form.value.only_amazon = !!data.only_amazon
+  } catch {
+    router.push({ name: 'notfound' })
+  }
 }
 
 function changeTown({ value }) {
