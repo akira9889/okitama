@@ -4,6 +4,7 @@ import { scrollToTop } from '@/constants.js'
 import { ref, reactive, onMounted, computed, onUnmounted, watch } from 'vue'
 import Spinner from '@/components/Spinner.vue'
 import CustomInput from '@/components/CustomInput.vue'
+import Btn from '@/components/Btn.vue'
 import CustomersTable from './CustomersTable.vue'
 import CustomerDetail from './CustomerDetail.vue'
 import { useStore } from 'vuex'
@@ -39,15 +40,6 @@ const shouldSetPositionCustomersWrap = computed(
 
 const shouldShowTable = computed(
   () => isCustomerDetailEmpty.value && customers.value.length > 1,
-)
-
-watch(
-  () => form.town_id,
-  () => {
-    if (form.searchType === 'address') {
-      submit()
-    }
-  },
 )
 
 onMounted(async () => {
@@ -173,6 +165,9 @@ function changeTown({ value }) {
             />
             <label for="by-address" class="block text-sm ml-2">住所</label>
           </div>
+        </div>
+        <div class="ml-auto">
+          <Btn text="検索" @click="submit" />
         </div>
       </form>
     </footer>
