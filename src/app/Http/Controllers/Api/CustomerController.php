@@ -33,10 +33,9 @@ class CustomerController extends Controller
 
         $query = Customer::with(['dropoffs', 'town']);
 
-        $searchQuery = str_replace([' ', '　'], '', $data['searchQuery']);
-        $searchQuery = mb_convert_kana($searchQuery, 'H');
-
         if ($data['searchType'] === 'name') {
+            $searchQuery = str_replace([' ', '　'], '', $data['searchQuery']);
+            $searchQuery = mb_convert_kana($searchQuery, 'H');
             $query = $query->where('full_name', 'LIKE', $searchQuery . '%')
                 ->orWhere('full_kana', 'LIKE', $searchQuery . '%')
                 ->whereIn('town_id', $deliveryAreas);
