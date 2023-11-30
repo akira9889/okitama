@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\MassPrunable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, MassPrunable;
 
     public $timestamps = false;
 
@@ -22,6 +25,11 @@ class Customer extends Model
         'description', 'only_amazon'
     ];
 
+    public function prunable(): Builder
+    {
+        return static::onlyTrashed()->doesntHave('dropoffHistories');
+    }
+
     public function dropoffs(): BelongsToMany
     {
         return $this->belongsToMany(Dropoff::class)->orderByPivot('dropoff_id');
@@ -30,5 +38,10 @@ class Customer extends Model
     public function town(): BelongsTo
     {
         return $this->belongsTo(Town::class);
+    }
+
+    public function dropoffHistories(): HasMany
+    {
+        return $this->HasMany(DropoffHistory::class);
     }
 }
