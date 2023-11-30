@@ -25,7 +25,7 @@ const addressInputRef = ref(null)
 
 const deliveryAreas = ref([])
 
-const loading = ref(false)
+const loading = computed(() => store.state.searchCustomer.loading)
 
 const isCustomerDetailEmpty = computed(
   () => Object.keys(customerDetail.value).length === 0,
@@ -63,8 +63,6 @@ function clearState() {
 }
 
 async function submit() {
-  loading.value = true
-
   try {
     await store.dispatch('searchCustomer/getCustomers', form)
 
@@ -80,8 +78,6 @@ async function submit() {
       message: '検索に失敗しました',
       type: 'error',
     })
-  } finally {
-    loading.value = false
   }
 }
 

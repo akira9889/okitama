@@ -7,6 +7,7 @@ export const state = {
   customerDetail: {},
   showBackButton: false,
   prevForm: {},
+  loading: false,
 }
 
 function resetCustomerData(commit) {
@@ -26,7 +27,7 @@ export const actions = {
       delete submitForm.town_id
       delete submitForm.searchAddress
     } else if (form.searchType === 'address') {
-      if (!form.town_id || !form.searchAddress) {
+      if (!form.town_id) {
         resetCustomerData(commit)
         return
       }
@@ -36,6 +37,8 @@ export const actions = {
     if (JSON.stringify(submitForm) === JSON.stringify(state.prevForm)) {
       return
     }
+
+    commit('SET_LOADING', true)
 
     commit('SET_PREV_FORM', submitForm)
 
@@ -49,6 +52,8 @@ export const actions = {
     } else {
       resetCustomerData(commit)
     }
+
+    commit('SET_LOADING', false)
   },
 }
 
@@ -64,5 +69,8 @@ export const mutations = {
   },
   SET_SHOW_BACK_BUTTON(state, value) {
     state.showBackButton = value
+  },
+  SET_LOADING(state, value) {
+    state.loading = value
   },
 }
