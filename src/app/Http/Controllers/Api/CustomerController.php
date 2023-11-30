@@ -113,6 +113,12 @@ class CustomerController extends Controller
         $customer->dropoffs()->sync($data['dropoff_ids']);
     }
 
+    public function delete(Customer $customer)
+    {
+        $customer->dropoffs()->detach();
+        $customer->delete();
+    }
+
     public function getDefaultTown()
     {
         $user = auth()->user();

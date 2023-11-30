@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('room_number')->nullable();
             $table->text('description')->nullable();
             $table->boolean('only_amazon')->default(false);
+            $table->softDeletes();
 
             $table->index(['full_name', 'town_id']);
             $table->index(['full_kana', 'town_id']);

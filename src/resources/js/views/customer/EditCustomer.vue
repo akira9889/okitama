@@ -1,6 +1,6 @@
 <script setup>
 import { apiClient } from '@/services/API.js'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref, onMounted, watch } from 'vue'
 import CustomInput from '@/components/CustomInput.vue'
 import InputError from '@/components/InputError.vue'
@@ -37,6 +37,7 @@ async function setSelectedTowns() {
 }
 
 const route = useRoute()
+const router = useRouter()
 
 watch(is_dropoff_possible, (isChecked) => {
   if (isChecked) {
@@ -45,20 +46,23 @@ watch(is_dropoff_possible, (isChecked) => {
 })
 
 async function getCustomer() {
-  const { data } = await apiClient.get(`/customer/${route.params.id}`)
-
-  form.value.last_name = data.last_name
-  form.value.first_name = data.first_name
-  form.value.last_kana = data.last_kana
-  form.value.first_kana = data.first_kana
-  form.value.company = data.company
-  form.value.address_number = data.address_number
-  form.value.building_name = data.building_name
-  form.value.room_number = data.room_number
-  form.value.dropoff_ids = data.dropoffs.map((dropoff) => dropoff.id)
-  form.value.town_id = data.town_id
-  form.value.description = data.description
-  form.value.only_amazon = data.only_amazon
+  try {
+    const { data } = await apiClient.get(`/customer/${route.params.id}`)
+    form.value.last_name = data.last_name
+    form.value.first_name = data.first_name
+    form.value.last_kana = data.last_kana
+    form.value.first_kana = data.first_kana
+    form.value.company = data.company
+    form.value.address_number = data.address_number
+    form.value.building_name = data.building_name
+    form.value.room_number = data.room_number
+    form.value.dropoff_ids = data.dropoffs.map((dropoff) => dropoff.id)
+    form.value.town_id = data.town_id
+    form.value.description = data.description
+    form.value.only_amazon = !!data.only_amazon
+  } catch {
+    router.push({ name: 'notfound' })
+  }
 }
 
 function changeTown({ value }) {
@@ -104,10 +108,40 @@ async function getDropoffPlace() {
     is_dropoff_possible.value = true
   }
 }
+
+async function deleteCustomer() {
+  try {
+    if (!confirm('この顧客を削除してもよろしいですか？')) {
+      return
+    }
+
+    await apiClient.delete(`/customer/${route.params.id}`)
+
+    router.push({ name: 'search-customer' })
+
+    store.dispatch('toast/showToast', {
+      message: '顧客を削除しました',
+    })
+  } catch {
+    store.dispatch('toast/showToast', {
+      message: '顧客の削除に失敗しました',
+      type: 'error',
+    })
+  }
+}
 </script>
 
 <template>
-  <h1 class="text-xl text-center">顧客編集</h1>
+  <div class="relative">
+    <h1 class="text-xl text-center">顧客編集</h1>
+    <div
+      class="w-12 h-12 rounded-full bg-customRed text-center leading-[48px] absolute right-0 top-0"
+      @click="deleteCustomer"
+    >
+      <font-awesome-icon :icon="['fas', 'trash']" class="text-2xl text-white" />
+    </div>
+  </div>
+
   <form class="mt-6" @submit.prevent="submit">
     <div>
       <InputError :error-msg="errorMsg?.last_name" class="mb-2" />
