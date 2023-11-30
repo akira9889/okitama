@@ -4,6 +4,7 @@ import { scrollToTop } from '@/constants.js'
 import { ref, reactive, onMounted, computed, onUnmounted, watch } from 'vue'
 import Spinner from '@/components/Spinner.vue'
 import CustomInput from '@/components/CustomInput.vue'
+import Btn from '@/components/Btn.vue'
 import CustomersTable from './CustomersTable.vue'
 import CustomerDetail from './CustomerDetail.vue'
 import { useStore } from 'vuex'
@@ -25,7 +26,7 @@ const addressInputRef = ref(null)
 
 const deliveryAreas = ref([])
 
-const loading = ref(false)
+const loading = computed(() => store.state.searchCustomer.loading)
 
 const isCustomerDetailEmpty = computed(
   () => Object.keys(customerDetail.value).length === 0,
@@ -41,15 +42,6 @@ const shouldShowTable = computed(
   () => isCustomerDetailEmpty.value && customers.value.length > 1,
 )
 
-watch(
-  () => form.town_id,
-  () => {
-    if (form.searchType === 'address') {
-      submit()
-    }
-  },
-)
-
 onMounted(async () => {
   await setSelectedTowns()
   form.town_id = deliveryAreas.value[0]?.options[0].key
@@ -63,8 +55,6 @@ function clearState() {
 }
 
 async function submit() {
-  loading.value = true
-
   try {
     await store.dispatch('searchCustomer/getCustomers', form)
 
@@ -80,8 +70,6 @@ async function submit() {
       message: '検索に失敗しました',
       type: 'error',
     })
-  } finally {
-    loading.value = false
   }
 }
 
@@ -177,6 +165,9 @@ function changeTown({ value }) {
             />
             <label for="by-address" class="block text-sm ml-2">住所</label>
           </div>
+        </div>
+        <div class="ml-auto">
+          <Btn text="検索" @click="submit" />
         </div>
       </form>
     </footer>
