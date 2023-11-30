@@ -40,8 +40,12 @@ class CustomerController extends Controller
                 ->orWhere('full_kana', 'LIKE', $searchQuery . '%')
                 ->whereIn('town_id', $deliveryAreas);
         } elseif ($data['searchType'] === 'address') {
-            $query = $query->where('town_id', $data['town_id'])
-                ->where('address_number', $data['searchAddress']);
+            $query = $query->where('town_id', $data['town_id']);
+
+            if (isset($data['searchAddress'])) {
+                $query = $query->where('address_number', 'LIKE', $data['searchAddress'] . '%');
+            }
+
         }
 
         $query = $query->orderBy('town_id')
