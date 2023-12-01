@@ -1,11 +1,12 @@
 <script setup>
 import { apiClient } from '@/services/API.js'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
 const route = useRoute()
 const store = useStore()
+const router = useRouter()
 
 const DropoffHistory = ref({})
 
@@ -20,9 +21,13 @@ onUnmounted(() => {
 })
 
 async function getDropoffHistory() {
-  const { data } = await apiClient.get(`/dropoff-history/${route.params.id}`)
+  try {
+    const { data } = await apiClient.get(`/dropoff-history/${route.params.id}`)
 
-  DropoffHistory.value = data
+    DropoffHistory.value = data
+  } catch {
+    router.push({ name: 'notfound'})
+  }
 }
 </script>
 
