@@ -2,6 +2,7 @@
 import { apiClient } from '@/services/API.js'
 import UserModal from './UserModal.vue'
 import { onMounted, ref } from 'vue'
+import GuideBox from '@/components/GuideBox.vue'
 
 const adminUsers = ref([])
 const commonUsers = ref([])
@@ -35,7 +36,6 @@ async function checkAwaitingUser() {
 </script>
 <template>
   <div>
-    <h1 class="text-xl text-center">ドライバー一覧</h1>
     <Transition name="modal">
       <UserModal
         v-if="modalOpened"
@@ -44,6 +44,8 @@ async function checkAwaitingUser() {
         @edited-user="getUser"
       />
     </Transition>
+
+    <h1 class="text-xl text-center">ドライバー一覧</h1>
 
     <div v-if="existsAwaitingUsers" class="mt-4 text-center">
       <div class="p-2 bg-yellow-200 rounded inline-block">
@@ -61,6 +63,11 @@ async function checkAwaitingUser() {
         </p>
       </div>
     </div>
+
+    <GuideBox class="mt-6">
+      <p>こちらではドライバーの編集ができます。</p>
+      <p>主に管理者機能をつけたり削除するこどができます。</p>
+    </GuideBox>
 
     <div class="mt-4">
       <h2 class="font-semibold">管理者</h2>

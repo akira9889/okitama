@@ -97,7 +97,7 @@ async function deleteUser() {
           />
         </div>
         <p class="text-xs text-center mt-2">
-          （ドライバーの編集や削除をすることができます。）
+          （ドライバーの編集、削除、全ての置き配履歴をみることができます。）
         </p>
 
         <div class="flex justify-center mt-4">
