@@ -2,6 +2,7 @@
 import store from '@/store'
 import Btn from '@/components/Btn.vue'
 import CustomInput from '@/components/CustomInput.vue'
+import GuideBox from '@/components/GuideBox.vue'
 import AreaModal from '@/views/setting/user/Area/AreaModal.vue'
 import { apiClient } from '@/services/API.js'
 import { onMounted, ref } from 'vue'
@@ -67,7 +68,22 @@ async function deleteTowns() {
   </Transition>
 
   <h1 class="text-xl text-center">エリア一覧</h1>
-  <div class="text-right">
+
+  <GuideBox class="mt-4">
+    <p>こちらは全ドライバーが追加したエリアが表示されます。</p>
+    <p>
+      担当するエリアがない場合は右の「エリア追加」ボタンから追加してください。
+    </p>
+    <p>
+      すでに追加されている場合は<router-link
+        :to="{ name: 'delivery-area' }"
+        class="font-semibold underline¥"
+        >エリア選択ページ</router-link
+      >でエリア選択してください。
+    </p>
+  </GuideBox>
+
+  <div class="text-right mt-6">
     <Btn
       text="エリアを追加"
       bg-color="primary"

@@ -1,6 +1,7 @@
 <script setup>
 import store from '@/store'
 import Btn from '@/components/Btn.vue'
+import GuideBox from '@/components/GuideBox.vue'
 import CustomInput from '@/components/CustomInput.vue'
 import { apiClient } from '@/services/API.js'
 import { onMounted, ref, computed } from 'vue'
@@ -67,6 +68,22 @@ async function submit() {
 
 <template>
   <h1 class="text-xl text-center">配達エリア</h1>
+
+  <GuideBox class="mt-4">
+    <p>配達するエリアを選択してください。</p>
+    <p>
+      選択するエリアが多いほど顧客検索に時間を要しますので、担当するエリアだけを選択するのがおすすめです。
+    </p>
+    <p>後から配達エリアの変更もできます。</p>
+
+    <p>
+      担当エリアがない場合は<router-link
+        :to="{ name: 'area' }"
+        class="font-semibold underline"
+        >エリア登録ページ</router-link
+      >で追加してください。
+    </p>
+  </GuideBox>
 
   <form @submit.prevent="submit">
     <div

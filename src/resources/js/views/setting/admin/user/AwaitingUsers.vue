@@ -1,5 +1,6 @@
 <script setup>
 import AwaitingUserModal from './AwaitingUserModal.vue'
+import GuideBox from '@/components/GuideBox.vue'
 import { apiClient } from '@/services/API.js'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from 'vuex'
@@ -34,6 +35,12 @@ function clickUser(user) {
 <template>
   <div>
     <h1 class="text-xl text-center">承認待ちユーザー</h1>
+
+    <GuideBox class="mt-4">
+      <p>管理者の承認待ちのユーザーです。</p>
+      <p>ユーザーを選択して承認または削除してください。</p>
+      <p>※ 承認するまでこちらのユーザーはこのアプリを使えません。</p>
+    </GuideBox>
 
     <Transition name="modal">
       <AwaitingUserModal

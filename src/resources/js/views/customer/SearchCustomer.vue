@@ -1,10 +1,11 @@
 <script setup>
 import { apiClient } from '@/services/API.js'
 import { scrollToTop } from '@/constants.js'
-import { ref, reactive, onMounted, computed, onUnmounted, watch } from 'vue'
+import { ref, reactive, onMounted, computed, onUnmounted } from 'vue'
 import Spinner from '@/components/Spinner.vue'
 import CustomInput from '@/components/CustomInput.vue'
 import Btn from '@/components/Btn.vue'
+import GuideBox from '@/components/GuideBox.vue'
 import CustomersTable from './CustomersTable.vue'
 import CustomerDetail from './CustomerDetail.vue'
 import { useStore } from 'vuex'
@@ -237,7 +238,18 @@ function changeTown({ value }) {
           :customer="customerDetail"
         />
         <CustomersTable v-else-if="shouldShowTable" :customers="customers" />
-        <div v-else class="text-center">顧客が見つかりません</div>
+        <div v-else>
+          <GuideBox
+            class="w-5/6 absolute left-1/2 -translate-x-1/2 -translate-y-[calc(100%+24px)]"
+          >
+            <p>名前または住所で検索してください。</p>
+            <p>※ 会社は住所で検索してください。</p>
+            <p>
+              検索結果が１つしかない場合はテーブルは表示されず、そのまま詳細が表示されます。
+            </p>
+          </GuideBox>
+          <p class="text-center">顧客が見つかりません</p>
+        </div>
       </div>
     </div>
   </div>

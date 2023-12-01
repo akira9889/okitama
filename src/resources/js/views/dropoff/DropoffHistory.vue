@@ -138,7 +138,9 @@ function redirect(param) {
       v-else
       class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
     >
-      履歴登録はありません
+      {{
+        monthsOptions.filter((month) => month.key === form.month)[0].text
+      }}の履歴履歴はありません
     </p>
   </div>
 </template>
