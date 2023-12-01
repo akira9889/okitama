@@ -44,7 +44,7 @@ const routes = [
         meta: { middleware: [auth, approved] },
       },
       {
-        path: 'edit-customer/:id',
+        path: 'edit-customer/:id(\\d+)',
         name: 'edit-customer',
         component: EditCustomer,
         meta: { middleware: [auth, approved] },
@@ -86,7 +86,7 @@ const routes = [
         meta: { middleware: [auth, approved] },
       },
       {
-        path: 'dropoff-history/:id',
+        path: 'dropoff-history/:id(\\d+)',
         name: 'dropoff-history.show',
         component: ShowDropoffHistory,
         meta: { middleware: [auth, approved] },
