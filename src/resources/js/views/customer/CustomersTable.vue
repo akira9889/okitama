@@ -140,7 +140,8 @@ function changeDropoffIcon(id) {
               </div>
             </div>
           </TableDetailCell>
-          <TableDetailCell :class="dropoffBgColor(customer)">
+          <TableDetailCell :class="dropoffBgColor(customer)" class="relative">
+            <span v-if="customer.absence" class="inline-block absolute top-1 left-1 text-xs rounded-full bg-sky-300 w-4 h-4 text-center leading-4 text-white">不</span>
             <span
               v-for="(dropoff, index) in customer.dropoffs"
               :key="index"

@@ -34,6 +34,7 @@ class CustomerResource extends JsonResource
             'room_number' => $this->room_number,
             'dropoffs' => DropoffResource::collection($this->dropoffs),
             'description' => $this->description,
+            'absence' => $this->absence,
             'only_amazon' => $this->only_amazon
         ];
 
