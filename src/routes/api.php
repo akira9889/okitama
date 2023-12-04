@@ -71,5 +71,5 @@ Route::middleware('auth:sanctum', 'approved')->group(function () {
     Route::delete('/customer/{customer}', [CustomerController::class, 'delete']);
 
     Route::get('/default-town', [CustomerController::class, 'getDefaultTown']);
-    Route::get('/hiragana', [CustomerController::class, 'changeStringToHiragana']);
+    Route::get('/hiragana', [CustomerController::class, 'getHiraganaName']);
 });
