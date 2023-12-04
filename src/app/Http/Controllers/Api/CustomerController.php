@@ -46,12 +46,14 @@ class CustomerController extends Controller
             if (isset($data['searchAddress'])) {
                 $query = $query->where('address_number', 'LIKE', $data['searchAddress'] . '%');
             }
-
         }
 
         $query = $query->orderBy('town_id')
-            ->orderBy('address_number')
-            ->orderBy('room_number');
+            ->orderByRaw('CONVERT(SUBSTRING_INDEX(address_number, \'-\', 1), UNSIGNED INTEGER)')
+            ->orderByRaw('CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX(address_number, \'-\', 2), \'-\', -1), UNSIGNED INTEGER)')
+            ->orderByRaw('CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX(address_number, \'-\', 3), \'-\', -1), UNSIGNED INTEGER)')
+            ->orderByRaw('CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX(address_number, \'-\', 4), \'-\', -1), UNSIGNED INTEGER)')
+            ->orderByRaw('LPAD(room_number, 5, \'0\')');
 
         $customers = $query->get();
 

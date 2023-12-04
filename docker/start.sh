@@ -19,7 +19,7 @@ set_env_variables() {
   echo MAIL_MAILER=$MAIL_MAILER >> $env_file
   echo MAIL_FROM_ADDRESS=$MAIL_FROM_ADDRESS >> $env_file
   echo MAIL_FROM_NAME=$APP_NAME >> $env_file
-  echo VITE_GOO_APP_ID=$GOO_APP_ID >> $env_file
+  echo GOO_APP_ID=$GOO_APP_ID >> $env_file
   echo 'Laravel env variables configured'
 }
 
