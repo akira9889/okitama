@@ -167,7 +167,7 @@ function changeTown({ value }) {
             <label for="by-address" class="block text-sm ml-2">住所</label>
           </div>
         </div>
-        <div class="ml-auto">
+        <div class="ml-auto md:ml-3">
           <Btn text="検索" @click="submit" />
         </div>
       </form>
