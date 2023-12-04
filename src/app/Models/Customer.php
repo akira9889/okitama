@@ -22,7 +22,7 @@ class Customer extends Model
         'first_kana', 'last_kana', 'full_kana',
         'company',
         'town_id', 'address_number', 'building_name', 'room_number',
-        'description', 'only_amazon'
+        'description', 'absence', 'only_amazon'
     ];
 
     public function prunable(): Builder

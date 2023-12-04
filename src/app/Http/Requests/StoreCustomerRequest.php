@@ -35,6 +35,7 @@ class StoreCustomerRequest extends FormRequest
             'dropoff_ids' => ['nullable'],
             'dropoff_ids.*' => ['integer', 'exists:dropoffs,id'],
             'description' => ['string', 'nullable'],
+            'absence' => ['required', 'boolean'],
             'only_amazon' => ['required', 'boolean'],
         ];
     }

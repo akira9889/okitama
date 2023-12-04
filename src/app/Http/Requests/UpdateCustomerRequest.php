@@ -33,6 +33,8 @@ class UpdateCustomerRequest extends FormRequest
             'room_number' => ['string', 'max:10', 'nullable'],
             'dropoff_ids' => ['nullable'],
             'dropoff_ids.*' => ['integer', 'exists:dropoffs,id'],
+            'absence' => ['required', 'boolean'],
+            'only_amazon' => ['required', 'boolean'],
             'description' => ['string', 'nullable']
         ];
     }
