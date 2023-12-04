@@ -13,7 +13,7 @@ class DropoffSeeder extends Seeder
      */
     public function run(): void
     {
-        $places = ['玄関', '不在時玄関', '車庫', '自転車', 'その他'];
+        $places = ['玄関', 'ガスメーター', '車庫', '自転車', 'その他'];
 
         foreach ($places as $place) {
             Dropoff::create([

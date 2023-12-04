@@ -1,6 +1,6 @@
 export const DROPOFF_PLACE_ID = {
   ENTRANCE: 1,
-  ENTRANCE_WHEN_ABSENT: 2,
+  GAS_METER: 2,
   GARAGE: 3,
   BICYCLE: 4,
   OTHER: 5,

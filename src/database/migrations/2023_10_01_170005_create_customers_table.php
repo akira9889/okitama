@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('building_name')->nullable();
             $table->string('room_number')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('absence')->default(false);
             $table->boolean('only_amazon')->default(false);
             $table->softDeletes();
 

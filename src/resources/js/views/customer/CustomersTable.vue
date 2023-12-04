@@ -82,9 +82,9 @@ const handleScroll = (e) => {
 
 function changeDropoffIcon(id) {
   if (id === DROPOFF_PLACE_ID.ENTRANCE) {
-    return '<span class="mr-1 inline-block w-[30px] h-[30px] leading-[30px] rounded-full border border-black text-center">玄</span>'
-  } else if (id === DROPOFF_PLACE_ID.ENTRANCE_WHEN_ABSENT) {
-    return "<span class=\"relative px-[8px] pt-[3px] pb-[2px] border-b-[1px] border-black before:content-[''] before:block before:w-[1px] before:h-[29px] before:bg-black before:absolute before:top-full before:right-full before:origin-top-right before:rotate-[210deg] after:content-[''] after:block after:w-[1px] after:h-[29px] after:bg-black after:absolute after:top-full after:left-full after:origin-top-left after:rotate-[150deg]\">玄</span>"
+    return '<span class="mr-1 inline-block">玄</span>'
+  } else if (id === DROPOFF_PLACE_ID.GAS_METER) {
+    return '<span class="mr-1 inline-block">ガ</span>'
   } else if (id === DROPOFF_PLACE_ID.GARAGE) {
     return '<span class="mr-1 inline-block">車</span>'
   } else if (id === DROPOFF_PLACE_ID.BICYCLE) {
@@ -140,7 +140,8 @@ function changeDropoffIcon(id) {
               </div>
             </div>
           </TableDetailCell>
-          <TableDetailCell :class="dropoffBgColor(customer)">
+          <TableDetailCell :class="dropoffBgColor(customer)" class="relative">
+            <span v-if="customer.absence" class="inline-block absolute top-1 left-1 text-xs rounded-full bg-sky-300 w-4 h-4 text-center leading-4 text-white">不</span>
             <span
               v-for="(dropoff, index) in customer.dropoffs"
               :key="index"

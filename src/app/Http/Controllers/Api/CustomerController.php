@@ -16,6 +16,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use SplFileObject;
 use Throwable;
 
 class CustomerController extends Controller
@@ -125,15 +126,21 @@ class CustomerController extends Controller
         return $user->defaultTown();
     }
 
-    public function changeStringToHiragana(Request $request)
+    public function getHiraganaName(Request $request)
     {
-        Log::debug($request);
+        $hiraganaName = $this->changeStringToHiragana($request->text);
+
+        return response()->json(['converted' => $hiraganaName]);
+    }
+
+    private function changeStringToHiragana(string $string)
+    {
         try {
             $url = 'https://labs.goo.ne.jp/api/hiragana';
 
             $param = [
                 'app_id' => config('services.goo.key'), // app_id
-                'sentence' => $request->text, // 変換したい文章
+                'sentence' => $string, // 変換したい文章
                 'output_type' => 'hiragana' // 出力タイプ
             ];
 
@@ -147,7 +154,7 @@ class CustomerController extends Controller
                 throw new \Exception('変換に失敗しました。');
             }
 
-            return response()->json(['converted' => $res['converted']]);
+            return $res['converted'];
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return response()->json(['error' => '内部サーバーエラーが発生しました。'], 500);
@@ -164,28 +171,30 @@ class CustomerController extends Controller
         $path = $file->getRealPath();
 
         try {
-            $lines = file($path, FILE_IGNORE_NEW_LINES);
-
+            $fileObject = new SplFileObject($path);
+            $fileObject->setFlags(SplFileObject::READ_CSV | SplFileObject::READ_AHEAD | SplFileObject::SKIP_EMPTY);
             // データをprefecture, city, townでグループ分け
             $groupedData = [];
             $prefectureNames = [];
 
-            foreach ($lines as $line) {
-                $data = str_getcsv($line);
-                [$prefectureName, $city, $town, $addressNumber, $roomNumber, $lastName, $firstName, $dropoffPlace, $description] = $data;
+            foreach ($fileObject as $data) {
+                [$prefectureName, $city, $town, $addressNumber, $buildingName, $roomNumber, $company, $lastName, $firstName, $dropoffPlace, $description, $absence, $onlyAmazon] = $data;
 
                 if (!in_array($prefectureName, $prefectureNames)) {
                     $prefectureNames[] = $prefectureName;
                 }
 
-
                 $groupedData[$prefectureName][$city][$town][] = [
                     'address_number' => $addressNumber,
+                    'building_name' => $buildingName,
                     'room_number' => $roomNumber,
                     'last_name' => $lastName,
                     'first_name' => $firstName,
+                    'company' => $company,
                     'dropoff_place' => $dropoffPlace,
-                    'description' => $description
+                    'description' => $description,
+                    'absence' => $absence,
+                    'only_amazon' => $onlyAmazon
                 ];
             }
 
@@ -203,7 +212,13 @@ class CustomerController extends Controller
 
             $this->processData($groupedData);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            DB::rollback();
+
+            Log::alert($e);
+
+            return response()->json([
+                'errors' => ['database' => ['データの削除に失敗しました。']]
+            ], 500);
         }
     }
 
@@ -257,22 +272,53 @@ class CustomerController extends Controller
         $dropoffData = [];
 
         foreach ($batch as $customer) {
+            $lastName = $customer['last_name'] ?? null;
+            $firstName = $customer['first_name'] ?? null;
+            $fullName = $lastName . $firstName;
+            $lastKana = $lastName ? $this->changeStringToHiragana($lastName) : null;
+            $firstKana = $firstName ? $this->changeStringToHiragana($firstName) : null;
+            $fullKana = $lastKana . $firstKana;
+
+            $onlyAmazon = FALSE;
+            if ($customer['only_amazon'] === '1') {
+                $onlyAmazon = TRUE;
+            }
+
+            $absence = FALSE;
+            if ($customer['absence'] === '1') {
+                $absence = TRUE;
+            }
+
             $customerData[] = [
-                'first_name' => $customer['first_name'] ?? null,
-                'last_name' => $customer['last_name'],
-                'full_name' => $customer['last_name'] . $customer['first_name'] ?? null,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'full_name' => $fullName,
+                'first_kana' => $firstKana,
+                'last_kana' => $lastKana,
+                'full_kana' => $fullKana,
+                'company' => $customer['company'],
                 'town_id' => $townId,
                 'address_number' => $customer['address_number'],
+                'building_name' => $customer['building_name'],
                 'room_number' => $customer['room_number'],
-                'description' => $customer['description']
+                'description' => $customer['description'],
+                'absence' => $absence,
+                'only_amazon' => $onlyAmazon,
             ];
 
-            $dropoffPlaceNames = explode('、', $customer['dropoff_place']);
-
+            $dropoffPlaceNames = [];
             $dropoffIds = [];
 
-            foreach ($dropoffPlaceNames as $dropoffName) {
-                $dropoffIds[] = $dropoffPlaceMap[$dropoffName] ?? DropoffPlace::OTHER->value;
+            if (!empty($customer['dropoff_place'])) {
+                $dropoffPlaceNames = explode('、', $customer['dropoff_place']);
+            }
+
+            if (!empty($dropoffPlaceNames)) {
+                foreach ($dropoffPlaceNames as $dropoffName) {
+                    if ($dropoffPlaceMap[$dropoffName]) {
+                        $dropoffIds[] = $dropoffPlaceMap[$dropoffName];
+                    }
+                }
             }
 
             $dropoffData[] = $dropoffIds;
