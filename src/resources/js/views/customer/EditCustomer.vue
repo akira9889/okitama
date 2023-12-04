@@ -59,6 +59,7 @@ async function getCustomer() {
     form.value.dropoff_ids = data.dropoffs.map((dropoff) => dropoff.id)
     form.value.town_id = data.town_id
     form.value.description = data.description
+    form.value.absence = !!data.absence
     form.value.only_amazon = !!data.only_amazon
   } catch {
     router.push({ name: 'notfound' })
@@ -283,6 +284,17 @@ async function deleteCustomer() {
         />
         <label for="dropoff_impossible" class="ml-1 text-sm">不可</label>
       </div>
+    </div>
+
+    <div class="mt-4 flex items-center">
+      <label for="absence" class="mr-2 whitespace-nowrap">不在時置き配</label>
+      <CustomInput
+        id="absence"
+        v-model="form.absence"
+        type="checkbox"
+        :checked="form.absence"
+        class="w-3 h-3"
+      />
     </div>
 
     <div class="mt-4 flex items-center">

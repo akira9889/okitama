@@ -17,6 +17,7 @@ const DEFAULT_FORM = {
   dropoff_ids: [],
   is_checked_default: false,
   town_id: '',
+  absence: false,
   only_amazon: false,
 }
 
@@ -26,6 +27,8 @@ const errorMsg = ref({})
 
 const deliveryAreas = ref([])
 const dropoffs = ref([])
+
+const isDisabled = ref(false)
 
 watch(
   () => form.value.last_name,
@@ -151,6 +154,7 @@ function checkDropoffPlace({ key, value }) {
 
 async function submit() {
   try {
+    isDisabled.value = true
     await apiClient.post('/customer', form.value)
     store.dispatch('toast/showToast', {
       message: '顧客を追加しました',
@@ -158,6 +162,8 @@ async function submit() {
     initializeForm()
   } catch ({ response }) {
     errorMsg.value = response.data.errors
+  } finally {
+    isDisabled.value = false
   }
 }
 
@@ -334,6 +340,16 @@ async function getDropoffPlace() {
     </div>
 
     <div class="mt-4 flex items-center">
+      <label for="absence" class="mr-2 whitespace-nowrap">不在時置き配</label>
+      <CustomInput
+        id="absence"
+        v-model="form.absence"
+        type="checkbox"
+        class="w-3 h-3"
+      />
+    </div>
+
+    <div class="mt-4 flex items-center">
       <label for="only_amazon" class="mr-2 whitespace-nowrap"
         >Amazonの荷物のみ置き配可</label
       >
@@ -356,7 +372,12 @@ async function getDropoffPlace() {
     </div>
 
     <div class="mt-6 text-center pb-6">
-      <Btn type="submit" text="追加" bg-color="primary" />
+      <Btn
+        type="submit"
+        text="追加"
+        bg-color="primary"
+        :disabled="isDisabled"
+      />
     </div>
   </form>
 </template>
