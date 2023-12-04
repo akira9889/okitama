@@ -178,18 +178,12 @@ function changeTown({ value }) {
         <div class="absolute top-2 left-0 w-full">
           <div class="flex items-center text-xs justify-between w-full">
             <div>
-              <span
-                class="inline-block w-[25px] h-[25px] leading-[25px] rounded-full border border-black text-center"
-                >玄</span
-              >
+              <span>玄</span>
               <span>→玄関</span>
             </div>
-            <div class="flex items-center">
-              <span
-                class="relative px-[8px] pt-[3px] border-b-[1px] border-black before:content-[''] before:block before:w-[1px] before:h-[28px] before:bg-black before:absolute before:top-full before:right-full before:origin-top-right before:rotate-[210deg] after:content-[''] after:block after:w-[1px] after:h-[28px] after:bg-black after:absolute after:top-full after:left-full after:origin-top-left after:rotate-[150deg]"
-                >玄</span
-              >
-              <span>→不在時玄関</span>
+            <div>
+              <span>ガ</span>
+              <span>→ガスメータ</span>
             </div>
             <div>
               <span>車</span>
@@ -216,11 +210,6 @@ function changeTown({ value }) {
             <div class="w-10 h-6 bg-yellow-200" />
             <span>•••</span>
             <p>Amazonのみ</p>
-          </div>
-          <div class="flex items-center">
-            <div class="w-10 h-6 bg-customRed" />
-            <span>•••</span>
-            <p>置き配不可</p>
           </div>
         </div>
       </template>
