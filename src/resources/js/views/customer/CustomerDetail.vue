@@ -122,7 +122,9 @@ function resetFile() {
 
     <div class="mt-4">
       <p>備考欄</p>
-      <p class="w-full p-3 bg-gray-200 text-sm min-h-[100px] whitespace-pre-wrap">
+      <p
+        class="w-full p-3 bg-gray-200 text-sm min-h-[100px] whitespace-pre-wrap"
+      >
         {{ customer.description }}
       </p>
     </div>

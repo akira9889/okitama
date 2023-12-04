@@ -203,7 +203,10 @@ function changeTown({ value }) {
         <div class="absolute top-11 flex justify-around text-xs w-full">
           <div class="flex items-center">
             <div class="w-10 h-6 border border-black relative">
-              <span class="inline-block absolute top-0 left-0 text-xs rounded-full bg-sky-300 w-4 h-4 text-center leading-4 text-white">不</span>
+              <span
+                class="inline-block absolute top-0 left-0 text-xs rounded-full bg-sky-300 w-4 h-4 text-center leading-4 text-white"
+                >不</span
+              >
             </div>
             <span>•••</span>
             <p>不在時</p>
