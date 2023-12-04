@@ -1,4 +1,4 @@
-FROM php:8.1.0-fpm as base
+FROM php:8.1.3-fpm as base
 
 # パッケージ一覧を更新
 RUN apt update && \
@@ -13,6 +13,7 @@ RUN apt update && \
 
 # Composerのインストール
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # Node.jsとnpmのインストールを行う共通のベースイメージ
 FROM base AS node_php_base
