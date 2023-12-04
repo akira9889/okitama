@@ -26,7 +26,7 @@ async function getDropoffHistory() {
 
     DropoffHistory.value = data
   } catch {
-    router.push({ name: 'notfound'})
+    router.push({ name: 'notfound' })
   }
 }
 </script>
