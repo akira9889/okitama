@@ -231,7 +231,7 @@ async function getDropoffPlace() {
         label="会社名"
         class="mt-1"
         autocomplete="off"
-        enterkeyhint="next"
+        enterkeyhint="done"
       />
     </div>
 
@@ -337,16 +337,6 @@ async function getDropoffPlace() {
           }}</label>
         </div>
       </div>
-    </div>
-
-    <div class="mt-4 flex items-center">
-      <label for="absence" class="mr-2 whitespace-nowrap">不在時置き配</label>
-      <CustomInput
-        id="absence"
-        v-model="form.absence"
-        type="checkbox"
-        class="w-3 h-3"
-      />
     </div>
 
     <div class="mt-4 flex items-center">
