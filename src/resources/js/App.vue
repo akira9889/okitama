@@ -30,7 +30,11 @@ onMounted(async () => {
       const currentIndex = formElements.indexOf(e.target)
       const nextElement = formElements[currentIndex + 1]
       if (nextElement) {
-        if (nextElement.type === 'checkbox') {
+        if (
+          nextElement.type === 'checkbox' ||
+          nextElement.type === 'select-one'
+        ) {
+          e.target.blur()
           return
         }
         nextElement.focus()
