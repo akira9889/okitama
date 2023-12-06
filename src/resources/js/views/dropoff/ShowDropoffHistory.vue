@@ -10,6 +10,8 @@ const router = useRouter()
 
 const DropoffHistory = ref({})
 
+const loading = ref(false)
+
 onMounted(async () => {
   await getDropoffHistory()
   store.dispatch('returnButton/showButton', true)
@@ -22,17 +24,20 @@ onUnmounted(() => {
 
 async function getDropoffHistory() {
   try {
+    loading.value = true
     const { data } = await apiClient.get(`/dropoff-history/${route.params.id}`)
 
     DropoffHistory.value = data
   } catch {
     router.push({ name: 'notfound' })
+  } finally {
+    loading.value = false
   }
 }
 </script>
 
 <template>
-  <div class="w-full relative">
+  <div v-if="!loading" class="w-full relative">
     <div class="text-center">
       <h2 class="text-xl">置き配履歴</h2>
 

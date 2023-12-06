@@ -110,6 +110,7 @@ class DropoffHistoryController extends Controller
      */
     public function show(DropoffHistory $dropoffHistory)
     {
+        $this->authorize('show', $dropoffHistory);
         return new DropoffHistoryResource($dropoffHistory);
     }
 }
