@@ -297,9 +297,9 @@ async function getDropoffPlace() {
 
     <div class="mt-6">
       <InputError :error-msg="errorMsg?.building_name" class="mb-2" />
-      <label for="building_name">建物名</label>
+      <label for="building">建物名</label>
       <CustomInput
-        id="building_name"
+        id="building"
         v-model="form.building_name"
         label="コーポ村山"
         autocomplete="off"
