@@ -65,10 +65,10 @@ variables:
 environments:
   prod:
     http:
-      alias: 'okitama.sawascle.com'
+      alias: 'okihai.sawascle.com'
     variables:
       APP_ENV: production
-      MAIL_FROM_ADDRESS: support@okitama.sawascle.com
+      MAIL_FROM_ADDRESS: support@okihai.sawascle.com
     image:
       build:
         target: production
