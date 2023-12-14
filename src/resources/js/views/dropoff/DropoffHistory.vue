@@ -108,8 +108,8 @@ function redirect(param) {
     <table v-if="dropoffHistories.length" class="w-full mt-4">
       <thead>
         <tr>
-          <TableHeaderCell> 氏名 </TableHeaderCell>
-          <TableHeaderCell> 住所 </TableHeaderCell>
+          <TableHeaderCell>顧客名</TableHeaderCell>
+          <TableHeaderCell>住所</TableHeaderCell>
           <TableHeaderCell>日時</TableHeaderCell>
         </tr>
       </thead>
