@@ -38,7 +38,10 @@ class DropoffHistoryController extends Controller
 
         list($year, $month) = explode('-', $validated['month']);
 
-        $relations = ['customer', 'customer.town'];
+        $relations = [
+            'customer' => fn($query) => $query->withTrashed(),
+            'customer.town' => fn ($query) => $query->withTrashed()
+        ];
 
         if ($searchType === self::ALL) {
             $relations['user'] = function ($query) {
