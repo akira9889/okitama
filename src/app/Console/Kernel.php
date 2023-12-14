@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('model:prune', [
-            '--model' => [\App\Models\DropoffHistory::class, \App\Models\User::class, \App\Models\Customer::class],
+            '--model' => [\App\Models\DropoffHistory::class, \App\Models\User::class, \App\Models\Customer::class, \App\Models\Town::class, \App\Models\City::class],
         ])->weekly();
     }
 
