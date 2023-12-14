@@ -37,7 +37,7 @@ function resetPassword() {
     <form class="space-y-6" @submit.prevent="resetPassword">
       <div>
         <div>
-          <InputError :error-msg="errors?.email" class="mb-2" />
+          <InputError :error-msg="errors?.password" class="mb-2" />
           <label
             for="password"
             class="block text-sm font-medium leading-6 text-gray-900"
