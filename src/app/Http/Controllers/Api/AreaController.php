@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AreaRequest;
 use App\Models\City;
+use App\Models\Customer;
 use App\Models\Town;
 use App\Models\DeliveryArea;
 use Illuminate\Http\Request;
@@ -47,14 +48,16 @@ class AreaController extends Controller
         DB::beginTransaction();
 
         try {
-            $exits = City::where('id', $data['city_id'])->exists();
+            $city = City::withTrashed()->where('id', $data['city_id'])->first();
 
-            if (!$exits) {
-                City::create([
+            if (!$city) {
+                $city = City::create([
                     'id' => $data['city_id'],
                     'name' => $data['city_name'],
                     'prefecture_id' => $data['prefecture_id']
                 ]);
+            } elseif ($city->trashed()) {
+                $city->restore();
             }
 
             $town = Town::create([
@@ -90,6 +93,14 @@ class AreaController extends Controller
             ]);
 
             $townIds = $data['delete_towns'];
+
+            $customerIds = Customer::whereIn('town_id', $townIds)->pluck('id');
+
+            // 顧客に紐づくcustomer_dropoffデータを削除
+            DB::table('customer_dropoff')->whereIn('customer_id', $customerIds)->delete();
+
+            // 顧客と配送エリアを削除
+            Customer::whereIn('town_id', $townIds)->delete();
             DeliveryArea::whereIn('town_id', $townIds)->delete();
 
             Town::whereIn('id', $townIds)->delete();
