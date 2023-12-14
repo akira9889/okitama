@@ -119,7 +119,12 @@ class CustomerController extends Controller
     public function delete(Customer $customer)
     {
         $customer->dropoffs()->detach();
-        $customer->delete();
+
+        if ($customer->dropoffHistories()->doesntExist()) {
+            $customer->forceDelete();
+        } else {
+            $customer->delete();
+        }
     }
 
     public function getDefaultTown()

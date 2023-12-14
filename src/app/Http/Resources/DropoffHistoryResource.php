@@ -38,10 +38,13 @@ class DropoffHistoryResource extends JsonResource
             Cache::put($cacheKey, $imageUrl, now()->addMinutes(1));
         }
 
+        $customerWithTrashed = $this->customer()->withTrashed()->first();
+        $townWithTrashed = $customerWithTrashed->town()->withTrashed()->first();
+
         return [
-            'first_name' => $this->customer->first_name,
-            'last_name' => $this->customer->last_name,
-            'address' => $this->customer->town->name . $this->customer->address_number . ' ' . $this->customer->room_number,
+            'first_name' => $customerWithTrashed->first_name,
+            'last_name' => $customerWithTrashed->last_name,
+            'address' => $townWithTrashed->name . $customerWithTrashed->address_number . ' ' . $customerWithTrashed->room_number,
             'image_url' => $imageUrl,
             'created_at' => (new \DateTime($this->created_at))->format('Y年m月d日 H時i分'),
         ];
