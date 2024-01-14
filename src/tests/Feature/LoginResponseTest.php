@@ -29,11 +29,11 @@ class LoginResponseTest extends TestCase
 
         // 必要なキーと値の検証
         $this->assertArrayHasKey('id', $responseData);
-        $this->assertArrayHasKey('name', $responseData);
-        $this->assertEquals('test@example.com', $responseData['email']);
+        $this->assertArrayHasKey('first_name', $responseData);
+        $this->assertArrayHasKey('last_name', $responseData);
 
         // 不必要なレスポンスがないかの検証
-        $expectedKeys = ['id', 'name', 'email'];
+        $expectedKeys = ['id', 'last_name', 'first_name', 'is_admin', 'is_approved'];
         $actualKeys = array_keys($responseData);
         sort($expectedKeys);
         sort($actualKeys);
