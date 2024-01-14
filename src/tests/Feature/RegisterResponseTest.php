@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class RegisterResponseTest extends TestCase
@@ -13,7 +12,8 @@ class RegisterResponseTest extends TestCase
     public function test_json_response_after_registration(): void
     {
         $userData = [
-            'name' => 'Test User',
+            'last_name' => 'Test',
+            'first_name' => 'User',
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
@@ -27,11 +27,11 @@ class RegisterResponseTest extends TestCase
 
         // 必要なキーと値の検証
         $this->assertArrayHasKey('id', $responseData);
-        $this->assertEquals('Test User', $responseData['name']);
-        $this->assertEquals('test@example.com', $responseData['email']);
+        $this->assertEquals('Test', $responseData['last_name']);
+        $this->assertEquals('User', $responseData['first_name']);
 
         // 不必要なレスポンスがないかの検証
-        $expectedKeys = ['id', 'name', 'email'];
+        $expectedKeys = ['id', 'last_name', 'first_name', 'is_admin', 'is_approved'];
         $actualKeys = array_keys($responseData);
         sort($expectedKeys);
         sort($actualKeys);
@@ -41,7 +41,8 @@ class RegisterResponseTest extends TestCase
     public function test_redirect_after_registration(): void
     {
         $userData = [
-            'name' => 'Test User',
+            'last_name' => 'Test',
+            'first_name' => 'User',
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
