@@ -37,7 +37,7 @@ function updateSelectedTowns({ key, value }) {
 }
 
 async function deleteTowns() {
-  if (!confirm(`本当に削除してもいいですか？`)) {
+  if (!confirm(`このエリアの顧客のデータも削除されます。本当に削除してもいいですか？`)) {
     return
   }
   errorMsg.value = {}
