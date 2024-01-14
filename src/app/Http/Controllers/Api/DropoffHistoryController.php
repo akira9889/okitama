@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDropoffHistoryRequest;
 use App\Http\Resources\DropoffHistoryListResource;
 use App\Http\Resources\DropoffHistoryResource;

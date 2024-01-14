@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DeliveryAreaController;
 use App\Http\Controllers\Api\DropoffController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\DropoffHistoryController;
+use App\Http\Controllers\Api\DropoffHistoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
